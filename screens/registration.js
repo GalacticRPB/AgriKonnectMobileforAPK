@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const App = () => {
+const Registration = ({navigation}) => {
   const [selected,setSelected] = React.useState("");
   const data = [
     {key:'1',value:'Buyer'},
@@ -77,14 +77,15 @@ const App = () => {
       </View>
 
       <TouchableOpacity 
-      style = {styles.button}>
+      style = {styles.button}
+      onPress={ () => navigation.navigate('SignIn')}>
         <Text 
         style = {styles.buttonText}>
-          LOG IN</Text>
+          REGISTER</Text>
       </TouchableOpacity>
       
       <Text style = {styles.ask}>Already have an account?</Text>
-      <TouchableOpacity>
+      <TouchableOpacity  onPress={ () => navigation.navigate('SignIn')}>
         <Text style = {styles.loginButton}>
           Login Here</Text>
           </TouchableOpacity>
@@ -172,4 +173,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default App;
+export default Registration;

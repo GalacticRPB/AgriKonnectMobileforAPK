@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, SafeAreaView} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
 const App = () => {
@@ -168,12 +168,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   dropdown1RowStyle: {
-    backgroundColor: 'green', 
+    backgroundColor: '#F4F4F4', 
     borderBottomColor: 'green'
   },
   dropdown1RowTxtStyle: {
-    color: 'white', 
-    textAlign: 'left'
+    color: 'black', 
+    textAlign: 'left',
+    fontWeight: 'bold',
   },
 
 })

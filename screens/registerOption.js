@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput} from 'react-native';
 
-class App extends Component{
+const registerOption = ({navigation}) =>{
   state={}
-  render(){
   return(
     <View style = {styles.ground}>
     <View style={styles.circle} />
@@ -12,14 +11,16 @@ class App extends Component{
       
 
       <TouchableOpacity 
-      style = {styles.button}>
+      style = {styles.button}
+      onPress={ () => navigation.navigate('signIn')}>
         <Text 
         style = {styles.buttonText}>
           SELLER</Text>
       </TouchableOpacity>
 
       <TouchableOpacity 
-      style = {styles.button}>
+      style = {styles.button}
+      onPress={ () => navigation.navigate('signIn')}>
         <Text 
         style = {styles.buttonText}>
           BUYER</Text>
@@ -27,7 +28,7 @@ class App extends Component{
     </View>
     </View>
   );
-}}
+}
 
 const styles = StyleSheet.create({
   ground:{
@@ -68,4 +69,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default App;
+export default registerOption;

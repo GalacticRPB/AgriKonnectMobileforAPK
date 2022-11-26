@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-class App extends Component{
+const SignIn = ({navigation}) => {
   state={}
-  render(){
   return(
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
@@ -26,21 +27,22 @@ class App extends Component{
       </View>
 
       <TouchableOpacity 
-      style = {styles.button}>
+      style = {styles.button}
+      onPress={ () => navigation.navigate('Tabs')}>
         <Text 
         style = {styles.buttonText}>
           LOG IN</Text>
       </TouchableOpacity>
       
       <Text style = {styles.ask}>Don't have account?</Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={ () => navigation.navigate('Registration')}>
         <Text style = {styles.registerButton}>
           Register Here</Text>
           </TouchableOpacity>
     </View>
     </View>
   );
-}}
+}
 
 const styles = StyleSheet.create({
   ground:{
@@ -106,4 +108,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default App;
+export default SignIn;
