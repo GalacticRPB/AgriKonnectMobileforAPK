@@ -13,7 +13,7 @@ import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import MI from 'react-native-vector-icons/MaterialIcons';
 /*Icons Library-End*/
 
-const Products = () => {
+const Products = ({navigation}) => {
     return(
         <ScrollView contentContainerStyle={styles.contentContainer}>
 
@@ -31,7 +31,7 @@ const Products = () => {
             <Text style = {styles.myProducts}>
                 My Products
             </Text>
-            <TouchableOpacity style = {styles.addButton}>
+            <TouchableOpacity style = {styles.addButton} onPress={()=> navigation.navigate('AddProduct')}>
             <FontAwesome5 name='plus' color={'white'} size={30} iconStyle={''}/>
             </TouchableOpacity>
         </View>
@@ -47,7 +47,7 @@ const Products = () => {
             </Text>
           </View>
           <View style={styles.bottom}>
-          <TouchableOpacity style = {styles.editButton}>
+          <TouchableOpacity style = {styles.editButton} onPress={()=> navigation.navigate('EditProduct')}>
             <Text style = {styles.editButtonText}>
               Edit
               </Text>

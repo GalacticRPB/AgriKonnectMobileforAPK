@@ -6,6 +6,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SignIn from './screens/signIn';
 import Registration from './screens/registration';
 import Tabs from './navigation/tabs';
+import EditProduct from "./screens/editProduct";
+import AddProduct from "./screens/addProduct";
+import TransactionDetails from "./screens/transactionDetail";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,6 +36,9 @@ const App = () => {
           headerShown: false
               
         }} />
+        <Stack.Screen name="EditProduct" component={ EditProduct } />
+        <Stack.Screen name="AddProduct" component={ AddProduct } />
+        <Stack.Screen name="TransactionDetails" component={ TransactionDetails } />
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -106,7 +106,7 @@ contentContainer: {
     },
     name:{
         color: 'white',
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
        

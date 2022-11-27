@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, SafeAreaView} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const EditProduct = ({navigation}) => {
+const AddProduct = ({navigation}) => {
   const [selected,setSelected] = React.useState("");
   const data = [
     {key:'1',value:'Vegetable'},
@@ -12,13 +12,13 @@ const EditProduct = ({navigation}) => {
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
-      <Text style = {styles.edit}>Edit Product</Text>
-      <Text style = {styles.addtext}>Edit product image</Text>
+      <Text style = {styles.edit}>Add New Product</Text>
+      <Text style = {styles.addtext}>Add product image</Text>
       <Text style = {styles.text}>Upload an image of your product</Text>
 
       <View style={styles.circle} />
 
-      <Text style = {styles.addtext}>Edit product details</Text> 
+      <Text style = {styles.addtext}>Add product details</Text> 
       <Text style = {styles.text}>Select product category</Text>
       <SelectDropdown
         defaultButtonText={' '}
@@ -66,7 +66,7 @@ const EditProduct = ({navigation}) => {
       style = {styles.button} onPress={()=> navigation.navigate('Products')}>
         <Text 
         style = {styles.buttonText}>
-          SAVE CHANGES</Text>
+          ADD PRODUCT</Text>
       </TouchableOpacity>
       </View>
       
@@ -179,4 +179,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default EditProduct;
+export default AddProduct;

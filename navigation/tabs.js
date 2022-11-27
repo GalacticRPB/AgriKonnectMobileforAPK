@@ -48,7 +48,11 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <Foundation name='home' color={'green'} size={30} iconStyle={''}/>
+                        <Text style={{
+                            color: focused ?  'green' : 'F4F4F4', 
+                        }}>
+                            <Foundation name='home' size={30} iconStyle={''}/>
+                        </Text>
                         <Text
                         style={{
                             color: focused ? 'green' : 'F4F4F4', 
@@ -66,7 +70,11 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <Entypo name='shop' color={'green'} size={30} iconStyle={''}/>
+                        <Text style={{
+                            color: focused ?  'green' : 'F4F4F4', 
+                        }}>
+                            <Entypo name='shop' size={30} iconStyle={''}/>
+                        </Text>
                         <Text
                         style={{
                             color: focused ?  'green' : 'F4F4F4', 
@@ -84,7 +92,11 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <MCI name='swap-horizontal-circle-outline' color={'green'} size={30} iconStyle={''}/>
+                        <Text style={{
+                            color: focused ?  'green' : 'F4F4F4', 
+                        }}>
+                        <MCI name='swap-horizontal-circle-outline'  size={30} iconStyle={''}/>
+                        </Text>
                         <Text
                         style={{
                             color: focused ?  'green' : 'F4F4F4', 
@@ -102,7 +114,13 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <MCI name='account' color={'green'} size={30} iconStyle={''}/>
+                        <Text
+                        style={{
+                            color: focused ?  'green' : 'F4F4F4', 
+                            fontSize:10
+                        }}>
+                        <MCI name='account' size={30} iconStyle={''}/>
+                        </Text>
                         <Text
                         style={{
                             color: focused ?  'green' : 'F4F4F4', 
