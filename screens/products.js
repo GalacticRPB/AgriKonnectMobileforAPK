@@ -19,9 +19,9 @@ const Products = ({navigation}) => {
 
         <View style={styles.sBarBG}>
         <View style={styles.searchbar}>
-        <FontAwesome name='search' color={'gray'} size={15} iconStyle={''}/>
+        <FontAwesome name='search' color={'gray'} size={30} iconStyle={''}/>
         <TextInput 
-          placeholder='Search Product'/>
+          placeholder='Search Product' />
         </View>
         </View>
 
@@ -38,7 +38,7 @@ const Products = ({navigation}) => {
 
         <View style = {[styles.rSoldBox, styles.elevation]}>
         <View style={styles.rectangleSold} />
-          <View style={styles.soldItem}>
+          <View>
             <Text style={styles.itemName}>
               Durian
             </Text>
@@ -50,11 +50,6 @@ const Products = ({navigation}) => {
           <TouchableOpacity style = {styles.editButton} onPress={()=> navigation.navigate('EditProduct')}>
             <Text style = {styles.editButtonText}>
               Edit
-              </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style = {styles.deleteButton}>
-            <Text style = {styles.deleteButtonText}>
-              Remove
               </Text>
           </TouchableOpacity>
         </View>
@@ -88,7 +83,7 @@ const styles = StyleSheet.create({
     },
     myProducts:{
         color: 'green',
-        fontSize: 20,
+        fontSize: 28,
         fontWeight: 'bold',
         textAlign: 'left',
     },
@@ -119,9 +114,6 @@ const styles = StyleSheet.create({
       fontSize: 24,
       fontWeight: 'bold',
     },
-    soldItem:{
-  
-    },
     bottom:{
       flex: 1,
       alignItems: 'flex-end',
@@ -130,30 +122,15 @@ const styles = StyleSheet.create({
     },
     editButton:{
       backgroundColor: 'orange',
-      borderRadius: 2,
-
-      height: 30,
-      width: 70,
+      borderRadius: 5,
+      height: 40,
+      width: 80,
       justifyContent: 'center',
       alignItems: 'center',
     },
     editButtonText:{
       color: 'black',
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-    deleteButton:{
-      backgroundColor: 'red',
-      borderRadius: 2,
-      marginTop: 10,
-      height: 30,
-      width: 70,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    deleteButtonText:{
-      color: 'white',
-      fontSize: 16,
+      fontSize: 18,
       fontWeight: 'bold',
     },
     sBarBG: {

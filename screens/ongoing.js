@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View,StyleSheet,Image, TouchableOpacity, ScrollView} from 'react-native';
+import {Text, View,StyleSheet,TouchableOpacity, ScrollView} from 'react-native';
 
 /*Icons Library-Start*/
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -13,13 +13,19 @@ import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import MI from 'react-native-vector-icons/MaterialIcons';
 /*Icons Library-End*/
 
-const Transaction = ({navigation}) => {
+const Ongoing = ({navigation}) => {
     return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
 
-    <View style={styles.topBG}>
-    <Text style = {styles.name}>Incoming Transactions</Text>
+<View style = {[styles.mPBox, styles.topBG]}>
+        <TouchableOpacity>
+        <Text style = {styles.leftIcon}>
+            <FontAwesome5 name="arrow-left" color={'white'} size={25} iconStyle={''} onPress={()=> navigation.navigate('Transaction')}/>
+        </Text>
+        </TouchableOpacity>
+        <Text style = {styles.name}>Ongoing Transactions</Text>
     </View>
+
 
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
@@ -50,13 +56,6 @@ const Transaction = ({navigation}) => {
             Quantity: 25 Kilos
             </Text>
           </View>
-          <View style={styles.bottom}>
-          <TouchableOpacity style = {styles.deliveredButton}>
-            <Text style = {styles.deliveredButtonText}>
-              OUT FOR DELIVERY
-              </Text>
-          </TouchableOpacity>
-        </View>
         </View>
 
         <View style={styles.rowFormat1}>
@@ -127,8 +126,8 @@ contentContainer: {
     topBG: {
         width: '100%',
         height: 70,
-        backgroundColor: "#388E3C",
-        justifyContent: 'center',
+        backgroundColor: "orange",
+        justifyContent: 'flex-start',
         alignItems: 'center',
     },
     name:{
@@ -152,7 +151,7 @@ contentContainer: {
       alignItems: 'center',
     },
     ongoingBG:{
-      backgroundColor: '#FFD88F',
+      backgroundColor: 'orange',
       height: '100%',
       width: '90%',
       justifyContent: 'center',
@@ -219,28 +218,8 @@ contentContainer: {
         color: 'black',
         fontSize: 18,
       },
-      bottom:{
-        flex: 1,
-        alignItems: 'flex-end',
-        marginRight: 5,
-  
-      },
-      deliveredButton:{
-        backgroundColor: 'green',
-        borderRadius: 5,
-        height: 60,
-        width: 90,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      deliveredButtonText:{
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'center'
-      },
       leftDetail:{
-        color: 'green',
+        color: 'orange',
         fontSize: 18,
         fontWeight: 'bold'
       },
@@ -258,6 +237,13 @@ contentContainer: {
         height:2,
         width:'100%',
       },
+      mPBox:{
+        flexDirection: "row",
+        flexWrap: 'nowrap',
+    },
+    leftIcon:{
+        marginLeft: '20%',
+    },
 })
 
-export default Transaction;
+export default Ongoing;

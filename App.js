@@ -9,6 +9,8 @@ import Tabs from './navigation/tabs';
 import EditProduct from "./screens/editProduct";
 import AddProduct from "./screens/addProduct";
 import TransactionDetails from "./screens/transactionDetail";
+import Ongoing from "./screens/ongoing";
+import Delivered from "./screens/delivered";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,6 +41,8 @@ const App = () => {
         <Stack.Screen name="EditProduct" component={ EditProduct } />
         <Stack.Screen name="AddProduct" component={ AddProduct } />
         <Stack.Screen name="TransactionDetails" component={ TransactionDetails } />
+        <Stack.Screen name="Ongoing" component={ Ongoing } />
+        <Stack.Screen name="Delivered" component={ Delivered } />
       </Stack.Navigator>
     </NavigationContainer>
   )

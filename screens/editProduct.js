@@ -2,6 +2,18 @@ import React from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, SafeAreaView} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
+/*Icons Library-Start*/
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import Foundation from 'react-native-vector-icons/Foundation';
+import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import MI from 'react-native-vector-icons/MaterialIcons';
+/*Icons Library-End*/
+
 const EditProduct = ({navigation}) => {
   const [selected,setSelected] = React.useState("");
   const data = [
@@ -12,11 +24,22 @@ const EditProduct = ({navigation}) => {
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
-      <Text style = {styles.edit}>Edit Product</Text>
+    <View style = {[styles.mPBox]}>
+        <TouchableOpacity>
+        <Text style = {styles.leftIcon}>
+            <FontAwesome5 name="arrow-left" color={'black'} size={25} iconStyle={''} onPress={()=> navigation.navigate('Products')}/>
+        </Text>
+        </TouchableOpacity>
+    <Text style = {styles.edit}>Edit Product</Text>
+    </View>
       <Text style = {styles.addtext}>Edit product image</Text>
       <Text style = {styles.text}>Upload an image of your product</Text>
 
-      <View style={styles.circle} />
+      <View style={styles.circle}>
+      <TouchableOpacity style = {styles.addButton} >
+            <FontAwesome5 name='plus' color={'white'} size={30} iconStyle={''}/>
+            </TouchableOpacity>
+      </View>
 
       <Text style = {styles.addtext}>Edit product details</Text> 
       <Text style = {styles.text}>Select product category</Text>
@@ -95,6 +118,16 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
   },
+  mPBox:{
+    flexDirection: "row",
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  leftIcon:{
+      justifyContent:'flex-start',
+      marginLeft: '5%',
+  },
   edit:{
     color: 'green',
     fontSize: 24,
@@ -115,6 +148,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#388E3C",
     marginTop: 10,
+  },
+  addButton:{
+    height: '100%',
+    width: '100%',
+    alignSelf: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text:{
     fontWeight: 'bold',

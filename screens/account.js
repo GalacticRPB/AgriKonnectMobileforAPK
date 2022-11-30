@@ -33,16 +33,13 @@ const Account = () => {
           
           <View style={styles.rectangle}>
           <TouchableOpacity>
-          <View style = {[styles.mPBox]}>
+          <View style = {[styles.mPBox, styles.elevation]}>
           <View style = {styles.leftIcon}>
             <AntDesign name="contacts" color={'black'} size={25} iconStyle={''}/>
             </View>
             <Text style = {styles.menubuttonText}>
                 Contact Information
             </Text>
-            <View style = {styles.rightIcon}>
-            <MCI name='greater-than' color={'black'} size={25} iconStyle={''}/>
-            </View>
         </View>
         </TouchableOpacity>
 
@@ -54,36 +51,25 @@ const Account = () => {
             <Text style = {styles.menubuttonText}>
                 Password
             </Text>
-            <View style = {styles.rightIcon}>
-            <MCI name='greater-than' color={'black'} size={25} iconStyle={''}/>
-            </View>
         </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style = {[styles.mPBox]}>
+          <View style = {styles.leftIcon}>
+            <MCI name="message-star-outline" color={'black'} size={25} iconStyle={''}/>
+            </View>
+            <Text style = {styles.menubuttonText}>
+                Product Reviews
+            </Text>
         </TouchableOpacity>
 
         <TouchableOpacity>
           <View style = {[styles.mPBox]}>
           <View style = {styles.leftIcon}>
-            <MCI name="message-star-outline" color={'black'} size={25} iconStyle={''}/>
-            </View>
-            <Text style = {styles.menubuttonText}>
-                Review
-            </Text>
-            <View style = {styles.rightIcon}>
-            <MCI name='greater-than' color={'black'} size={25} iconStyle={''}/>
-            </View>
-        </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <View style = {[styles.mPBox]}>
-          <Text style = {styles.leftIcon}>
             <Ionicons name="log-out-outline" color={'black'} size={25} iconStyle={''}/>
-            </Text>
+            </View>
             <Text style = {styles.menubuttonText}>
                 Logout
-            </Text>
-            <Text style = {styles.rightIcon}>
-            <MCI name='greater-than' color={'black'} size={25} iconStyle={''}/>
             </Text>
         </View>
         </TouchableOpacity>
@@ -101,9 +87,9 @@ const styles = StyleSheet.create({
         color: 'green',
       },
       ground:{
-        backgroundColor: 'white',
         flex:1,
         justifyContent: 'center',
+        backgroundColor: 'white',
       },
       foreground:{
         flex: 1,
@@ -145,10 +131,9 @@ const styles = StyleSheet.create({
       },
       mPBox:{
         flexDirection: "row",
-        flexWrap:'wrap',
+        flexWrap:'nowrap',
         height: 50,
         alignItems: 'center',
-        justifyContent: 'flex-start',
         backgroundColor: 'white',
         borderRadius: 4,
         marginBottom: 30,
@@ -158,21 +143,11 @@ const styles = StyleSheet.create({
         width: '15%',
         justifyContent: 'center',
         marginLeft: 20,
-        textAlignVertical: 'center',
       },
       menubuttonText:{
         color: 'black',
         fontSize: 18,
         textAlign: 'left',
-        marginLeft: 0,
-        alignItems: 'flex-start',
-      },
-      rightIcon:{
-        height: '100%',
-        width: '15%',
-        justifyContent: 'center',
-        alignItems: 'flex-end',
-        textAlignVertical: 'center',
       },
 })
 

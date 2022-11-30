@@ -1,21 +1,42 @@
 import React from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 
+/*Icons Library-Start*/
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import Foundation from 'react-native-vector-icons/Foundation';
+import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import MI from 'react-native-vector-icons/MaterialIcons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+/*Icons Library-End*/
+
 const Home = ({navigation}) => {
   return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
-    <Text style = {styles.hello}>Hello,</Text>
-      <Text style = {styles.name}>Mr. Barnes</Text>
+      <View style = {[styles.top]}>
+      <View>
+        <Text style = {styles.hello}>Hello,</Text>
+        <Text style = {styles.name}>Russell</Text>
+      </View>
+      <View>
+        <MCI name='account-circle' color={'gray'} size={80} iconStyle={''}/>
+      </View>
+      </View>
 
-      <View style={styles.rectangle} />
+      <View style={[styles.rectangle, styles.elevation]} />
 
       <Text style = {styles.recent}>Recently Sold</Text> 
 
         <View style = {[styles.rSoldBox, styles.elevation]}>
         <View style={styles.rectangleSold} />
-          <View style={styles.soldItem}>
+          <View>
             <Text style={styles.itemName}>
               Durian
             </Text>
@@ -24,11 +45,6 @@ const Home = ({navigation}) => {
             </Text>
           </View>
           <View style={styles.bottom}>
-          <TouchableOpacity style = {styles.button} onPress={()=> navigation.navigate('TransactionDetails')}>
-            <Text style = {styles.buttonText}>
-              View
-              </Text>
-          </TouchableOpacity>
         </View>
         </View>
 
@@ -58,6 +74,14 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
   },
+  top:{
+    marginTop: 15,
+    flexDirection: "row",
+    flexWrap: 'nowrap',
+    height: 80,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   name:{
     color: 'green',
     fontSize: 28,
@@ -72,7 +96,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   rSoldBox:{
-    marginTop: 15,
+    marginTop: 5,
     backgroundColor: "white",
     flexDirection: "row",
     flexWrap: 'nowrap',
@@ -97,35 +121,17 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  soldItem:{
-
-  },
   bottom:{
     flex: 1,
     alignItems: 'flex-end',
     marginRight: 15,
-  },
-  button:{
-    backgroundColor: 'green',
-    borderRadius: 2,
-    marginTop: 0,
-    height: 40,
-    width: 70,
-    justifyContent: 'center',
-    alignItems: 'center',
-    
-  },
-  buttonText:{
-    color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
   },
   rectangle: {
     width: 'auto',
     height: 250,
     borderRadius: 10,
     backgroundColor: "#388E3C",
-    marginTop: 10,
+    marginTop: 20,
   },
   hello:{
     color: 'black',
