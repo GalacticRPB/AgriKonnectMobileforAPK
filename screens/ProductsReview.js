@@ -5,51 +5,28 @@ import { RadioButton } from 'react-native-paper';
 import Icons from 'react-native-vector-icons/FontAwesome';
 
 
-const BasketScreen  = ({navigate}) => {
+const ProductReview  = ({navigate}) => {
 
-  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState("");
-  const [total, setTotal] = useState(0);
-  const [selectedItems, setSelectedItems] = useState(false);
-  const [value, setQuantity] = useState(1);
+ 
+  let user_id = global.id
 
-  let id = global.id
-
-  function handleIncrement() {
-    //setCount(prevCount => prevCount+=1);
-    if(value < 10)
-    {
-      setQuantity(prevCount => prevCount + 1);
-    }
-}
-
-function handleDecrement() {
-    if(value > 1)
-    {
-      setQuantity(prevCount => prevCount - 1);
-    }
-}
-
-  const getBasket = async () => {
+  const getReview = async () => {
     try {
-      const response = await fetch (`http://10.0.2.2:8000/api/basket/${id}`);
+      const response = await fetch (`http://10.0.2.2:8000/api/review/${user_id}`);
       const json = await response.json();
-      setData(json.cart)
+      setData(json.review)
     }
     catch (error)
     {
       console.error(error)
-    }
-    finally
-    {
-      setLoading(false);
     }
   }
 
 
   console.log(data)
   useEffect(() => {
-    getBasket();
+    getReview();
   }, []);
 
   /*function increment() {
@@ -83,11 +60,8 @@ function handleDecrement() {
                       keyExtractor= {({id}, index) => id}
                       renderItem={({item}) => (
                         <View>
-                            <TouchableOpacity onPress={() => {navigation.navigate('Checkout', {item:item})}}>
-                              <Text style={styles.ProdName}>{item.name}</Text>
                               <Text style={styles.ProdPrice}>{item.price}</Text>
                               <Text style={styles.ProdPrice}>{item.fruits_qty}</Text>
-                            </TouchableOpacity>
                         </View>
                       )}
                     />
@@ -97,34 +71,10 @@ function handleDecrement() {
           </ScrollView>
         </View>
       </ScrollView>
-      <View style={styles.TotalContainer}>
-        <View style={{flexDirection: 'row',margin: 5}}>
-              <View style={styles.radiobutton}>
-                
-              </View>
-              <View style={{alignSelf: 'center'}}>
-                      <Text style={{fontWeight: 'bold', color:'#000000', textAlign: 'center'}}>All</Text>
-              </View>
-              <View style={{flexDirection: 'column', margin: 15}}>
-                    <View style={{flexDirection: 'row'}}>
-                      <Text style={{fontSize: 15, fontWeight:'bold', color:'#000000',marginLeft: 20}}>SubTotal:</Text>
-                      <Text style={{fontSize: 15, fontWeight:'bold', color:'#000000',color:'#000000'}}>Php 100.00</Text>
-                    </View>
-                    <View style={{flexDirection: 'row'}}>
-                      <Text style={{fontSize: 12,color:'#000000',marginLeft: 20}}> Shipping Fee:</Text>
-                      <Text style={{fontSize: 12,color:'#000000'}}> Php 100.00</Text>
-                    </View>
-              </View>
-              <View style={{alignSelf: 'center', justifyContent: 'space-between'}}>
-                <TouchableOpacity><Text style={{backgroundColor:'#31A05F', color: 'white',
-                fontWeight: 'bold', padding: 8, borderRadius: 10, marginLeft: 50}}>Checkout</Text></TouchableOpacity>
-              </View>
-          </View> 
       </View>
-    </View>
   )
 }
-export default BasketScreen;
+export default ProductReview;
 
 
 const styles = StyleSheet.create({

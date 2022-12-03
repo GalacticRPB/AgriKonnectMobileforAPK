@@ -13,6 +13,7 @@ import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import MI from 'react-native-vector-icons/MaterialIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { FlatList } from 'react-native-gesture-handler';
 /*Icons Library-End*/
 
 const Home = ({navigation}) => {
@@ -20,7 +21,6 @@ const Home = ({navigation}) => {
   const [recent, setRecent] = useState("");
 
   let id = global.id
-
   const getRecent = async () => {
     try {
       const response = await fetch (`http://10.0.2.2:8000/api/recent/${id}`);
@@ -30,30 +30,6 @@ const Home = ({navigation}) => {
     catch (error)
     {
       console.error(error)
-    }
-  }
-
-  const showRecentPurchase = () => {
-    if (recent.length == 0) {
-      return (
-        <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
-      )
-    }
-    else
-    {
-      return(
-        <FlatList
-          data = {recent}
-          keyExtractor= {({id}, index) => id}
-          renderItem={({item}) => (
-            <View>
-                  <Text style={styles.ProdName}>{item.name}</Text>
-                  <Text style={styles.ProdPrice}>{item.price}</Text>
-                  <Text style={styles.ProdPrice}>{item.fruits_qty}</Text>
-            </View>
-          )}
-        />
-      )
     }
   }
 
@@ -78,15 +54,20 @@ const Home = ({navigation}) => {
       <View style={[styles.rectangle, styles.elevation]} />
 
       <Text style = {styles.recent}>Recently Sold</Text> 
-
-        <View style = {[styles.rSoldBox, styles.elevation]}>
-        <View style={styles.rectangleSold} />
           <View>
-            {showRecentPurchase}
-          </View>
+          <FlatList
+            data = {recent}
+            keyExtractor= {({id}, index) => id}
+            renderItem={({item}) => (
+            <View>
+                  <Text style={styles.ProdName}>Product Name: {item.order_name}</Text>
+                  <Text style={styles.ProdPrice}>Quantity: {item.order_qty}</Text>
+            </View>
+          )}
+        />
           <View style={styles.bottom}>
         </View>
-        </View>
+      </View>
 
 
     </View>
@@ -177,6 +158,26 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 18,
     marginTop: 10,
+  },
+  ProdInfo: {
+    margin: 20,
+  },
+  ProdName: {
+    fontWeight: 'bold', 
+    color: '#000000',
+    fontSize: 15
+  },
+  ProdPrice:{
+    fontWeight: 'bold', 
+    color: '#000000',
+  },
+  BestBasketButton:{
+    backgroundColor:"#31A05F",
+    borderRadius: 10,
+    padding: 12,
+    width: 40,
+    marginTop:30,
+    marginLeft: 100,
   },
 
 

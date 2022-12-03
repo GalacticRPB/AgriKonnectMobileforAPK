@@ -32,6 +32,9 @@ import WriteReview from './screens/WriteReview';
 import RecentTransactions from './screens/RecentTransactions';
 import OrderReviews from './screens/OrderReviews';
 import SearchScreen from './screens/SearchScreen';
+import ContactInfoEdit from "./screens/sellerContactInfo";
+import EditProfile from "./screens/SellerEditProfile";
+import PasswordEdit from "./screens/SellerEditPassword";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -100,6 +103,9 @@ const App = () => {
           <Stack.Screen name="SearchScreen" component={ SearchScreen } options = {{ 
             headerShown: false
           }} />
+        <Stack.Screen name="ContactInfoEdit" component={ ContactInfoEdit } />
+        <Stack.Screen name="EditProfile" component={ EditProfile} />
+        <Stack.Screen name="EditPassword" component={ PasswordEdit} />
         <Stack.Screen name="EditProduct" component={ EditProduct } />
         <Stack.Screen name="AddProduct" component={ AddProduct } />
         <Stack.Screen name="TransactionDetails" component={ TransactionDetails } />

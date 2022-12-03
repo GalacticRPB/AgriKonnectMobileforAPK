@@ -33,9 +33,9 @@ const Fruits = ({navigation}) => {
     <View style={styles.container}>
       <ScrollView>
       <View style={{flexDirection: 'row', padding: 10}}>
-                    <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
-                    <IoIcons name= 'arrow-back' size={50} color='#000000'/>
-                    </TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
+          <IoIcons name= 'arrow-back' size={50} color='#000000'/>
+          </TouchableOpacity>
         <Text style={styles.SectionText}>  Fruits</Text>
         </View>
         <ScrollView>

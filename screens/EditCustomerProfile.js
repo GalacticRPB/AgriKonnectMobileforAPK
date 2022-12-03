@@ -5,6 +5,7 @@ import FaIcons from 'react-native-vector-icons/FontAwesome5';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const EditCustomerProfile = ({navigation}) => {
+    
     return(
         <View style={styles.container}>
             <ScrollView>

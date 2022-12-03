@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, Alert} from 'react-native';
 
 /*Icons Library-Start*/
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -15,7 +15,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 /*Icons Library-End*/
 
-const Account = () => {
+const Account = ({navigation}) => {
     return(
         <ScrollView contentContainerStyle={styles.contentContainer}>
         <View style = {styles.ground}>
@@ -32,7 +32,7 @@ const Account = () => {
     
           
           <View style={styles.rectangle}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={ () => navigation.navigate('ContactInfoEdit')}>
           <View style = {[styles.mPBox, styles.elevation]}>
           <View style = {styles.leftIcon}>
             <AntDesign name="contacts" color={'black'} size={25} iconStyle={''}/>
@@ -43,7 +43,7 @@ const Account = () => {
         </View>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={ () => navigation.navigate('EditPassword')}>
           <View style = {[styles.mPBox]}>
           <View style = {styles.leftIcon}>
             <MCI name="lock" color={'black'} size={25} iconStyle={''}/>
@@ -63,7 +63,7 @@ const Account = () => {
             </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={ () => [Alert.alert("You Have been successfully logged out"), navigation.popToTop()] }>
           <View style = {[styles.mPBox]}>
           <View style = {styles.leftIcon}>
             <Ionicons name="log-out-outline" color={'black'} size={25} iconStyle={''}/>
