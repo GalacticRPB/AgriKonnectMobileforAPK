@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 
 /*Icons Library-Start*/
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,6 +15,62 @@ import MI from 'react-native-vector-icons/MaterialIcons';
 /*Icons Library-End*/
 
 const Products = ({navigation}) => {
+
+  const [myProducts, setMyProducts] = useState([]);
+
+  let id = global.id;
+
+  console.log(id)
+  const getProducts = async () => {
+    try {
+      const response = await fetch (`http://10.0.2.2:8000/api/getproducts/${id}`);
+      const json = await response.json();
+      setMyProducts(json.products);
+    }
+    catch (error)
+    {
+      console.error(error);
+    }
+  }
+
+  /*const showMyProducts = () => {
+    while(isLoading){
+      return(<ActivityIndicator size="large" color="green"></ActivityIndicator>)
+    }
+    if (myProducts.length == 0) {
+      return (
+        <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
+      )
+    }
+    else
+    {
+      return(
+        <FlatList
+          data = {myProducts}
+          keyExtractor= {({id}, index) => id}
+          renderItem={({item}) => (
+            <View>
+                  <Text style={styles.ProdName}>{item.category}</Text>
+                  <Text style={styles.ProdPrice}>{item.name}</Text>
+                  <Text style={styles.ProdPrice}>{item.description}</Text>
+                  <Text style={styles.ProdPrice}>{item.price}</Text>
+                  <Text style={styles.ProdPrice}>{item.quantity}</Text>
+                  <TouchableOpacity style = {styles.editButton} onPress={()=> navigation.navigate('EditProduct')}>
+                    <Text style = {styles.editButtonText}>
+                      Edit
+                      </Text>
+                  </TouchableOpacity>
+            </View>
+          )}
+        />
+      )
+    }
+  }
+  console.log(myProducts)*/
+
+  useEffect(() => {
+    getProducts();
+  }, []);
     return(
         <ScrollView contentContainerStyle={styles.contentContainer}>
 
@@ -36,32 +93,27 @@ const Products = ({navigation}) => {
             </TouchableOpacity>
         </View>
 
-        <View style = {[styles.rSoldBox, styles.elevation]}>
-        <View style={styles.rectangleSold} />
-          <View>
-            <Text style={styles.itemName}>
-              Durian
-            </Text>
-            <Text>
-              Quantity: 25 Kilos
-            </Text>
-          </View>
-          <View style={styles.bottom}>
-          <TouchableOpacity style = {styles.editButton} onPress={()=> navigation.navigate('EditProduct')}>
-            <Text style = {styles.editButtonText}>
-              Edit
-              </Text>
-          </TouchableOpacity>
-        </View>
-        </View>
+        <FlatList data = {myProducts}
+                keyExtractor={({id}, index) => id}
+                renderItem={({item}) => (
+                  <ScrollView>
+                  <View style={styles.ProdInfo}>
+                    <Text style={styles.ProdName}>{item.category}</Text>
+                    <Text style={styles.ProdPrice}>{item.name}</Text>
+                    <Text style={styles.ProdPrice}>{item.description}</Text>
+                    <Text style={styles.ProdPrice}>{item.quantity}</Text>
+                    <Text style={styles.ProdPrice}>{item.price}</Text>
+                  </View>
+                </ScrollView>
 
+            )}>
+        </FlatList>
 
     </View>
     </View>
     </ScrollView>
   );
 }
-
 const styles = StyleSheet.create({
     contentContainer: {
       flex: 1,
@@ -166,6 +218,26 @@ const styles = StyleSheet.create({
       alignSelf: 'auto',
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    ProdInfo: {
+      margin: 20,
+    },
+    ProdName: {
+      fontWeight: 'bold', 
+      color: '#000000',
+      fontSize: 15
+    },
+    ProdPrice:{
+      fontWeight: 'bold', 
+      color: '#000000',
+    },
+    BestBasketButton:{
+      backgroundColor:"#31A05F",
+      borderRadius: 10,
+      padding: 12,
+      width: 40,
+      marginTop:30,
+      marginLeft: 90,
     },
   
   

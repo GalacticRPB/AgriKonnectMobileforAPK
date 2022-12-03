@@ -1,17 +1,16 @@
-import React, {Component, useState} from 'react';
+
+import React, {useState} from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-const SignIn = ({navigation}) => {
-  
-  const [username, setUsername] = useState('');
-  const [checkValidUser, setCheckValidUser] = useState(false);
-  const [password, setPassword] = useState('');
-  const [checkValidPassword, setCheckValidPassword] = useState(false);
+const CustomerSignIn = ({navigation}) => {
 
-  const loginSeller = async () => {
-    await fetch('http://10.0.2.2:8000/api/login', {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const login = async () => {
+      await fetch('http://10.0.2.2:8000/api/loginCustomer', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -22,7 +21,7 @@ const SignIn = ({navigation}) => {
       }).then(res=> res.json())
       .then(resData => {
         if ('error' in resData) {
-          alert('Username or Password')
+          alert('Login credentials do not match')
           console.log(resData)
         }
         else 
@@ -30,75 +29,47 @@ const SignIn = ({navigation}) => {
           global.id = resData.id
           global.firstname = resData.firstname
           global.middlename = resData.middlename
-          global.lastname = resData.lastname
-          global.username = resData.username
-          global.email = resData.email
           global.username = resData.username
           global.mobilephone = resData.mobilephone
           setPassword('');
           setUsername(''),
-          navigation.navigate('Tabs')
+          navigation.navigate('BottomNavigation')
         }
       })
-  }
-
-  /*const handleCheckUsername = text => {
-    if(text.length < 1)
-    {
-      setCheckValidUser(true);
     }
-    else
-    {
-      setCheckValidUser(false);
-    }
-  }
-
-  const handleCheckConfirmPassword = text => {
-    if(text.length <1)
-    {
-      setCheckValidPassword(true);
-    }
-    else
-    {
-      setCheckValidPassword(false);
-    }
-  }*/
 
   return(
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
       <Text style = {styles.welcome}>Welcome,</Text>
-      <Text style = {styles.continue}>Sign-in as Seller</Text>
+      <Text style = {styles.continue}>Sign-in to continue</Text>
 
       <View style = {styles.inputsBox}>
       <TextInput 
+      placeholder='Username'
       style = {styles.input} 
-      onChangeText = { (text) => setUsername(text) }
-      placeholder='Enter Username'
-      placeholderTextColor= 'gray'
-      />
-
+      onChangeText= { (text) => setUsername(text) }>
+      </TextInput>
       
-      <TextInput 
-      style = {styles.input} 
-      onChangeText = { (text) =>  setPassword(text)}
-      placeholder='Password'
-      secureTextEntry={true}
-      placeholderTextColor= 'gray'
-      />
 
+      <TextInput 
+      placeholder='Password'
+      style = {styles.input} 
+      secureTextEntry={true}
+      onChangeText={(text) =>  setPassword(text)}>
+      </TextInput>
       </View>
 
       <TouchableOpacity 
       style = {styles.button}
-      onPress={ loginSeller } >
+      onPress={ login}>
         <Text 
         style = {styles.buttonText}>
           LOG IN</Text>
       </TouchableOpacity>
       
       <Text style = {styles.ask}>Don't have account?</Text>
-      <TouchableOpacity onPress={ () => navigation.navigate('SellerRegistration')}>
+      <TouchableOpacity onPress={ () => navigation.navigate('CustomerRegistration')}>
         <Text style = {styles.registerButton}>
           Register Here</Text>
           </TouchableOpacity>
@@ -171,4 +142,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default SignIn;
+export default CustomerSignIn;

@@ -25,8 +25,8 @@ const Account = () => {
         <MCI name='account-circle' color={'gray'} size={100} iconStyle={''}/>
         </TouchableOpacity>
         <View style={styles.bottom}>
-        <Text style = {styles.name}>Russell Barnes</Text>
-          <Text style = {styles.eMail}>russell.barnes@agri.com</Text>
+        <Text style = {styles.name}>{global.firstname} {global.lastname}</Text>
+          <Text style = {styles.eMail}>{global.username}</Text>
           </View>
         </View>
     

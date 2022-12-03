@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 
 /*Icons Library-Start*/
@@ -16,6 +16,51 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 /*Icons Library-End*/
 
 const Home = ({navigation}) => {
+
+  const [recent, setRecent] = useState("");
+
+  let id = global.id
+
+  const getRecent = async () => {
+    try {
+      const response = await fetch (`http://10.0.2.2:8000/api/recent/${id}`);
+      const json = await response.json();
+      setRecent(json.delivered)
+    }
+    catch (error)
+    {
+      console.error(error)
+    }
+  }
+
+  const showRecentPurchase = () => {
+    if (recent.length == 0) {
+      return (
+        <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
+      )
+    }
+    else
+    {
+      return(
+        <FlatList
+          data = {recent}
+          keyExtractor= {({id}, index) => id}
+          renderItem={({item}) => (
+            <View>
+                  <Text style={styles.ProdName}>{item.name}</Text>
+                  <Text style={styles.ProdPrice}>{item.price}</Text>
+                  <Text style={styles.ProdPrice}>{item.fruits_qty}</Text>
+            </View>
+          )}
+        />
+      )
+    }
+  }
+
+  useEffect(() => {
+    getRecent();
+  }, []);
+
   return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
@@ -23,7 +68,7 @@ const Home = ({navigation}) => {
       <View style = {[styles.top]}>
       <View>
         <Text style = {styles.hello}>Hello,</Text>
-        <Text style = {styles.name}>Russell</Text>
+        <Text style = {styles.name}>{global.firstname}</Text>
       </View>
       <View>
         <MCI name='account-circle' color={'gray'} size={80} iconStyle={''}/>
@@ -37,12 +82,7 @@ const Home = ({navigation}) => {
         <View style = {[styles.rSoldBox, styles.elevation]}>
         <View style={styles.rectangleSold} />
           <View>
-            <Text style={styles.itemName}>
-              Durian
-            </Text>
-            <Text>
-              June 1, 2021
-            </Text>
+            {showRecentPurchase}
           </View>
           <View style={styles.bottom}>
         </View>

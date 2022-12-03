@@ -1,30 +1,22 @@
 import React, { useState } from 'react';
-import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, Alert} from 'react-native';
+import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const Registration = ({navigation}) => {
+const CustomerRegistration = ({navigation}) => {
 
+  const [mobilephone, setMobilephone] = useState('');
   const [firstname, setFirstname] = useState('');
   const [middlename, setMiddlename] = useState('');
-  const [lastname, setLastname] = useState('');
   const [username, setUsername] = useState('');
-  const [validusername, setValidUsername] = useState('');
-  const [mobilephone, setMobilephone] = useState('');
-  const [validnumber, setValidNumber] = useState('');
+  const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
-  const [validemail, setValidEmail] = useState('');
-  const [validpassword, setValidPassword] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPw, setConfirmPw] = useState('');
-  const [validconfirm, setValidConfirm] = useState('');
-  const [verified, setVerified] = useState('');
+  const [password, setPassword] = useState('')
+  const [data, setData] = useState('');
+  const [loading, setLoading] = useState('');
 
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-
-  const RegisterSeller = async () => {
+  const RegisterCustomer = async () => {
     try{
-      const response = await fetch('http://10.0.2.2:8000/api/register', {
+      const response = await fetch('http://10.0.2.2:8000/api/registerCustomer', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -38,7 +30,6 @@ const Registration = ({navigation}) => {
           mobilephone: mobilephone,
           email: email,
           password: password,
-          verified: verified,
         })
       });
 
@@ -51,7 +42,7 @@ const Registration = ({navigation}) => {
         setMobilephone(''),
         setEmail(''),
         setPassword('');
-        setVerified('false');
+        console.log("test")
       }
 
       
@@ -65,77 +56,14 @@ const Registration = ({navigation}) => {
       setLoading(false);
     }
   }
-
-  const handleCheckUsername = text => {
-    if(text.length < 8)
-    {
-      setValidUsername(true);
-    }
-    else
-    {
-      setValidUsername(false);
-    }
-  }
-
-  const handleCheckPassword = text => {
-    if (text.length < 8){
-        setValidPassword(true);
-    }else{
-        setValidPassword(false);
-    }
-}
-
-const handleCheckConfirmPassword = (text, password) => {
-    if (text != password){
-        setValidConfirm(true);
-    }else{
-        setValidConfirm(false);
-    }
-}
-
-const handleCheckEmail = text => {
-    let regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    setEmail(text)
-    if(regex.test(text)){
-        setValidEmail(false);
-    } else {
-        setValidEmail(true);
-    }
-/*const handleUserValidation = () => {
-  errors = [];
-
-  let regex2 = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if(regex2.test(email) == false){
-      errors.push("Invalid Email format")
-  }
-  if (username.length < 8){
-      errors.push("Username should have at least 8 characters")
-  }
-  if (password.length < 8){
-      errors.push("Password should have at least 8 characters")
-  }
-  if (password != confirmPw){
-      errors.push("Password is not the same as Confirm Password")
-  }
-  if (mobilephone.length != 11){
-      errors.push("Mobile number should be valid 11 digit number")
-  }
-  if (errors.length == 0){
-      RegisterSeller();
-      Alert.alert('Registration Submitted');
-      navigation.navigate('SellerSign')
-  }else{
-      Alert.alert("Error!", errors.join('\n'))
-  }
-}*/
-}
   
   return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
       <Text style = {styles.create}>Create an Account</Text>
-      <Text style = {styles.subcreate}>Sign up as a Seller</Text>
+      <Text style = {styles.subcreate}>Sign-up to continue</Text>
+      
       <View style = {styles.inputsBox}> 
       {/*<SelectDropdown
         defaultButtonText={'Select user'}
@@ -168,58 +96,61 @@ const handleCheckEmail = text => {
       <TextInput 
       placeholder='Middle Name'
       style = {styles.input}
-      onChangeText = { (text) => setMiddlename(text) } >
+      onChangeText = { (text) => setMiddlename(text) }
+      >
       </TextInput>
 
       <TextInput 
       placeholder='Last Name'
       style = {styles.input}
-      onChangeText = { (text) => setLastname(text) } >
+      onChangeText = { (text) => setLastname(text) }
+      >
       </TextInput>
 
       <TextInput 
       placeholder='Username'
       style = {styles.input}
-      onChangeText = { (text) =>  setUsername(text) }>
+      onChangeText = { (text) => setUsername(text) }>
       </TextInput>
 
       <TextInput 
-      placeholder='Email '
+      placeholder='Mobile Phone'
       style = {styles.input}
-      onChangeText = { (text) => [ setValidEmail(text)] }>
+      keyboardType="numeric"
+      onChangeText = { (text) => setMobilephone(text) }>
       </TextInput>
 
       <TextInput 
-      placeholder='Mobile Phone '
+      placeholder='Email'
       style = {styles.input}
-      onChangeText = { (text) => [ setValidNumber(text)] }>
+      onChangeText = { (text) => setEmail(text) }
+      >
       </TextInput>
       
       <TextInput 
       placeholder='Password'
       style = {styles.input} 
-      secureTextEntry={true}
-      onChangeText = { (text) => [ setPassword(text)] }>
+      secureTextEntry={true}>
       </TextInput>
 
       <TextInput 
       placeholder='Confirm Password'
       style = {styles.input} 
       secureTextEntry={true}
-      onChangeText = { (text) => [ setConfirmPw(text)] }>
+      onChangeText = { (text) => setPassword(text) }>
       </TextInput>
       </View>
 
       <TouchableOpacity 
       style = {styles.button}
-      onPress={ RegisterSeller}>
+      onPress={ RegisterCustomer}>
         <Text 
         style = {styles.buttonText}>
           REGISTER</Text>
       </TouchableOpacity>
       
       <Text style = {styles.ask}>Already have an account?</Text>
-      <TouchableOpacity  onPress={ () => navigation.navigate('SellerSignIn')}>
+      <TouchableOpacity  onPress={ () => navigation.navigate('CustomerSignIn')}>
         <Text style = {styles.loginButton}>
           Login Here</Text>
           </TouchableOpacity>
@@ -311,4 +242,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Registration;
+export default CustomerRegistration;
