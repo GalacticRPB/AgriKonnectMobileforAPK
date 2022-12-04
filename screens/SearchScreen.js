@@ -6,7 +6,30 @@ import SearchBar from '../components/SearchBar';
 import ProductContainer from './ProductContainer';
 
 const SearchScreen = ({navigation}) => {
-    const [term, setItem] = useState ('');
+
+    const [data, setData] = useState ('');
+    const [search, setSearch] = useState('');
+
+    const [filteredData, setFilteredData] = useState([]);
+    const [masterData, setMasterData] = useState([]);
+
+    const searchFilter = (text) => {
+      if (text) {
+        const newData = masterData.filter((item) => {
+          const itemData = item.name ? item.name.toUpperCase()
+                          : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+        setFilteredData(newData);
+        setSearch(text);
+      }
+      else
+      {
+        setFilteredData(masterData);
+        setSearch(text);
+      }
+    }
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -18,9 +41,9 @@ const SearchScreen = ({navigation}) => {
           <View>
             <SearchBar
             placeholder='Search a product'
-            onChange = {setItem}
-            term = {term}
-            ></SearchBar>
+            onChange = {filteredData}>
+              
+            </SearchBar>
           </View>
           <ProductContainer/>
         </ScrollView>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text,View,StyleSheet,Image,TouchableOpacity} from 'react-native';
+import {Text,View,StyleSheet,Image,TouchableOpacity, Alert} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import McIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -55,7 +55,7 @@ const CustomerProfile = ({navigation}) => {
                             <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.ButtonContainer}>
+                    <TouchableOpacity style={styles.ButtonContainer} onPress={ () => [Alert.alert("You Have been successfully logged out"), navigation.popToTop()] }>
                         <View style={{flexDirection: 'row'}}>
                             <McIcons name='logout'size={50} color='#5F5B5B'/>
                             <Text style={{marginTop: 10, marginLeft: 10, color: '#000000'}}> Logout</Text>

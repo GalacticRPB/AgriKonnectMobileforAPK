@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, ScrollView} from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 
 /*Icons Library-Start*/
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,6 +15,24 @@ import MI from 'react-native-vector-icons/MaterialIcons';
 /*Icons Library-End*/
 
 const Transaction = ({navigation}) => {
+  let user_id = global.id;
+
+  const [transaction, setTransaction] = useState([]);
+
+  const getTransaction = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/showOrder/${user_id}`);
+      const json = await response.json();
+      setTransaction(json.orders);
+    }
+    catch(error) {
+      console.error(error);
+    } 
+  }
+
+  useEffect(() => {
+    getTransaction();
+  }, []);
     return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
 
@@ -40,23 +59,23 @@ const Transaction = ({navigation}) => {
       </View>
 
     <View style = {[styles.itemBox, styles.elevation]}>
-    <View style = {styles.rowFormat}>
-        <View style={styles.rectangleSold} />
-          <View>
-          <Text style={styles.itemDate}>
-              Patatas
-            </Text>
-            <Text style={styles.itemName}>
-            Quantity: 25 Kilos
-            </Text>
-          </View>
-          <View style={styles.bottom}>
-          <TouchableOpacity style = {styles.deliveredButton}>
-            <Text style = {styles.deliveredButtonText}>
-              OUT FOR DELIVERY
-              </Text>
-          </TouchableOpacity>
-        </View>
+        <View style = {styles.rowFormat}>
+            <FlatList
+                style = {{ height: 450 }}
+                data={transaction}
+                keyExtractor={({ id }, index) => id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity style = {styles.item} onPress={ () => navigation.navigate('PetDetails', {item:item})}>
+                    <Text style = {styles.header2}>{item.order_name}</Text>
+                    <View style={{borderBottomColor: 'gray', borderBottomWidth: StyleSheet.hairlineWidth, margin: 3}}/>
+                    <Text style = {styles.description}>{item.pet_type}</Text>
+                    <Text style = {styles.description2}>{item.pet_birthdate}</Text>
+                    <Text style = {styles.description}>{item.pet_breed}</Text>
+                    <Text style = {styles.description2}>{item.pet_sex}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
         </View>
 
         <View style={styles.rowFormat1}>
@@ -93,7 +112,6 @@ const Transaction = ({navigation}) => {
         </View>
         </View>
 
-    </View>
     </View>
     </ScrollView>
     );}

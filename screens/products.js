@@ -15,58 +15,43 @@ import MI from 'react-native-vector-icons/MaterialIcons';
 /*Icons Library-End*/
 
 const Products = ({navigation}) => {
-
-  const [myProducts, setMyProducts] = useState([]);
-
   let id = global.id;
+  const [search, setSearch] = useState('');
 
-  console.log(id)
-  const getProducts = async () => {
-    try {
-      const response = await fetch (`http://10.0.2.2:8000/api/getproducts/${id}`);
-      const json = await response.json();
-      setMyProducts(json.products);
-    }
-    catch (error)
-    {
-      console.error(error);
-    }
-  }
+  const [filteredData, setFilteredData] = useState([]);
+  const [masterData, setMasterData] = useState([]);
 
-  /*const showMyProducts = () => {
-    while(isLoading){
-      return(<ActivityIndicator size="large" color="green"></ActivityIndicator>)
-    }
-    if (myProducts.length == 0) {
-      return (
-        <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
-      )
+  const searchFilter = (text) => {
+    if (text) {
+        const newData = masterData.filter((item) => {
+        const itemData = item.name ? item.name.toUpperCase()
+                        : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
     }
     else
     {
-      return(
-        <FlatList
-          data = {myProducts}
-          keyExtractor= {({id}, index) => id}
-          renderItem={({item}) => (
-            <View>
-                  <Text style={styles.ProdName}>{item.category}</Text>
-                  <Text style={styles.ProdPrice}>{item.name}</Text>
-                  <Text style={styles.ProdPrice}>{item.description}</Text>
-                  <Text style={styles.ProdPrice}>{item.price}</Text>
-                  <Text style={styles.ProdPrice}>{item.quantity}</Text>
-                  <TouchableOpacity style = {styles.editButton} onPress={()=> navigation.navigate('EditProduct')}>
-                    <Text style = {styles.editButtonText}>
-                      Edit
-                      </Text>
-                  </TouchableOpacity>
-            </View>
-          )}
-        />
-      )
+      setFilteredData(masterData);
+      setSearch(text);
     }
   }
-  console.log(myProducts)*/
+
+const getProducts = () => {
+  const apiURL = `http://10.0.2.2:8000/api/getproducts/${id}`;
+  fetch(apiURL)
+  .then((response) => response.json())
+  .then((responseJson) => {
+      setFilteredData(responseJson.products);
+      setMasterData(responseJson.products);
+  }).catch((error) => {
+      console.error(error);
+  }).finally(() => {
+      setLoading(false);
+  })
+}
 
   useEffect(() => {
     getProducts();
@@ -77,8 +62,13 @@ const Products = ({navigation}) => {
         <View style={styles.sBarBG}>
         <View style={styles.searchbar}>
         <FontAwesome name='search' color={'gray'} size={30} iconStyle={''}/>
-        <TextInput 
-          placeholder='Search Product' />
+          <TextInput 
+            style={styles.searchbar}
+            placeholder='Search Product Name'
+            placeholderTextColor = 'gray'
+            value = {search}
+            onChangeText = { (text) => searchFilter(text) }
+            ></TextInput>
         </View>
         </View>
 
@@ -92,22 +82,30 @@ const Products = ({navigation}) => {
             <FontAwesome5 name='plus' color={'white'} size={30} iconStyle={''}/>
             </TouchableOpacity>
         </View>
-
-        <FlatList data = {myProducts}
-                keyExtractor={({id}, index) => id}
-                renderItem={({item}) => (
-                  <ScrollView>
-                  <View style={styles.ProdInfo}>
+        <ScrollView>
+            <View style={styles.BestContainer}>
+              <View style={{flexDirection: 'row'}}>
+                <FlatList data = {filteredData}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item}) => (
+                    <ScrollView>
+                    <TouchableOpacity onPress={() => {navigation.navigate('ProductDetails', {item:item})}}>
+                    <View style={styles.ProdInfo}>
                     <Text style={styles.ProdName}>{item.category}</Text>
-                    <Text style={styles.ProdPrice}>{item.name}</Text>
-                    <Text style={styles.ProdPrice}>{item.description}</Text>
-                    <Text style={styles.ProdPrice}>{item.quantity}</Text>
-                    <Text style={styles.ProdPrice}>{item.price}</Text>
-                  </View>
-                </ScrollView>
+                      <Text style={styles.ProdPrice}>{item.name}</Text>
+                      <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
+                      <Text style={styles.ProdPrice}>Quantity: {item.quantity}</Text>
+                    </View>
+                    </TouchableOpacity>
+                  </ScrollView>
 
-            )}>
-        </FlatList>
+                  )}>
+                  
+                </FlatList>
+                    
+              </View>
+            </View>
+          </ScrollView>
 
     </View>
     </View>
@@ -132,6 +130,12 @@ const styles = StyleSheet.create({
       marginTop: '5%',
       marginLeft: '4%',
       marginRight: '4%',
+    },
+    searchbar: {
+      backgroundColor: 'white',
+      borderRadius: 12,
+      padding: 12,
+      margin: 10,
     },
     myProducts:{
         color: 'green',

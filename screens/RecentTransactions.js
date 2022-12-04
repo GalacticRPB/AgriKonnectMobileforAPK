@@ -1,13 +1,33 @@
-import React,{useState}  from 'react';
+import React,{useEffect, useState}  from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView} from 'react-native';
 import MiIcons from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
+import { FlatList } from 'react-native-gesture-handler';
 
 
 const RecentTransactions = ({navigation}) => {
-    const [selected,setSelected] = useState("");
-    const paymentmethod = ["Cash on Delivery", "Gcash"]
+    
+    const [data, setData] = useState("");
+    const id = global.id
+
+    const getReview = async () => {
+        try {
+        const response = await fetch (`http://10.0.2.2:8000/api/customer-recent/${id}`);
+        const json = await response.json();
+        setData(json.reviews)
+        }
+        catch (error)
+        {
+        console.error(error)
+        }
+    }
+
+
+    console.log(data)
+    useEffect(() => {
+        getReview();
+    }, []);
     return(
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
@@ -20,9 +40,17 @@ const RecentTransactions = ({navigation}) => {
                 <View style={{flexDirection: 'row'}}>
                     <Image style={styles.ProdImg} source={require('../assets/lettuce.png')}/>
                         <View style={{flexDirection: 'column', margin: 10}}>
-                            <Text style={styles.ButtonTitle}>Lettuce</Text>
-                            <Text style={styles.kilo}>5 kg</Text>
-                            <Text style={styles.amount}>Php 100.00</Text>
+                        <FlatList data = {data}
+                            keyExtractor={({id}, index) => id}
+                            renderItem={({item})=> (
+                                <View style={styles.ProdInfo}>
+                                <Text style={styles.ProdName}>Product: {item.order_name}</Text>
+                                <Text style={styles.ProdPrice}>Price:  {item.order_total}.00</Text>
+                                <Text style={styles.ProdPrice}>Quantity:  {item.order_qty}</Text>
+                                </View>
+                                )}>
+                            
+                            </FlatList>
                         </View>
                 </View>
             </View>

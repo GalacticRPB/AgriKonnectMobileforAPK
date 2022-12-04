@@ -6,9 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const SignIn = ({navigation}) => {
   
   const [username, setUsername] = useState('');
-  const [checkValidUser, setCheckValidUser] = useState(false);
   const [password, setPassword] = useState('');
-  const [checkValidPassword, setCheckValidPassword] = useState(false);
 
   const loginSeller = async () => {
     await fetch('http://10.0.2.2:8000/api/login', {

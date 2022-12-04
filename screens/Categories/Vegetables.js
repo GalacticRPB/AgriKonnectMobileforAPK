@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView, ActivityIndicator} from 'react-native';
 import IoIcons from 'react-native-vector-icons/Ionicons';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import { TextInput } from 'react-native-gesture-handler';
 
 
 const Vegetables = ({navigation}) => {
     const [isLoading, setLoading] = useState(true);
     const [term, setItem] = useState ([]);
 
-    const getVegetable = async () => {
+    /*const getVegetable = async () => {
       try {
         const response = await fetch ( `http://10.0.2.2:8000/api/vegetable`);
         const json = await response.json();
@@ -22,49 +23,96 @@ const Vegetables = ({navigation}) => {
       {
         setLoading(false);
       }
-    }
+    }*/
 
-    const showVegetables = () => {
-      while(isLoading){
-        return(<ActivityIndicator size="large" color="green" style={{ alignSelf: 'center' }}></ActivityIndicator>)
-      }
-      if (term.length == 0) {
-        return (
-          <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
-        )
-      }
-      else
-      {
-        return(
-          <FlatList
-            data = {term}
-            keyExtractor= {({id}, index) => id}
-            renderItem={({item}) => (
-              <View style={{ marginTop: 20 }}>
-                  <TouchableOpacity onPress={() => {navigation.navigate('VegetableDetails', {item:item})}}>
-                    <Text style={styles.ProdName}>{item.name}</Text>
-                    <Text style={styles.ProdPrice}>Php {item.price}.oo</Text>
-                    <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
-                  </TouchableOpacity>
-              </View>
-            )}
-          />
-        )
-      }
+    
+  const [search, setSearch] = useState('');
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [masterData, setMasterData] = useState([]);
+
+  const searchFilter = (text) => {
+    if (text) {
+        const newData = masterData.filter((item) => {
+        const itemData = item.name ? item.name.toUpperCase()
+                        : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
     }
+    else
+    {
+      setFilteredData(masterData);
+      setSearch(text);
+    }
+  }
+
+const getProducts = () => {
+  const apiURL = `http://10.0.2.2:8000/api/vegetable`;
+  fetch(apiURL)
+  .then((response) => response.json())
+  .then((responseJson) => {
+      setFilteredData(responseJson.products);
+      setMasterData(responseJson.products);
+  }).catch((error) => {
+      console.error(error);
+  }).finally(() => {
+      setLoading(false);
+  })
+}
+
+
+  const showVegetables = () => {
+    while(isLoading){
+      return(<ActivityIndicator size="large" color="green" style={{ alignSelf: 'center' }}></ActivityIndicator>)
+    }
+    if (filteredData.length == 0) {
+      return (
+        <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
+      )
+    }
+    else
+    {
+      return(
+        <FlatList
+          data = {filteredData}
+          keyExtractor= {({id}, index) => id}
+          renderItem={({item}) => (
+            <View style={{ marginTop: 20 }}>
+                <TouchableOpacity onPress={() => {navigation.navigate('VegetableDetails', {item:item})}}>
+                  <Text style={styles.ProdName}>{item.name}</Text>
+                  <Text style={styles.ProdPrice}>Php {item.price}.oo</Text>
+                  <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
+                </TouchableOpacity>
+            </View>
+          )}
+        />
+      )
+    }
+  }
 
   useEffect(() => {
-    getVegetable();
+    getProducts();
   }, []);
 
   return (
     <View style={styles.container}>
        <View style={{flexDirection: 'row', padding: 10}}>
-                    <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
-                    <IoIcons name= 'arrow-back' size={50} color='#000000'/>
-                    </TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
+            <IoIcons name= 'arrow-back' size={50} color='#000000'/>
+            </TouchableOpacity>
                     
         <Text style={styles.SectionText}> Vegetables</Text>
+        </View>
+        <View>
+        <TextInput 
+            placeholder='Search Product Name'
+            placeholderTextColor = 'gray'
+            value = {search}
+            onChangeText = { (text) => searchFilter(text) }
+            ></TextInput>
         </View>
             <View style={styles.BestContainer}>
               <View style={{flexDirection: 'row'}}>

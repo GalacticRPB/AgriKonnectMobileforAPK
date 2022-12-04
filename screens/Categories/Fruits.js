@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import {Text, View,StyleSheet,TouchableOpacity, Image, ScrollView} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
-import Icons from 'react-native-vector-icons/FontAwesome';
+import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView, ActivityIndicator} from 'react-native';
 import IoIcons from 'react-native-vector-icons/Ionicons';
+import Icons from 'react-native-vector-icons/FontAwesome';
+import { TextInput } from 'react-native-gesture-handler';
+
 
 const Fruits = ({navigation}) => {
-  
-  const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [term, setItem] = useState ([]);
 
-    const getFruits = async () => {
+    /*const getVegetable = async () => {
       try {
-        const response = await fetch ( `http://10.0.2.2:8000/api/fruit`);
+        const response = await fetch ( `http://10.0.2.2:8000/api/vegetable`);
         const json = await response.json();
         setItem(json.products);
       }
@@ -23,44 +23,104 @@ const Fruits = ({navigation}) => {
       {
         setLoading(false);
       }
+    }*/
+
+    
+  const [search, setSearch] = useState('');
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [masterData, setMasterData] = useState([]);
+
+  const searchFilter = (text) => {
+    if (text) {
+        const newData = masterData.filter((item) => {
+        const itemData = item.name ? item.name.toUpperCase()
+                        : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
     }
+    else
+    {
+      setFilteredData(masterData);
+      setSearch(text);
+    }
+  }
+
+const getProducts = () => {
+  const apiURL = `http://10.0.2.2:8000/api/fruit`;
+  fetch(apiURL)
+  .then((response) => response.json())
+  .then((responseJson) => {
+      setFilteredData(responseJson.products);
+      setMasterData(responseJson.products);
+  }).catch((error) => {
+      console.error(error);
+  }).finally(() => {
+      setLoading(false);
+  })
+}
+
+
+  const showFruits = () => {
+    while(isLoading){
+      return(<ActivityIndicator size="large" color="green" style={{ alignSelf: 'center' }}></ActivityIndicator>)
+    }
+    if (filteredData.length == 0) {
+      return (
+        <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
+      )
+    }
+    else
+    {
+      return(
+        <FlatList
+          data = {filteredData}
+          keyExtractor= {({id}, index) => id}
+          renderItem={({item}) => (
+            <View style={{ marginTop: 20 }}>
+                <TouchableOpacity onPress={() => {navigation.navigate('VegetableDetails', {item:item})}}>
+                  <Text style={styles.ProdName}>{item.name}</Text>
+                  <Text style={styles.ProdPrice}>Php {item.price}.oo</Text>
+                  <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
+                </TouchableOpacity>
+            </View>
+          )}
+        />
+      )
+    }
+  }
 
   useEffect(() => {
-    getFruits();
+    getProducts();
   }, []);
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-      <View style={{flexDirection: 'row', padding: 10}}>
-          <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
-          <IoIcons name= 'arrow-back' size={50} color='#000000'/>
-          </TouchableOpacity>
-        <Text style={styles.SectionText}>  Fruits</Text>
+       <View style={{flexDirection: 'row', padding: 10}}>
+            <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
+            <IoIcons name= 'arrow-back' size={50} color='#000000'/>
+            </TouchableOpacity>
+                    
+        <Text style={styles.SectionText}> Fruits</Text>
         </View>
-        <ScrollView>
+        <View>
+        <TextInput 
+            placeholder='Search Product Name'
+            placeholderTextColor = 'gray'
+            value = {search}
+            onChangeText = { (text) => searchFilter(text) }
+            ></TextInput>
+        </View>
             <View style={styles.BestContainer}>
               <View style={{flexDirection: 'row'}}>
-              <FlatList data = {term}
-                keyExtractor={({id}, index) => id}
-                renderItem={({item}) => (
-                  <ScrollView>
-                  <TouchableOpacity onPress={() => {navigation.navigate('ProductDetails', {item:item})}}>
-                  <View style={styles.ProdInfo}>
-                  <Text style={styles.ProdName}>{item.name}</Text>
-                    <Text style={styles.ProdPrice}>Price: Php {item.price}.00</Text>
-                    <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
-                  </View>
-                  </TouchableOpacity>
-                </ScrollView>
-
-                )}>
-                  
-                </FlatList>
+                {showFruits()}
+                
+                 
               </View>
             </View>
-        </ScrollView>
-      </ScrollView>
     </View>
     );
 }
@@ -70,13 +130,8 @@ export default Fruits;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#F4F4F4'
   },
-  headercontainer:{
-    flexDirection: 'row',
-    padding: 20,
-    justifyContent: 'space-between'
-  },
+
   title: {
     color: '#5F5B5B',
     fontWeight:'bold',

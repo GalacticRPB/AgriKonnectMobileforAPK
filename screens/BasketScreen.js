@@ -5,12 +5,9 @@ import { RadioButton } from 'react-native-paper';
 import Icons from 'react-native-vector-icons/FontAwesome';
 
 
-const BasketScreen  = ({navigate}) => {
+const BasketScreen  = ({navigation}) => {
 
-  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState("");
-  const [total, setTotal] = useState(0);
-  const [selectedItems, setSelectedItems] = useState(false);
   const [value, setQuantity] = useState(1);
 
   let id = global.id
@@ -75,22 +72,22 @@ function handleDecrement() {
           <ScrollView>
             <View style={styles.BestContainer}>
               <View style={{flexDirection: 'row'}}>
-                <View>
+              <FlatList data = {data}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item}) => (
+                    <ScrollView>
+                    <TouchableOpacity onPress={() => {navigation.navigate('CheckoutForm', {item:item})}}>
+                    <View style={styles.ProdInfo}>
+                        <Text style={styles.ProdName}>{item.name}</Text>
+                        <Text style={styles.ProdPrice}>{item.price}</Text>
+                        <Text style={styles.ProdPrice}>{item.fruits_qty}</Text>
+                    </View>
+                    </TouchableOpacity>
+                  </ScrollView>
+
+                  )}>
                   
-                </View>
-                    <FlatList
-                      data = {data}
-                      keyExtractor= {({id}, index) => id}
-                      renderItem={({item}) => (
-                        <View>
-                            <TouchableOpacity onPress={() => {navigation.navigate('Checkout', {item:item})}}>
-                              <Text style={styles.ProdName}>{item.name}</Text>
-                              <Text style={styles.ProdPrice}>{item.price}</Text>
-                              <Text style={styles.ProdPrice}>{item.fruits_qty}</Text>
-                            </TouchableOpacity>
-                        </View>
-                      )}
-                    />
+                </FlatList>
                     
               </View>
             </View>

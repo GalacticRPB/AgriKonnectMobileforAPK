@@ -21,11 +21,13 @@ const Home = ({navigation}) => {
   const [recent, setRecent] = useState("");
 
   let id = global.id
+
+  console.log(recent)
   const getRecent = async () => {
     try {
       const response = await fetch (`http://10.0.2.2:8000/api/recent/${id}`);
       const json = await response.json();
-      setRecent(json.delivered)
+      setRecent(json.sellerdelivered)
     }
     catch (error)
     {
@@ -54,17 +56,23 @@ const Home = ({navigation}) => {
       <View style={[styles.rectangle, styles.elevation]} />
 
       <Text style = {styles.recent}>Recently Sold</Text> 
-          <View>
-          <FlatList
-            data = {recent}
-            keyExtractor= {({id}, index) => id}
-            renderItem={({item}) => (
-            <View>
-                  <Text style={styles.ProdName}>Product Name: {item.order_name}</Text>
-                  <Text style={styles.ProdPrice}>Quantity: {item.order_qty}</Text>
-            </View>
-          )}
-        />
+        <View>
+          <ScrollView>
+            <FlatList data = {recent}
+              keyExtractor={({id}, index) => id}
+              renderItem={({item}) => (
+                <ScrollView>
+                  <View style={styles.ProdInfo}>
+                  <Text style={styles.ProdName}>{item.name}</Text>
+                    <Text style={styles.ProdPrice}>Product: {item.order_name}</Text>
+                    <Text style={styles.ProdPrice}>Php : Php {item.order_total}.00</Text>
+                  </View>
+              </ScrollView>
+
+              )}>
+              
+            </FlatList>
+          </ScrollView>
           <View style={styles.bottom}>
         </View>
       </View>

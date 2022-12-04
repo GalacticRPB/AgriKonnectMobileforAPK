@@ -3,23 +3,11 @@ import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, Sa
 import SelectDropdown from 'react-native-select-dropdown';
 
 /*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import MI from 'react-native-vector-icons/MaterialIcons';
 /*Icons Library-End*/
 
 const EditProduct = ({navigation}) => {
-  const [selected,setSelected] = React.useState("");
-  const data = [
-    {key:'1',value:'Vegetable'},
-    {key:'2',value:'Fruit'},];
-  const countries = ["Vegetable", "Fruit"]
+
   return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>

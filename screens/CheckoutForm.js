@@ -3,14 +3,21 @@ import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, Sc
 import MiIcons from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
+import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
 
 
-const CheckoutForm = ({navigation}) => {
+const CheckoutForm = ({navigation, route}) => {
 
     const [data, setData] = useState("");
     const [loading, setLoading] = useState("");
+    const [firstname, setFirstname] = useState("");
+    const [middlename, setMiddlename] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [shippingaddress, setAddress] = useState("");
+    const [mobilephone, setMobilephone] = useState("");
+    const [modeofpayment, setModeofPayment] = useState("");
     
-    /*const Checkout = async () => {
+    const Checkout = async () => {
         try{
             const response = await fetch('http://10.0.2.2:8000/api/place-order', {
                 method: 'POST',
@@ -19,25 +26,47 @@ const CheckoutForm = ({navigation}) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    cart_id:
-                    seller_id:
-                    order_name: 
-                    price:
-                    product_qty:
-                    shippngfee:
-                    total_price:
-                    firstname:
-                    middlename:
-                    lastname:
-                    shippingaddress:
-                    mobilephone: 
-                    modeofpaymentL
-                    customerId:
+                    cart_id: route.params.item.id,
+                    seller_id: route.params.item.user_id,
+                    order_name: route.params.item.name,
+                    price: route.params.item.price,
+                    product_qty: route.params.item.value,
+                    shippingfee: route.params.item.value,
+                    total_price: route.params.item.value,
+                    firstname: global.firstname,
+                    middlename: global.middlename,
+                    lastname: global.lastname,
+                    shippingaddress: shippingaddress,
+                    mobilephone: mobilephone,
+                    modeofpayment: modeofpayment,
+                    customerId: global.id,
                 })
-            })
+            });
+
+            if((response).status === 201)
+            {
+                setFirstname('');
+                setMiddlename(''),
+                setLastname(''),
+                setUsername(''),
+                setMobilephone(''),
+                setAddress(''),
+                setModeofPayment('');
+                console.log("test")
+            }
+
+            
+            const json = await response.json();
+            setData(json.register);
+            }
+            catch (error) {
+            console.error(error);
+            }
+            finally {
+            setLoading(false);
+            }
         }
-    }*/
-    
+            
     return(
         <View style={styles.container}>
             <ScrollView>
@@ -50,9 +79,9 @@ const CheckoutForm = ({navigation}) => {
                 <View style={{flexDirection: 'row'}}>
                     <Image style={styles.itemPhoto} source={require('../assets/lettuce.png')}/>
                     <View style={{flexDirection: 'column', margin: 10}}>
-                        <Text style={styles.prodname}>Lettuce</Text>
-                        <Text style={styles.prodprice}>Php. 40.00</Text>
-                        <Text style={styles.prodqty}>Qty: 1kg</Text>
+                        <Text style={styles.prodname}>{route.params.item.name}</Text>
+                        <Text style={styles.prodprice}>{route.params.item.price}</Text>
+                        <Text style={styles.prodqty}>Qty: {route.params.item.qty}</Text>
                     </View>
                 </View>
                 <View style={{flexDirection:'column'}}>
@@ -63,35 +92,12 @@ const CheckoutForm = ({navigation}) => {
                                 <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
                             </View>
                     </TouchableOpacity>
-                    <Text style={styles.TitleInput}> Select Payment Method</Text>
-                    <SelectDropdown
-                    defaultButtonText={'Select payment method'}
-                    buttonStyle={styles.dropdown1BtnStyle}
-                    buttonTextStyle={styles.dropdown1BtnTxtStyle}
-                    dropdownStyle={styles.dropdown1DropdownStyle}
-                    rowStyle={styles.dropdown1RowStyle}
-                    rowTextStyle={styles.dropdown1RowTxtStyle}
-                        data={paymentmethod}
-                        onSelect={(selectedItem, index) => {
-                        console.log(selectedItem, index)
-                        }}
-                        buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem
-                        }}
-                        rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item
-                        }}
-                    />
-                    <Text style={styles.TitleInput}> Voucher Code </Text>
+                    <Text style={styles.TitleInput}> Payment Method</Text>
                         <TextInput 
-                        placeholder='Voucher code'
-                        style = {styles.input} 
-                        keyboardType='default'>
-                        </TextInput>
+                            placeholder='Cash on Delivery'
+                            style = {styles.input} 
+                            keyboardType='default'>
+                            </TextInput>
                     <Text style={styles.TitleInput}> SubTotal</Text>
                         <TextInput 
                         placeholder='SubTotal'

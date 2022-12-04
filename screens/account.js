@@ -54,7 +54,7 @@ const Account = ({navigation}) => {
         </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style = {[styles.mPBox]}>
+        <TouchableOpacity style = {[styles.mPBox]} onPress={ () => navigation.navigate('ProductReview')}>
           <View style = {styles.leftIcon}>
             <MCI name="message-star-outline" color={'black'} size={25} iconStyle={''}/>
             </View>

@@ -1,32 +1,65 @@
-import React from 'react';
-import {Text, View,StyleSheet,TouchableOpacity,Image} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {Text,View,Image,StyleSheet,TouchableOpacity} from 'react-native';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 
+const OrderReview = ({navigation}) => {
 
-const OrderReviews = ({navigation}) => {
+    const [data, setData] = useState("");
+    let id = global.id
+
+    const getReview = async () => {
+        try {
+        const response = await fetch (`http://10.0.2.2:8000/api/customer-review/${id}`);
+        const json = await response.json();
+        setData(json.review)
+        }
+        catch (error)
+        {
+        console.error(error)
+        }
+    }
+
+
+    console.log(data)
+    useEffect(() => {
+        getReview();
+    }, []);
+
     return(
         <View style={styles.container}>
-                <View style={{flexDirection: 'row', padding: 10}}>
-                    <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                    <Icons name= 'arrow-back' size={50} color='#000000'/>
-                    </TouchableOpacity>
-                    <Text style={styles.SectionText}> My Reviews </Text>
-                </View>
-                <View style={styles.PayContainer} onPress={()=>navigation.navigate('ToPay')}>
+            <View style={{flexDirection: 'row', padding: 10}}>
+                <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
+                <Icons name= 'arrow-back' size={50} color='#000000'/>
+                </TouchableOpacity>
+                <Text style={styles.SectionText}> Product Reviews </Text>
+            </View>
+            <ScrollView>
+                <View style={{flexDirection: 'column', margin: 10}}>
+                    <View style={styles.ButtonContainer}>
                         <View style={{flexDirection: 'row'}}>
-                            <Image style={styles.ProdImg} source={require('../assets/lettuce.png')}/>
-                            <View style={{flexDirection: 'column', margin: 10}}>
-                                <Text style={styles.ButtonTitle}>Lettuce</Text>
-                                <Text style={styles.kilo}>Rating: 4/5</Text>
-                                <Text style={styles.amount}>Comment: Fast and delivery!</Text>
-                            </View>
+                        <FlatList data = {data}
+                            keyExtractor={({id}, index) => id}
+                            renderItem={({item})=> (
+                                <View style={styles.ProdInfo}>
+                                <Text style={styles.ProdName}>Product: {item.order_name}</Text>
+                                <Text style={styles.ProdPrice}>Price:  {item.order_total}.00</Text>
+                                <Text style={styles.ProdPrice}>Quantity:  {item.order_qty}</Text>
+                                <Text style={styles.ProdPrice}>Review:  {item.review}</Text>
+                                </View>
+                                )}>
+                            
+                            </FlatList>
                         </View>
+                    </View>
                 </View>
+            </ScrollView>
         </View>
-)}
+    )
+}
 
-export default OrderReviews;
+export default OrderReview;
 
 
 const styles = StyleSheet.create({
@@ -41,7 +74,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         padding: 10,
     },
-    PayContainer:{
+    sellerPhoto: {
+        width: 50,
+        height: 50,
+        marginTop: 10,
+    },
+    ButtonContainer:{
         padding: 10,
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
@@ -60,16 +98,10 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: 'bold',
     },
-    kilo: {
+    rating: {
         color: '#000000',
     },
-    amount:{
+    comment:{
         color: '#000000',
-    },
-    ProdImg:{
-        marginTop: 10,
-        marginLeft: 10,
-        height: 90,
-        width: 90,
-    },
+    }
 })

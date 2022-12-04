@@ -48,23 +48,26 @@ const ProductReview  = ({navigate}) => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.headercontainer}>
-          <Text style={styles.SectionText}> My Basket </Text>
+          <Text style={styles.SectionText}> Product Review </Text>
           <ScrollView>
             <View style={styles.BestContainer}>
               <View style={{flexDirection: 'row'}}>
-                <View>
+                <FlatList data = {data}
+                  keyExtractor={({id}, index) => id}
+                  renderItem={({item}) => (
+                    <ScrollView>
+                    <TouchableOpacity onPress={() => {navigation.navigate('ProductDetails', {item:item})}}>
+                    <View style={styles.ProdInfo}>
+                    <Text style={styles.ProdName}>{item.name}</Text>
+                      <Text style={styles.ProdPrice}>Product: {item.order_name}</Text>
+                      <Text style={styles.ProdPrice}>Review: {item.review}</Text>
+                    </View>
+                    </TouchableOpacity>
+                  </ScrollView>
+
+                  )}>
                   
-                </View>
-                    <FlatList
-                      data = {data}
-                      keyExtractor= {({id}, index) => id}
-                      renderItem={({item}) => (
-                        <View>
-                              <Text style={styles.ProdPrice}>{item.price}</Text>
-                              <Text style={styles.ProdPrice}>{item.fruits_qty}</Text>
-                        </View>
-                      )}
-                    />
+                </FlatList>
                     
               </View>
             </View>
