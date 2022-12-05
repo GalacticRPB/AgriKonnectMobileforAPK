@@ -4,15 +4,14 @@ import SelectDropdown from 'react-native-select-dropdown';
 
 const CustomerRegistration = ({navigation}) => {
 
-  const [mobilephone, setMobilephone] = useState('');
   const [firstname, setFirstname] = useState('');
   const [middlename, setMiddlename] = useState('');
   const [username, setUsername] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('')
-  const [data, setData] = useState('');
-  const [loading, setLoading] = useState('');
+
+  const [data, setData] = useState([]);
 
   const RegisterCustomer = async () => {
     try{
@@ -27,7 +26,6 @@ const CustomerRegistration = ({navigation}) => {
           middlename: middlename,
           lastname: lastname,
           username: username,
-          mobilephone: mobilephone,
           email: email,
           password: password,
         })
@@ -39,21 +37,17 @@ const CustomerRegistration = ({navigation}) => {
         setMiddlename(''),
         setLastname(''),
         setUsername(''),
-        setMobilephone(''),
         setEmail(''),
         setPassword('');
-        console.log("test")
+        navigation.navigate('CustomerSignIn');
       }
-
-      
+    console.log("test")
+    console.log(response)
     const json = await response.json();
-    setData(json.register);
+    setData(json.customer);
     }
     catch (error) {
       console.error(error);
-    }
-    finally {
-      setLoading(false);
     }
   }
   
@@ -114,13 +108,6 @@ const CustomerRegistration = ({navigation}) => {
       </TextInput>
 
       <TextInput 
-      placeholder='Mobile Phone'
-      style = {styles.input}
-      keyboardType="numeric"
-      onChangeText = { (text) => setMobilephone(text) }>
-      </TextInput>
-
-      <TextInput 
       placeholder='Email'
       style = {styles.input}
       onChangeText = { (text) => setEmail(text) }
@@ -129,12 +116,6 @@ const CustomerRegistration = ({navigation}) => {
       
       <TextInput 
       placeholder='Password'
-      style = {styles.input} 
-      secureTextEntry={true}>
-      </TextInput>
-
-      <TextInput 
-      placeholder='Confirm Password'
       style = {styles.input} 
       secureTextEntry={true}
       onChangeText = { (text) => setPassword(text) }>

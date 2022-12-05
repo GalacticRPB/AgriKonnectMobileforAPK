@@ -89,7 +89,7 @@ const getProducts = () => {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item}) => (
                     <ScrollView>
-                    <TouchableOpacity onPress={() => {navigation.navigate('ProductDetails', {item:item})}}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('EditProduct', {item:item})}}>
                     <View style={styles.ProdInfo}>
                     <Text style={styles.ProdName}>{item.category}</Text>
                       <Text style={styles.ProdPrice}>{item.name}</Text>

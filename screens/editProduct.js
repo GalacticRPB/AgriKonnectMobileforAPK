@@ -1,13 +1,72 @@
-import React from 'react';
-import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, SafeAreaView} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, SafeAreaView, ViewComponent} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
 /*Icons Library-Start*/
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 /*Icons Library-End*/
 
-const EditProduct = ({navigation}) => {
+const EditProduct = ({navigation, route}) => {
+  
+  const [edit, setEditProduct] = useState([]);
 
+  const [category, setCategory] = useState([]);
+  const [name, setName] = useState([]);
+  const [description, setDescription] = useState([]);
+  const [price, setPrice] = useState([]);
+  const [quantity, setQuantity] = useState([]);
+
+  var user_id = edit.user_id;
+  var product_id = route.params.item.id;
+  const getProductDetails = async () => {
+    try 
+    {
+      const response = await fetch(`http://10.0.2.2:8000/api/edit-products/${product_id}`);
+      const json = await response.json();
+      setEditProduct(json.product)
+    }
+    catch (error)
+    {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getProductDetails();
+  }, []);
+
+  const updateProduct = async () => {
+    try{
+      const response = await fetch(`http://10.0.2.2:8000/api/update-product/${product_id}`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: user_id,
+          category: category,
+          name: name,
+          description: description,
+          price: price,
+          quantity: quantity,
+        })
+      });
+      if((response).status === 200)
+      {
+        console.log("test")
+        setCategory('');
+        setName('');
+        setDescription('');
+        setPrice('');
+        setQuantity('');
+        console.log(category, name, description, price, quantity)
+        const json = await response.json();
+      }
+    }catch (error) {
+      console.error(error)
+    }
+  }
   return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
@@ -18,68 +77,59 @@ const EditProduct = ({navigation}) => {
             <FontAwesome5 name="arrow-left" color={'black'} size={25} iconStyle={''} onPress={()=> navigation.navigate('Products')}/>
         </Text>
         </TouchableOpacity>
-    <Text style = {styles.edit}>Edit Product</Text>
     </View>
-      <Text style = {styles.addtext}>Edit product image</Text>
-      <Text style = {styles.text}>Upload an image of your product</Text>
-
-      <View style={styles.circle}>
-      <TouchableOpacity style = {styles.addButton} >
-            <FontAwesome5 name='plus' color={'white'} size={30} iconStyle={''}/>
-            </TouchableOpacity>
-      </View>
-
+          
+    </View>
       <Text style = {styles.addtext}>Edit product details</Text> 
       <Text style = {styles.text}>Select product category</Text>
-      <SelectDropdown
-        defaultButtonText={' '}
-        buttonStyle={styles.dropdown1BtnStyle}
-        buttonTextStyle={styles.dropdown1BtnTxtStyle}
-        dropdownStyle={styles.dropdown1DropdownStyle}
-        rowStyle={styles.dropdown1RowStyle}
-        rowTextStyle={styles.dropdown1RowTxtStyle}
-          data={countries}
-          onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            // text represented after item is selected
-            // if data array is an array of objects then return selectedItem.property to render after item is selected
-            return selectedItem
-          }}
-          rowTextForSelection={(item, index) => {
-            // text represented for each item in dropdown
-            // if data array is an array of objects then return item.property to represent item in dropdown
-            return item
-          }}
-        />
+      <TextInput 
+      placeholder='Product Category'
+      onChangeText = { (text) => [setCategory(text)] }
+      style = {styles.input}
+      defaultValue = {edit.category}>
+      </TextInput>
         <Text style = {styles.text}>Product Name</Text>
        <TextInput 
-      style = {styles.input}>
+      placeholder='Product Name'
+      onChangeText = { (text) => setName(text) }
+      style = {styles.input}
+      defaultValue = {edit.name}>
       </TextInput>
 
       <Text style = {styles.text}>Product Price</Text>
       <TextInput 
-      placeholder='Price in Peso (ex. 20.00)'
+      placeholder='Product Price'
+      onChangeText = { (text) => setPrice(text) }
       style = {styles.input}
-      keyboardType='numeric'>
+      defaultValue = {edit.price}>
       </TextInput>
 
       <Text style = {styles.text}>Product Quantity</Text>
       <TextInput 
-      placeholder='Quantity in Kilograms'
+      placeholder='Product Quantity'
+      onChangeText = { (text) => setQuantity(text) }
       style = {styles.input}
-      keyboardType='numeric'>
+      defaultValue = {edit.quantity}>
+      </TextInput>
+
+      <Text style = {styles.text}>Product Description</Text>
+      <TextInput 
+      placeholder='Product Description'
+      onChangeText = { (text) => setDescription(text) }
+      style = {styles.input}
+      defaultValue = {edit.description}>
       </TextInput>
 
       <View style={styles.bottom}>
       <TouchableOpacity 
-      style = {styles.button} onPress={()=> navigation.navigate('Products')}>
-        <Text 
-        style = {styles.buttonText}>
-          SAVE CHANGES</Text>
+          style = {styles.button}
+          onPress={ updateProduct }>
+          <Text style = {styles.buttonText}>
+            Save Product</Text>
       </TouchableOpacity>
       </View>
+    <View>
+
       
     </View>
     </View>

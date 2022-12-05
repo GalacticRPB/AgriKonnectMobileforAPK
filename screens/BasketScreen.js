@@ -1,31 +1,68 @@
 import React, {useEffect, useState} from 'react';
-import {Text,View,StyleSheet,ScrollView,Image,TouchableOpacity, ActivityIndicator} from 'react-native';
+import {Text,View,StyleSheet,ScrollView,TouchableOpacity, Pressable} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { RadioButton } from 'react-native-paper';
 import Icons from 'react-native-vector-icons/FontAwesome';
+import CheckBox from '@react-native-community/checkbox';
 
+const shippingfee = 50;
+const conviencefee = 5;
 
-const BasketScreen  = ({navigation}) => {
+const BasketScreen  = ({navigation, route}) => {
 
-  const [data, setData] = useState("");
+  const [data, setData] = useState([]);
   const [value, setQuantity] = useState(1);
+
 
   let id = global.id
 
-  function handleIncrement() {
-    //setCount(prevCount => prevCount+=1);
-    if(value < 10)
-    {
-      setQuantity(prevCount => prevCount + 1);
-    }
-}
+  /*const handleDecrement = (cart_id) => {
+    setData((data) =>
+      data.map((item) =>
+        cart_id === item.id
+          ? {
+              ...item,
+              fruits_qty: item.fruits_qty - (item.fruits_qty > 1 ? 1 : 0),
+            }
+          : item
+      )
+    );
+    updateCartQuantity(cart_id, "dec");
+  };
 
-function handleDecrement() {
-    if(value > 1)
-    {
-      setQuantity(prevCount => prevCount - 1);
+  const handleIncrement = (cart_id) => {
+    setData((data) =>
+      data.map((item) =>
+        cart_id === item.id
+          ? {
+              ...item,
+              fruits_qty: item.fruits_qty + (item.fruits_qty < 10 ? 1 : 0),
+            }
+          : item
+      )
+    );
+    updateCartQuantity(cart_id, "inc");
+  };
+
+  function updateCartQuantity  (cart_id, scope) {
+    try {
+      const response = fetch(`http://10.0.0.2:8000/api/basket-updatedquantity/${cart_id}/${scope}/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+      });
+      if ((response).status === 200)
+      {
+
+      }
+
+    }catch (error){
+      console.error(error);
     }
-}
+
+  }*/
 
   const getBasket = async () => {
     try {
@@ -76,12 +113,19 @@ function handleDecrement() {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item}) => (
                     <ScrollView>
-                    <TouchableOpacity onPress={() => {navigation.navigate('CheckoutForm', {item:item})}}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('CheckoutForm', {item:item, sffee: shippingfee, cfee: conviencefee})}}>
                     <View style={styles.ProdInfo}>
-                        <Text style={styles.ProdName}>{item.name}</Text>
-                        <Text style={styles.ProdPrice}>{item.price}</Text>
-                        <Text style={styles.ProdPrice}>{item.fruits_qty}</Text>
+                  
+                        <Text style={styles.ProdName}>Product Name: {item.name}</Text>
+                        <Text style={styles.ProdPrice}>Unit Price: {item.price}</Text>
+                        <Text style={styles.ProdPrice}>Quantity: {item.fruits_qty}</Text>
+                        <Text style={styles.ProdPrice}>Total Price: {item.fruits_qty * item.price}</Text>
+                        <View style={{flexDirection: 'row'}}>
+          
+                        </View>
+                        
                     </View>
+              
                     </TouchableOpacity>
                   </ScrollView>
 
@@ -94,30 +138,6 @@ function handleDecrement() {
           </ScrollView>
         </View>
       </ScrollView>
-      <View style={styles.TotalContainer}>
-        <View style={{flexDirection: 'row',margin: 5}}>
-              <View style={styles.radiobutton}>
-                
-              </View>
-              <View style={{alignSelf: 'center'}}>
-                      <Text style={{fontWeight: 'bold', color:'#000000', textAlign: 'center'}}>All</Text>
-              </View>
-              <View style={{flexDirection: 'column', margin: 15}}>
-                    <View style={{flexDirection: 'row'}}>
-                      <Text style={{fontSize: 15, fontWeight:'bold', color:'#000000',marginLeft: 20}}>SubTotal:</Text>
-                      <Text style={{fontSize: 15, fontWeight:'bold', color:'#000000',color:'#000000'}}>Php 100.00</Text>
-                    </View>
-                    <View style={{flexDirection: 'row'}}>
-                      <Text style={{fontSize: 12,color:'#000000',marginLeft: 20}}> Shipping Fee:</Text>
-                      <Text style={{fontSize: 12,color:'#000000'}}> Php 100.00</Text>
-                    </View>
-              </View>
-              <View style={{alignSelf: 'center', justifyContent: 'space-between'}}>
-                <TouchableOpacity><Text style={{backgroundColor:'#31A05F', color: 'white',
-                fontWeight: 'bold', padding: 8, borderRadius: 10, marginLeft: 50}}>Checkout</Text></TouchableOpacity>
-              </View>
-          </View> 
-      </View>
     </View>
   )
 }
@@ -198,18 +218,18 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   incrementbutton: {
-    backgroundColor:"#388E3C",
-    borderRadius: 10,
-    padding: 10,
-    color: 'white',
-    marginBottom: 5
+  backgroundColor:"#388E3C",
+  borderRadius: 10,
+  padding: 10,
+  color: 'white',
+  marginBottom: 5
   },
   numberContainer: {
-    backgroundColor:"#FFF59D",
-    borderRadius: 10,
-    padding: 10,
-    fontSize: 12,
-    marginBottom: 5,
+      backgroundColor:"#FFF59D",
+      borderRadius: 10,
+      padding: 10,
+      fontSize: 12,
+      marginBottom: 5,
   },
   TotalContainer:{
     backgroundColor: 'white',

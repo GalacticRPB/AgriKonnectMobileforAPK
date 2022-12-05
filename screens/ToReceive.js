@@ -1,13 +1,68 @@
-import React,{useState}  from 'react';
-import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView} from 'react-native';
+import React,{useEffect, useState}  from 'react';
+import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView, Alert} from 'react-native';
 import MiIcons from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/Ionicons';
 import SelectDropdown from 'react-native-select-dropdown';
+import { FlatList } from 'react-native-gesture-handler';
 
 
 const ToReceive = ({navigation}) => {
-    const [selected,setSelected] = useState("");
-    const paymentmethod = ["Cash on Delivery", "Gcash"]
+
+    const [forDelivery, setReceived] = useState([]);
+
+    const id = global.id;
+    
+    const toReceive = async () => {
+        try{
+            const response = await fetch(`http://10.0.2.2:8000/api/out-for-delivery/${id}`);
+            const json = await response.json();
+            setReceived(json.deliveries)
+        }
+        catch (error)
+        {
+            console.error(error)
+        }
+    }
+    console.log(forDelivery)
+    useEffect(() => {
+      toReceive();
+    }, []);
+
+    const receive = async () => {
+        try{
+            const response = await fetch('http://10.0.2.2:8000/api/order-delivered', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    product_id: forDelivery.productId,
+                    seller_id: forDelivery.sellerId,
+                    customerId: forDelivery.customerId,
+                    order_id: forDelivery.orderId,
+                    order_name: forDelivery.orderName,
+                    order_qty: forDelivery.orderQty,
+                    order_price: forDelivery.orderPrice,
+                    order_total: forDelivery.orderTotal,
+                    firstname: forDelivery.firstname,
+                    middlename: forDelivery.middlename,
+                    lastname: forDelivery.lastname,
+                    contactNo: forDelivery.mobilephone,
+                    shippingaddress: forDelivery.shippingaddress,
+                    modeofpayment: forDelivery.modeofpayment,
+                })
+            });
+        console.log(response)
+        Alert.alert("Order Received");
+        const json = await response.json();
+        console.log("test for product")
+        setReceived(json.message);
+        } catch (error) {
+        console.error(error);
+        } 
+    }
+   
     return(
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
@@ -18,15 +73,22 @@ const ToReceive = ({navigation}) => {
                 </View>
                 <View style={styles.PayContainer}>
                         <View style={{flexDirection: 'row'}}>
-                            <Image style={styles.ProdImg} source={require('../assets/lettuce.png')}/>
-                            <View style={{flexDirection: 'column', margin: 10}}>
-                                <Text style={styles.ButtonTitle}>Lettuce</Text>
-                                <Text style={styles.kilo}>5 kg</Text>
-                                <Text style={styles.amount}>Php 100.00</Text>
-                            </View>
-                            <TouchableOpacity>
-                                <Text style={styles.receivedbutton}>Order Received</Text>
-                            </TouchableOpacity>
+                        <FlatList data = {forDelivery}
+                            keyExtractor={({id}, index) => id}
+                            renderItem={({item}) => (
+                            <ScrollView>
+                                <View style={{flexDirection: 'column', margin: 10}}>
+                                    <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
+                                    <Text style={styles.amount}>Price: {item.order_total}</Text>
+                                    <TouchableOpacity  onPress={ receive}>
+                                        <Text style={styles.receivedbutton}>Order Received</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </ScrollView>
+
+                            )}>
+                        </FlatList>
+                            
                         </View>
                 </View>
         </View>

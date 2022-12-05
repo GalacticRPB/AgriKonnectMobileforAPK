@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity, ScrollView} from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 
 /*Icons Library-Start*/
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,6 +15,25 @@ import MI from 'react-native-vector-icons/MaterialIcons';
 /*Icons Library-End*/
 
 const Ongoing = ({navigation}) => {
+
+    const [ongoing, setOngoing] = useState([])
+
+    let user_id = global.id
+    
+    const getOngoing = async () => {
+      try{
+        const response = await fetch(`http://10.0.2.2:8000/api/ongoing/${user_id}`);
+        const json = await response.json();
+        setOngoing(json.deliveries)
+      }
+      catch (error)
+      {
+        console.error(error)
+      }
+    }
+    useEffect(() => {
+      getOngoing();
+    },[]);
     return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
 
@@ -25,9 +45,6 @@ const Ongoing = ({navigation}) => {
         </TouchableOpacity>
         <Text style = {styles.name}>Ongoing Transactions</Text>
     </View>
-
-
-    <View style = {styles.ground}>
     <View style = {styles.foreground}>
       
       <View style = {styles.tab}>
@@ -44,56 +61,27 @@ const Ongoing = ({navigation}) => {
           </View>
         </TouchableOpacity>
       </View>
+      <FlatList data= {ongoing}
+        keyExtractor={({id}, index) => id}
+        renderItem={({item}) => (
+        <ScrollView>
+             <View style={{flexDirection: 'column', margin: 10}}>
+                  <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
+                  <Text style={styles.amount}>Quantity: {item.order_qty}</Text>
+                  <Text style={styles.amount}>Unit Price: {item.order_price}</Text>
+                  <Text style={styles.amount}>Total Price: {item.order_total}</Text>
+                  <Text style={styles.amount}>Customer Name: {item.firstname} {item.middlename} {item.lastname}</Text>
+                  <Text style={styles.amount}>Mobile Phone: {item.contactNo}</Text>
+                  <Text style={styles.amount}>Shipping Address: {item.shippingaddress}</Text>
+                  <Text style={styles.amount}>Mode of Payment: {item.modeofpayment}</Text>
+                  <Text style={styles.amount}>Shipping Status: Pending...</Text>
+              </View>
 
-    <View style = {[styles.itemBox, styles.elevation]}>
-    <View style = {styles.rowFormat}>
-        <View style={styles.rectangleSold} />
-          <View>
-          <Text style={styles.itemDate}>
-              Patatas
-            </Text>
-            <Text style={styles.itemName}>
-            Quantity: 25 Kilos
-            </Text>
-          </View>
-        </View>
+        </ScrollView>
+      )}>
 
-        <View style={styles.rowFormat1}>
-          <View>
-            <Text style={styles.leftDetail}>Delivery Address</Text>
-          </View>
-          <View>
-            <Text style={styles.rightDetail}>Althea Dianne L. Baculi</Text>
-            <Text style={styles.rightDetail}>(+63)912 3456 789</Text>
-            <Text style={styles.rightDetail}>Intertown Homes Brgy. Ipilan</Text>
-          </View>
-        </View>
-
-        <View style={styles.rowFormat1}>
-          <View>
-            <Text style={styles.leftDetail}>Mode of Payment</Text>
-          </View>
-          <View>
-            <Text style={styles.rightDetail}>Cash on Delivery</Text>
-          </View>
-        </View>
-        <View style={styles.divider}/>
-        <View style={styles.rowFormat1}>
-          <View>
-            <Text>Product Price</Text>
-            <Text>Shipping Fee</Text>
-            <Text style={styles.leftDetail}>Order Total</Text>
-          </View>
-          <View>
-            <Text style={styles.price}>Php. 520.00</Text>
-            <Text style={styles.price}>Php. 10.00</Text>
-            <Text style={styles.leftDetail}>Php. 530.00</Text>
-          </View>
-        </View>
-        </View>
-
-    </View>
-    </View>
+      </FlatList>
+    </View> 
     </ScrollView>
     );}
 

@@ -44,7 +44,7 @@ const ProductDetails = ({navigation, route}) => {
                 })
             });
         const json = await response.json();
-        console.log("test")
+        console.log("test for product")
         setData(json.message);
         } catch (error) {
         console.error(error);

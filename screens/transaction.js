@@ -21,7 +21,7 @@ const Transaction = ({navigation}) => {
 
   const getTransaction = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/showOrder/${user_id}`);
+      const response = await fetch(`http://10.0.2.2:8000/api/showOrder/${user_id}`);
       const json = await response.json();
       setTransaction(json.orders);
     }
@@ -29,7 +29,7 @@ const Transaction = ({navigation}) => {
       console.error(error);
     } 
   }
-
+  console.log(transaction)
   useEffect(() => {
     getTransaction();
   }, []);
@@ -57,59 +57,30 @@ const Transaction = ({navigation}) => {
           </View>
         </TouchableOpacity>
       </View>
-
-    <View style = {[styles.itemBox, styles.elevation]}>
         <View style = {styles.rowFormat}>
             <FlatList
                 style = {{ height: 450 }}
                 data={transaction}
                 keyExtractor={({ id }, index) => id}
                 renderItem={({ item }) => (
-                  <TouchableOpacity style = {styles.item} onPress={ () => navigation.navigate('PetDetails', {item:item})}>
-                    <Text style = {styles.header2}>{item.order_name}</Text>
+                  <TouchableOpacity style = {styles.item} onPress={ () => navigation.navigate('Ongoing', {item:item})}>
+                    <Text style = {styles.header2}>Product Name: {item.order_name}</Text>
                     <View style={{borderBottomColor: 'gray', borderBottomWidth: StyleSheet.hairlineWidth, margin: 3}}/>
-                    <Text style = {styles.description}>{item.pet_type}</Text>
-                    <Text style = {styles.description2}>{item.pet_birthdate}</Text>
-                    <Text style = {styles.description}>{item.pet_breed}</Text>
-                    <Text style = {styles.description2}>{item.pet_sex}</Text>
+                    <Text style = {styles.myProducts}>Quantity:</Text>
+                    <Text style = {styles.myProducts}>Unit Price:</Text>
+                    <Text style = {styles.myProducts}>Total Price:</Text>
+                    <Text style = {styles.myProducts}>Customer Name:</Text>
+                    <Text style = {styles.myProducts}>Phone Number:</Text>
+                    <Text style = {styles.myProducts}>Shipping Address:</Text>
+                    <Text style = {styles.myProducts}>Mode of Payment:</Text>
+                    <TouchableOpacity>
+                      <Text>Shipping Status</Text>
+                    </TouchableOpacity>
+                  
                   </TouchableOpacity>
                 )}
               />
             </View>
-        </View>
-
-        <View style={styles.rowFormat1}>
-          <View>
-            <Text style={styles.leftDetail}>Delivery Address</Text>
-          </View>
-          <View>
-            <Text style={styles.rightDetail}>Althea Dianne L. Baculi</Text>
-            <Text style={styles.rightDetail}>(+63)912 3456 789</Text>
-            <Text style={styles.rightDetail}>Intertown Homes Brgy. Ipilan</Text>
-          </View>
-        </View>
-
-        <View style={styles.rowFormat1}>
-          <View>
-            <Text style={styles.leftDetail}>Mode of Payment</Text>
-          </View>
-          <View>
-            <Text style={styles.rightDetail}>Cash on Delivery</Text>
-          </View>
-        </View>
-        <View style={styles.divider}/>
-        <View style={styles.rowFormat1}>
-          <View>
-            <Text>Product Price</Text>
-            <Text>Shipping Fee</Text>
-            <Text style={styles.leftDetail}>Order Total</Text>
-          </View>
-          <View>
-            <Text style={styles.price}>Php. 520.00</Text>
-            <Text style={styles.price}>Php. 10.00</Text>
-            <Text style={styles.leftDetail}>Php. 530.00</Text>
-          </View>
-        </View>
         </View>
 
     </View>

@@ -1,22 +1,22 @@
 import React,{useState}  from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView} from 'react-native';
-import MiIcons from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/Ionicons';
-import SelectDropdown from 'react-native-select-dropdown';
-import { roundToNearestPixel } from 'react-native/Libraries/Utilities/PixelRatio';
 
 
 const CheckoutForm = ({navigation, route}) => {
 
-    const [data, setData] = useState("");
-    const [loading, setLoading] = useState("");
-    const [firstname, setFirstname] = useState("");
-    const [middlename, setMiddlename] = useState("");
-    const [lastname, setLastname] = useState("");
-    const [shippingaddress, setAddress] = useState("");
-    const [mobilephone, setMobilephone] = useState("");
-    const [modeofpayment, setModeofPayment] = useState("");
-    
+
+    const [shippingaddress, setAddress] = useState([]);
+    const [mobilephone, setMobilephone] = useState([]);
+    const [modeofpayment, setModeofPayment] = useState([]);
+    const [orders, setOrders] = useState([]);
+
+    console.log(orders)
+    const sf = route.params.sffee;
+    const cf = route.params.cfee;
+    const total = (route.params.item.price * route.params.item.fruits_qty)
+    const grandtotal = (route.params.item.price * route.params.item.fruits_qty + route.params.cfee)
+
     const Checkout = async () => {
         try{
             const response = await fetch('http://10.0.2.2:8000/api/place-order', {
@@ -27,43 +27,38 @@ const CheckoutForm = ({navigation, route}) => {
                 },
                 body: JSON.stringify({
                     cart_id: route.params.item.id,
-                    seller_id: route.params.item.user_id,
-                    order_name: route.params.item.name,
+                    seller_id: route.params.item.seller_id,
+                    customerId: global.id,
+                    product_id: route.params.item.product_id,
+                    order_name: route.params.item.order_name,
                     price: route.params.item.price,
-                    product_qty: route.params.item.value,
-                    shippingfee: route.params.item.value,
-                    total_price: route.params.item.value,
+                    product_qty: route.params.item.fruits_qty,
+                    shippingfee: route.params.sffee,
+                    conviencefee: route.params.cfee,
+                    total_price: grandtotal,
                     firstname: global.firstname,
                     middlename: global.middlename,
                     lastname: global.lastname,
                     shippingaddress: shippingaddress,
                     mobilephone: mobilephone,
                     modeofpayment: modeofpayment,
-                    customerId: global.id,
+                    image: route.params.item.image,
                 })
             });
 
-            if((response).status === 201)
+            if((response).status === 200)
             {
-                setFirstname('');
-                setMiddlename(''),
-                setLastname(''),
-                setUsername(''),
-                setMobilephone(''),
-                setAddress(''),
+                setAddress('');
+                setMobilephone('');
                 setModeofPayment('');
-                console.log("test")
+                console.log('Success')
             }
-
-            
+            console.log(response)
             const json = await response.json();
-            setData(json.register);
+            setOrders(json.orders);
             }
             catch (error) {
             console.error(error);
-            }
-            finally {
-            setLoading(false);
             }
         }
             
@@ -71,7 +66,7 @@ const CheckoutForm = ({navigation, route}) => {
         <View style={styles.container}>
             <ScrollView>
                 <View style={{flexDirection: 'row', padding: 10}}>
-                    <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+                    <TouchableOpacity onPress={()=>navigation.navigate('Basket')}>
                     <Icons name= 'arrow-back' size={50} color='#000000'/>
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> Checkout Form </Text>
@@ -80,38 +75,49 @@ const CheckoutForm = ({navigation, route}) => {
                     <Image style={styles.itemPhoto} source={require('../assets/lettuce.png')}/>
                     <View style={{flexDirection: 'column', margin: 10}}>
                         <Text style={styles.prodname}>{route.params.item.name}</Text>
-                        <Text style={styles.prodprice}>{route.params.item.price}</Text>
-                        <Text style={styles.prodqty}>Qty: {route.params.item.qty}</Text>
+                        <Text style={styles.prodprice}>Price: {route.params.item.price}</Text>
+                        <Text style={styles.prodqty}>Qty: {route.params.item.fruits_qty}</Text>
                     </View>
                 </View>
                 <View style={{flexDirection:'column'}}>
                     <Text style={styles.TitleInput}> Shipping Address</Text>
-                    <TouchableOpacity style={styles.ButtonContainer} onPress={()=>navigation.navigate('ShippingAddress')}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <Text style={styles.Address}> Brgy. Ipilan, Tayabas City</Text>
-                                <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
-                            </View>
-                    </TouchableOpacity>
-                    <Text style={styles.TitleInput}> Payment Method</Text>
-                        <TextInput 
-                            placeholder='Cash on Delivery'
-                            style = {styles.input} 
-                            keyboardType='default'>
-                            </TextInput>
-                    <Text style={styles.TitleInput}> SubTotal</Text>
-                        <TextInput 
-                        placeholder='SubTotal'
-                        style = {styles.input} 
-                        keyboardType='default'>
-                        </TextInput>
+                    <TextInput 
+                    placeholder='Enter Shipping Address'
+                    style = {styles.input}
+                    onChangeText = { (text) => setAddress(text) } >
+                    </TextInput>
+                    <Text style={styles.TitleInput}> Mobile Number</Text>
+                    <TextInput 
+                    placeholder='Enter mobile number'
+                    style = {styles.input}
+                    onChangeText = { (text) => setMobilephone(text) } >
+                    </TextInput>
+                    <Text style={styles.TitleInput}> Mode of Payment</Text>
+                    <TextInput 
+                    placeholder='Please input Cash on Delivery'
+                    style = {styles.input}
+                    onChangeText = { (text) => setModeofPayment(text) } >
+                    </TextInput>
+                    
+                        <Text style={styles.TitleInput}> Shipping Fee</Text>
+                        <Text  style={styles.ProdPrice}>
+                            {sf}
+                        </Text>
+                        <Text style={styles.TitleInput}> Convience Fee</Text>
+                        <Text  style={styles.ProdPrice}>
+                            {cf}
+                        </Text>
+                        <Text style={styles.TitleInput}> Order Total</Text>
+                        <Text  style={styles.ProdPrice}>
+                            {total}
+                        </Text>
+
                     <Text style={styles.TitleInput}> Order Amount (fees included)</Text>
-                        <TextInput 
-                        placeholder='Order Amount'
-                        style = {styles.input} 
-                        keyboardType='default'>
-                        </TextInput>
+                        <Text  style={styles.ProdPrice}>
+                            {grandtotal}
+                        </Text>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around',margin: 10}}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={ Checkout}>
                             <Text style={styles.basketbutton}>PLACE ORDER</Text>
                         </TouchableOpacity>
                     </View>
@@ -146,6 +152,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 30,
     },
+    ProdPrice:{
+        fontWeight: 'bold', 
+        color: '#000000',
+      },
     prodprice:{
         color: '#000000',
         fontWeight: 'bold',

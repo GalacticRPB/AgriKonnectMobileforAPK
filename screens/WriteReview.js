@@ -1,70 +1,50 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, Images, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 
-const WriteReview = ({navigation}) => {
-    // Set the default Ratings Selected
-    const [defaultRating, setDefaultRating] = useState(3);
-    // Set the max number of Ratings
-    const [maxRating, setMaxRating] = useState([1, 2, 3, 4, 5]);
+const WriteReview = ({navigation, route}) => {
 
-    // Filled Star
-    const starImageFilled = require('../assets/star_fill.png');
-    // Empty Star
-    const starImageCorner = require('../assets/star.png');
-    // Half Star
-    //const startHalfFilled = require('../assets/star_fill.png');
-    const onStarClick = (item, bool) => {
-        if (bool) {
-          item = item - 1 + 0;
-        }
-        setDefaultRating(item);
-      };
-    
-      const CustomRatingBar = () => {
-        return (
-          <View style={styles.ratingBarStyle}>
-            {maxRating.map((item, key) => {
-              return (
-                <View>
-                  <Image
-                    style={styles.imageStyle}
-                    source={
-                      item <= defaultRating
-                        ? starImageFilled
-                        : starImageCorner
-                    }
-                  />
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      position: 'absolute',
-                    }}>
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      style={{
-                        width: 20,
-                        height: 40,
-                      }}
-                      onPress={() => onStarClick(item, true)}
-                    />
-    
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      style={{
-                        width: 20,
-                        height: 40,
-                      }}
-                      onPress={() => onStarClick(item, false)}
-                    />
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-        );
-      };
+    const [toReview, setReview] = useState([]);
+
+  const postReview = async () => {
+    try
+    {
+      const response = await fetch(`http://10.0.2.2:8000/api/review`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customer_id: route.params.item.customer_id,
+          product_id: route.params.item.product_id,
+          seller_id: route.params.item.seller_id,
+          firstname: global.firstname,
+          middlename: global.middlename,
+          lastname: global.lastname,
+          order_id: route.params.item.order_id,
+          order_name: route.params.item.order_name,
+          order_qty: route.params.item.order_qty,
+          order_total: route.params.item.order_total,
+          review: toReview,
+        })
+    });
+  
+    if ((response).status === 200)
+      {
+          setReview('');
+          console.log(response)
+          const json = await response.json();
+          Alert.alert("Customer Updated Successfully");
+          navigation.navigate('Profile');
+      }
+    }catch (error)
+    {
+      console.error(error)
+    }
+}
+
+
     return (
     <View style={styles.container}>
         <ScrollView>
@@ -76,34 +56,23 @@ const WriteReview = ({navigation}) => {
             </View>
             <View style={{padding: 50}}>
                     <View style={{flexDirection: 'column', margin: 10}}>
-                        <Text style={styles.Title}>Lettuce</Text>
-                        <Text style={styles.kilo}>5 kg</Text>
-                        <Text style={styles.amount}>Php 100.00</Text>
+                        <Text style={styles.Title}>{route.params.item.order_name}</Text>
+                        <Text style={styles.kilo}>{route.params.item.order_qty} kg</Text>
+                        <Text style={styles.amount}>Php {route.params.item.order_total}.00</Text>
                     </View>
                     <View style={{flexDirection: 'column'}}>
-                        <CustomRatingBar />
-                        <Text style={styles.textStyle}>
-                        {/* Display selected Ratings */}
-                        {defaultRating} / {Math.max.apply(null, maxRating)}
-                        </Text>
-
-                        {/*<TouchableOpacity
-                        activeOpacity={0.7}
-                        style={styles.buttonStyle}
-                        onPress={() => alert('Selected Ratings ' + defaultRating)}>
-                        {/* Button to display selected Ratings in alert box *
-                        <Text style={styles.buttonTextStyle}>Get Selected Ratings</Text>
-                        </TouchableOpacity>*/}
+  
                         <Text style={styles.TitleInput}> What's your product experience?</Text>
                         <TextInput 
                         multiline
                         placeholder='Write your review'
                         style = {styles.input} 
+                        onChangeText = { (text) => [setReview(text)] }
                         keyboardType='default'>
                         </TextInput>
                     </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={ postReview }>
                 <Text style={styles.reviewbutton}>SUBMIT</Text>
             </TouchableOpacity>
         </ScrollView>

@@ -131,7 +131,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput
                     onChangeText = { (text) => [setFirstname(text)] }
                     placeholder='First Name'
-                    value = {firstname}/>
+                    defaultValue = {firstname}/>
                     </View>
     
                     <Text style = {styles.inputsTitle}>Middle Name</Text>
@@ -139,7 +139,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput
                     onChangeText = { (text) => [setMiddlename(text)] }
                     placeholder='Middle Name'
-                    value = {middlename}/>
+                    defaultValue = {middlename}/>
                     </View>
     
                     <Text style = {styles.inputsTitle}>Last Name</Text>
@@ -147,7 +147,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput
                     onChangeText = { (text) => [setLastname(text)] }
                     placeholder='Last Name'
-                    value = {lastname}/>
+                    defaultValue = {lastname}/>
                     </View>
     
                     <Text style = {styles.inputsTitle}>Username</Text>
@@ -155,7 +155,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput
                     onChangeText = { (text) => [setUsername(text)] }
                     placeholder='Username'
-                    value = {username}/>
+                    defaultValue = {username}/>
                     </View>
     
                     <Text>{birthdate.toLocaleDateString()}</Text>
@@ -168,7 +168,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput 
                     onChangeText = { (text) => [setGender(text)] }
                     placeholder='Gender'
-                    value = {gender}/>
+                    defaultValue = {gender}/>
                     </View>
     
                     <Text style = {styles.inputsTitle}>Phone Number</Text>
@@ -176,7 +176,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput 
                     onChangeText = { (text) => [setMobilePhone(text)] }
                     placeholder='Phone Number' keyboardType='numeric'
-                    value = {mobilephone}/>
+                    defaultValue = {mobilephone}/>
                     </View>
     
                     <Text style = {styles.inputsTitle}>Email</Text>
@@ -184,7 +184,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput 
                     onChangeText = { (text) => [setEmail(text)] }
                     placeholder='Email'
-                    value = {email}/>
+                    defaultValue = {email}/>
                     </View>
     
                     <Text style = {styles.inputsTitle}>Baranggay</Text>
@@ -192,7 +192,7 @@ const EditProfile = ({navigation, route}) => {
                     <TextInput
                     onChangeText = { (text) => [setBrgy(text)] } 
                     placeholder='Barangay'
-                    value = {brgy}/>
+                    defaultValue = {brgy}/>
                     </View>
                 </View>
                 </ScrollView>

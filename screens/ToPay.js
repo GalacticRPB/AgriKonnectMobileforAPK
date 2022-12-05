@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,Image} from 'react-native';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Icons from 'react-native-vector-icons/Ionicons';
 
-
-
 const ToPay = ({navigation}) => {
+
+    const [toPay, setToPay] = useState([]);
+
+    let id = global.id
+
+    const getToPay = async () => {
+        try {
+            const response = await fetch(`http://10.0.2.2:8000/api/show-to-pay/${id}`);
+            const json = await response.json();
+            setToPay(json.toPay)
+        }
+        catch (error)
+        {
+            console.error(error)
+        }
+    }
+
+    console.log(toPay)
+    useEffect(() => {
+      getToPay();
+    }, []);
+  
     return(
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
@@ -13,15 +34,22 @@ const ToPay = ({navigation}) => {
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> To Pay </Text>
                 </View>
-                <View style={styles.PayContainer} onPress={()=>navigation.navigate('ToPay')}>
-                        <View style={{flexDirection: 'row'}}>
-                            <Image style={styles.ProdImg} source={require('../assets/lettuce.png')}/>
-                            <View style={{flexDirection: 'column', margin: 10}}>
-                                <Text style={styles.ButtonTitle}>Lettuce</Text>
-                                <Text style={styles.kilo}>5 kg</Text>
-                                <Text style={styles.amount}>Php 100.00</Text>
-                            </View>
-                        </View>
+                <View style={styles.PayContainer} onPress={()=>navigation.navigate('Account')}>
+                    <View style={{flexDirection: 'row'}}>
+                        <FlatList data = {toPay}
+                            keyExtractor={({id}, index) => id}
+                            renderItem={({item}) => (
+                            <ScrollView>
+                                <View style={{flexDirection: 'column', margin: 10}}>
+                                    <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
+                                    <Text style={styles.amount}>Price: {item.total_price}</Text>
+                                    <Text style={styles.amount}>Order Status: Pending...</Text>
+                                </View>
+                            </ScrollView>
+
+                            )}>
+                        </FlatList>
+                    </View>
                 </View>
         </View>
 )}

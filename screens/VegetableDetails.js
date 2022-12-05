@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView} from 'react-native';
+import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView, Alert} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 import MiIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -42,11 +42,17 @@ const VegetableDetails = ({navigation, route}) => {
                     seller_id: route.params.item.user_id,
                     fruits_qty: value,
                     name: route.params.item.name,
+                    image: route.params.item.image,
                     price: route.params.item.price,
+                    
                 })
+                
             });
+        Alert.alert('Product Added to Cart');
+        navigation.navigate('Vegetable');
         const json = await response.json();
-        console.log("test")
+        console.log("test for vegetables")
+        console.log(response)
         setData(json.message);
         } catch (error) {
         console.error(error);

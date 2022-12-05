@@ -1,12 +1,31 @@
-import React,{useState}  from 'react';
+import React,{useEffect, useState}  from 'react';
 import {Text, View,StyleSheet,TouchableOpacity, Image} from 'react-native';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 
 
 const ToReview = ({navigation}) => {
-    const [selected,setSelected] = useState("");
-    const paymentmethod = ["Cash on Delivery", "Gcash"]
+    
+    const user_id = global.id
+    const [toReview, setToReview] = useState([]);
+
+    const review = async () => {
+        try{
+            const response = await fetch(`http://10.0.2.2:8000/api/to-review/${user_id}`);
+            const json = await response.json();
+            setToReview(json.delivered)
+        }
+        catch (error)
+        {
+            console.error(error)
+        }
+    }
+
+    console.log(toReview)
+    useEffect(() => {
+      review();
+    }, []);
     return(
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
@@ -17,15 +36,22 @@ const ToReview = ({navigation}) => {
                 </View>
                 <View style={styles.PayContainer} onPress={()=>navigation.navigate('ToPay')}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Image style={styles.ProdImg} source={require('../assets/lettuce.png')}/>
-                            <View style={{flexDirection: 'column', margin: 10}}>
-                                <Text style={styles.ButtonTitle}>Lettuce</Text>
-                                <Text style={styles.kilo}>5 kg</Text>
-                                <Text style={styles.amount}>Php 100.00</Text>
-                            </View>
-                            <TouchableOpacity onPress={()=>navigation.navigate('WriteReview')}>
-                                <Text style={styles.reviewbutton}>REVIEW</Text>
-                            </TouchableOpacity>
+                        <FlatList data = {toReview}
+                            keyExtractor={({id}, index) => id}
+                            renderItem={({item}) => (
+                            <ScrollView>
+                                <View style={{flexDirection: 'column', margin: 10}}>
+                                    <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
+                                    <Text style={styles.amount}>Price: {item.order_total}</Text>
+                                    <TouchableOpacity onPress={() => {navigation.navigate('WriteReview', {item:item})}}>
+                                        <Text style={styles.reviewbutton}>REVIEW</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </ScrollView>
+
+                            )}>
+                        </FlatList>
+                            
                         </View>
                 </View>
         </View>

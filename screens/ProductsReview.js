@@ -5,7 +5,7 @@ import { RadioButton } from 'react-native-paper';
 import Icons from 'react-native-vector-icons/FontAwesome';
 
 
-const ProductReview  = ({navigate}) => {
+const ProductReview  = ({navigation}) => {
 
   const [data, setData] = useState("");
  

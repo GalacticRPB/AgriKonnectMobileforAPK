@@ -20,7 +20,7 @@ const Registration = ({ navigation }) => {
   const [mobilephone, setMobilephone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [verified, setVerified] = useState("false");
+  const [verified, setVerified] = useState("");
   const [selectedImage, setSelectedImage] = useState([
     { fileName: "Choose a photo" },
   ]);
@@ -29,7 +29,6 @@ const Registration = ({ navigation }) => {
 
   const RegisterSeller = async () => {
     const formData = new FormData();
-
     formData.append("firstname", firstname);
     formData.append("middlename", middlename);
     formData.append("lastname", lastname);
@@ -39,9 +38,6 @@ const Registration = ({ navigation }) => {
     formData.append("password", password);
     formData.append("verified", verified);
 
-    // temp
-    const file = await getFileFromUrl( selectedImage.uri, selectedImage.fileName);
-    console.log(file)
     // [
     //     {
     //       "fileName":"rn_image_picker_lib_temp_ff3f441f-4f03-47ed-81b8-f24d2165126c.jpg",
@@ -52,36 +48,27 @@ const Registration = ({ navigation }) => {
     //       "width":200
     //     }
     // ]
-    formData.append("image", file);
-    try {
-      const response = await fetch(
-        "http://10.0.2.2:8000/api/register",
-        {
-          method: "POST",
-          headers: {
-            Accept: 'application/json',
-            "Content-Type": "multipart/form-data",
-          },
-          body: formData,
-        }
-      );
-  
-    }catch (error){
-      console.error(error)
-    }
+    formData.append("image", {
+      uri: selectedImage[0].uri,
+      type: selectedImage[0].type,
+      name: selectedImage[0].fileName,
+    });
+
+    const response = await fetch(
+      "https:10.0.2.2:8000/api/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      }
+    );
+    
     const json = await response.json();
-    console.log("test")
     console.log(json);
   };
 
-  async function getFileFromUrl(url, name, defaultType = 'image/jpeg'){
-    console.log(url)
-    const response = await fetch(url);
-    const data = await response.blob();
-    return new File([data], name, {
-      type: data.type || defaultType,
-    });
-  }
 
   const launchImageLibraryHandler = () => {
     const options = {
@@ -94,7 +81,7 @@ const Registration = ({ navigation }) => {
     launchImageLibrary(options, (response) => {
       console.log(response);
 
-      setSelectedImage(response.assets[0]);
+      setSelectedImage(response.assets);
 
       if (response.didCancel) {
         console.log("User cancelled image picker");
@@ -150,18 +137,6 @@ const Registration = ({ navigation }) => {
               style={styles.input}
               onChangeText={(text) => setMobilephone(text)}
             ></TextInput>
-            
-            <View style={styles.imageBox}>
-              <Text style={styles.imageFilename} numberOfLines={1}>
-                {selectedImage.fileName}
-              </Text>
-              <TouchableOpacity
-                style={styles.imageButton}
-                onPress={launchImageLibraryHandler}>
-                <Text style={styles.imageButtonText}>Select Image</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
 
             <TextInput
               placeholder="Password"
@@ -170,7 +145,18 @@ const Registration = ({ navigation }) => {
               onChangeText={(text) => setPassword(text)}
             ></TextInput>
 
-           
+            <View style={styles.imageBox}>
+              <Text style={styles.imageFilename} numberOfLines={1}>
+                {selectedImage[0].fileName}
+              </Text>
+              <TouchableOpacity
+                style={styles.imageButton}
+                onPress={launchImageLibraryHandler}
+              >
+                <Text style={styles.imageButtonText}>Select Image</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <TouchableOpacity style={styles.button} onPress={RegisterSeller}>
             <Text style={styles.buttonText}>REGISTER</Text>
