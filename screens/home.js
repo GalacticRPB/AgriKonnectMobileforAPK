@@ -22,6 +22,7 @@ const Home = ({navigation}) => {
 
   let id = global.id
 
+  console.log(id)
   console.log(recent)
   const getRecent = async () => {
     try {

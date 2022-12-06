@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {Text, Images, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView} from 'react-native';
+import {Text, Images, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView, Alert} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 const WriteReview = ({navigation, route}) => {
 
-    const [toReview, setReview] = useState([]);
-
+  const [toReview, setReview] = useState([]);
   const postReview = async () => {
     try
     {
-      const response = await fetch(`http://10.0.2.2:8000/api/review`, {
+      const response = await fetch('http://10.0.2.2:8000/api/review', {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -22,7 +21,6 @@ const WriteReview = ({navigation, route}) => {
           firstname: global.firstname,
           middlename: global.middlename,
           lastname: global.lastname,
-          order_id: route.params.item.order_id,
           order_name: route.params.item.order_name,
           order_qty: route.params.item.order_qty,
           order_total: route.params.item.order_total,
@@ -40,8 +38,10 @@ const WriteReview = ({navigation, route}) => {
       }
     }catch (error)
     {
+      console.log("Test")
       console.error(error)
     }
+    
 }
 
 

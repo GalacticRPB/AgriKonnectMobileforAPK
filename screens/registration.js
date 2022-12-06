@@ -64,9 +64,9 @@ const Registration = ({ navigation }) => {
         body: formData,
       }
     );
-    
+    console.log("test")
     const json = await response.json();
-    console.log(json);
+    console.log(formData);
   };
 
 

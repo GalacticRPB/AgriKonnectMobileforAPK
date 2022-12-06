@@ -74,10 +74,6 @@ const BasketScreen  = ({navigation, route}) => {
     {
       console.error(error)
     }
-    finally
-    {
-      setLoading(false);
-    }
   }
 
 

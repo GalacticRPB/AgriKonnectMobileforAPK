@@ -11,7 +11,7 @@ const CheckoutForm = ({navigation, route}) => {
     const [modeofpayment, setModeofPayment] = useState([]);
     const [orders, setOrders] = useState([]);
 
-    console.log(orders)
+    console.log(global.firstname)
     const sf = route.params.sffee;
     const cf = route.params.cfee;
     const total = (route.params.item.price * route.params.item.fruits_qty)
@@ -19,7 +19,7 @@ const CheckoutForm = ({navigation, route}) => {
 
     const Checkout = async () => {
         try{
-            const response = await fetch('http://10.0.2.2:8000/api/place-order', {
+            const response = await fetch(`http://10.0.2.2:8000/api/place-order`, {
                 method: 'POST',
                 headers: {
                     Accept: 'applicaton/json',
@@ -28,7 +28,7 @@ const CheckoutForm = ({navigation, route}) => {
                 body: JSON.stringify({
                     cart_id: route.params.item.id,
                     seller_id: route.params.item.seller_id,
-                    customerId: global.id,
+                    user_id: route.params.item.user_id,
                     product_id: route.params.item.product_id,
                     order_name: route.params.item.order_name,
                     price: route.params.item.price,
@@ -51,11 +51,10 @@ const CheckoutForm = ({navigation, route}) => {
                 setAddress('');
                 setMobilephone('');
                 setModeofPayment('');
-                console.log('Success')
             }
             console.log(response)
             const json = await response.json();
-            setOrders(json.orders);
+            setOrders(json.message);
             }
             catch (error) {
             console.error(error);

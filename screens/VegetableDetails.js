@@ -49,7 +49,6 @@ const VegetableDetails = ({navigation, route}) => {
                 
             });
         Alert.alert('Product Added to Cart');
-        navigation.navigate('Vegetable');
         const json = await response.json();
         console.log("test for vegetables")
         console.log(response)

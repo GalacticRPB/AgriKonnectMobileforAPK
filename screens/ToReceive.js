@@ -11,7 +11,8 @@ const ToReceive = ({navigation}) => {
     const [forDelivery, setReceived] = useState([]);
 
     const id = global.id;
-    
+    const mobilephone = forDelivery.contactNo
+
     const toReceive = async () => {
         try{
             const response = await fetch(`http://10.0.2.2:8000/api/out-for-delivery/${id}`);
@@ -23,10 +24,10 @@ const ToReceive = ({navigation}) => {
             console.error(error)
         }
     }
-    console.log(forDelivery)
     useEffect(() => {
       toReceive();
     }, []);
+    console.log(forDelivery)
 
     const receive = async () => {
         try{
@@ -37,23 +38,22 @@ const ToReceive = ({navigation}) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    product_id: forDelivery.productId,
-                    seller_id: forDelivery.sellerId,
+                    product_id: forDelivery.product_id,
+                    seller_id: forDelivery.seller_id,
                     customerId: forDelivery.customerId,
-                    order_id: forDelivery.orderId,
-                    order_name: forDelivery.orderName,
-                    order_qty: forDelivery.orderQty,
-                    order_price: forDelivery.orderPrice,
-                    order_total: forDelivery.orderTotal,
+                    order_id: forDelivery.order_id,
+                    order_name: forDelivery.order_name,
+                    order_qty: forDelivery.order_qty,
+                    order_price: forDelivery.order_price,
+                    order_total: forDelivery.order_total,
                     firstname: forDelivery.firstname,
                     middlename: forDelivery.middlename,
                     lastname: forDelivery.lastname,
-                    contactNo: forDelivery.mobilephone,
+                    contactNo: forDelivery.contactNo,
                     shippingaddress: forDelivery.shippingaddress,
                     modeofpayment: forDelivery.modeofpayment,
                 })
             });
-        console.log(response)
         Alert.alert("Order Received");
         const json = await response.json();
         console.log("test for product")
@@ -62,6 +62,8 @@ const ToReceive = ({navigation}) => {
         console.error(error);
         } 
     }
+
+
    
     return(
         <View style={styles.container}>

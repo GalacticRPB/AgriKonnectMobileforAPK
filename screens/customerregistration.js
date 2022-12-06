@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
+import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, Alert} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 
 const CustomerRegistration = ({navigation}) => {
@@ -31,7 +31,7 @@ const CustomerRegistration = ({navigation}) => {
         })
       });
 
-      if((response).status === 201)
+      if((response).status === 200)
       {
         setFirstname('');
         setMiddlename(''),
@@ -39,6 +39,7 @@ const CustomerRegistration = ({navigation}) => {
         setUsername(''),
         setEmail(''),
         setPassword('');
+        Alert.alert("Customer Registered Successfully!");
         navigation.navigate('CustomerSignIn');
       }
     console.log("test")
