@@ -54,7 +54,7 @@ const EditProduct = ({navigation, route}) => {
       });
       if((response).status === 200)
       {
-        console.log("test")
+        
         setCategory('');
         setName('');
         setDescription('');

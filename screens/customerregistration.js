@@ -42,7 +42,6 @@ const CustomerRegistration = ({navigation}) => {
         Alert.alert("Customer Registered Successfully!");
         navigation.navigate('CustomerSignIn');
       }
-    console.log("test")
     console.log(response)
     const json = await response.json();
     setData(json.customer);
