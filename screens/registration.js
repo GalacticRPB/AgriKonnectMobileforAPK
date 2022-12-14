@@ -19,6 +19,7 @@ const Registration = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [selectedImage, setSelectedImage] = useState([]);
+  const [brgy, setAddress] = useState('');
 
   const RegisterSeller = async () => {
     const formData = new FormData();
@@ -29,6 +30,7 @@ const Registration = ({navigation}) => {
     formData.append('mobilephone', mobilephone);
     formData.append('email', email);
     formData.append('password', password);
+    formData.append('brgy', brgy);
     formData.append('verified', false);
     formData.append('image', {
       uri: selectedImage[0].uri,
@@ -39,7 +41,7 @@ const Registration = ({navigation}) => {
       ),
     });
 
-    const response = await fetch('http://localhost:8000/api/register', {
+    const response = await fetch('http://10.0.2.2:8000/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -138,6 +140,12 @@ const Registration = ({navigation}) => {
                 <Text style={styles.imageButtonText}>Select Image</Text>
               </TouchableOpacity>
             </View>
+
+            <TextInput
+              placeholder="Address"
+              style={styles.input}
+              onChangeText={text => setAddress(text)}
+            />
           </View>
 
           <TouchableOpacity style={styles.button} onPress={RegisterSeller}>

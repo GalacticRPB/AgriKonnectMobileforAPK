@@ -9,6 +9,7 @@ const CustomerRegistration = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
+  const [mobilephone, setMobilephone] = useState('');
   const [password, setPassword] = useState('')
 
   const [data, setData] = useState([]);
@@ -27,6 +28,7 @@ const CustomerRegistration = ({navigation}) => {
           lastname: lastname,
           username: username,
           email: email,
+          mobilephone: mobilephone,
           password: password,
         })
       });
@@ -38,6 +40,7 @@ const CustomerRegistration = ({navigation}) => {
         setLastname(''),
         setUsername(''),
         setEmail(''),
+        setMobilephone(''),
         setPassword('');
         Alert.alert("Customer Registered Successfully!");
         navigation.navigate('CustomerSignIn');
@@ -50,6 +53,40 @@ const CustomerRegistration = ({navigation}) => {
       console.error(error);
     }
   }
+
+  const handleUserValidation = () => {
+    errors = [];
+
+    if (firstname.length <= 0){
+        errors.push("Username should have at least 8 characters")
+    }
+    if (middlename.length <=0){
+        errors.push("Password should have at least 8 characters")
+    }
+    if (lastname <=0){
+        errors.push("Password is not the same as Confirm Password")
+    }
+    if (username.length <= 0){
+      errors.push("Password should have at least 8 characters")
+    }
+    if (email.length <= 0){
+      errors.push("Password should have at least 8 characters")
+    }
+    if (mobilephone.length != 11){
+        errors.push("Mobile number should be valid 11 digit number")
+    }
+    if (password.length <=0){
+      errors.push("Mobile number should be valid 11 digit number")
+    }
+    if (errors.length == 0){
+        RegisterCustomer();
+        Alert.alert('User Created Successfully!');
+        navigation.navigate('Login')
+    }else{
+        Alert.alert("Error!", errors.join('\n'))
+    }
+}
+
   
   return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -108,6 +145,12 @@ const CustomerRegistration = ({navigation}) => {
       </TextInput>
 
       <TextInput 
+      placeholder='Phone Number'
+      style = {styles.input}
+      onChangeText = { (text) => setMobilephone(text) }>
+      </TextInput>
+
+      <TextInput 
       placeholder='Email'
       style = {styles.input}
       onChangeText = { (text) => setEmail(text) }
@@ -145,6 +188,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingVertical: 20,
     color: '#F4F4F4',
+    paddingTop: 50,
   },
   ground:{
     backgroundColor: '#F4F4F4',

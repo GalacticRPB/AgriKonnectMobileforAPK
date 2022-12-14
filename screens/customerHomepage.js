@@ -1,27 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,FlatList, ActivityIndicator, Image, ScrollView} from 'react-native';
-import Icons from 'react-native-vector-icons/FontAwesome';
+import { TextInput } from 'react-native-gesture-handler';
+import { Feather } from '@expo/vector-icons';
 
 const CustomerHomepage = ({navigation}) => {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState("");
-    const getrecommended = async () => {
-      try {
-      const response = await fetch(`http://10.0.2.2:8000/api/product-recommended`);
-      const json = await response.json();
-      setData(json.data);
-      } catch (error) {
+  const [search, setSearch] = useState('');
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [masterData, setMasterData] = useState([]);
+
+  const searchFilter = (text) => {
+    if (text) {
+        const newData = masterData.filter((item) => {
+        const itemData = item.name ? item.name.toUpperCase()
+                        : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
+    }
+    else
+    {
+      setFilteredData(masterData);
+      setSearch(text);
+    }
+  }
+
+const getRecommended = () => {
+  const apiURL = `http://10.0.2.2:8000/api/product-recommended`;
+  fetch(apiURL)
+  .then((response) => response.json())
+  .then((responseJson) => {
+      setFilteredData(responseJson.data);
+      setMasterData(responseJson.data);
+  }).catch((error) => {
       console.error(error);
-      } finally {
+  }).finally(() => {
       setLoading(false);
-      }
+  })
+}
+
+
+  const showRecommended = () => {
+    while(isLoading){
+      return(<ActivityIndicator size="large" color="green" style={{ alignSelf: 'center' }}></ActivityIndicator>)
+    }
+    if (filteredData.length == 0) {
+      return (
+        <Text style = {{ fontSize: 20, color: 'gray', justifyContent: 'center', textAlign: 'center', marginTop: 25, marginBottom: 25 }}> No Product Available</Text>
+      )
+    }
+    else
+    {
+      return(
+        <FlatList
+          data = {filteredData}
+          keyExtractor= {({id}, index) => id}
+          renderItem={({item}) => (
+            <View style={styles.PContainer}>
+                <TouchableOpacity onPress={() => {navigation.navigate('RecommendedProducts', {item:item})}}>
+                  <Text style={styles.ProdName}>{item.name}</Text>
+                  <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
+                  <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
+                </TouchableOpacity>
+            </View>
+          )}
+        />
+      )
+    }
   }
 
   useEffect(() => {
-    getrecommended();
-}, []);
+    getRecommended();
+  }, []);
 
-  console.log(data)
 
   return (
     <View style={styles.container}>
@@ -31,20 +85,22 @@ const CustomerHomepage = ({navigation}) => {
                 <Text style={styles.title}> Hi, {global.firstname}! </Text>
                 <Text style={styles.subtitle}> What would you buy today? </Text>
               </View>
-              <View>
-                <TouchableOpacity style={styles.BasketButton}>
-                  <Icons name='shopping-basket'
-                  size={25}
-                  color='white'
-                  style={styles.BasketIcon}/>
-                </TouchableOpacity>
-              </View>
         </View>
-        <View>
-          <TouchableOpacity  onPress={()=>navigation.navigate('SearchScreen')}>
-            <Text style={styles.searchbar}><Icons name='search' size={20}/>
-             Search a product</Text>
-          </TouchableOpacity>
+        <View style={styles.searchcontainer}>
+        <View style={styles.SectionStyle}>
+ 
+        <Feather name="search" size={24} color="black" />
+        <TextInput 
+            placeholder='Search Product Name'
+            placeholderTextColor = 'gray'
+            value = {search}
+            onChangeText = { (text) => searchFilter(text) }
+            style={styles.searchbar}
+          >
+
+
+          </TextInput>
+          </View>
         </View>
         <Text style={styles.SectionText}> Categories </Text>
         <View style = {styles.horizontalView}>
@@ -69,24 +125,12 @@ const CustomerHomepage = ({navigation}) => {
             </TouchableOpacity>
           </ScrollView>
         </View>
-        <Text style={styles.BestText}> Best Sellers</Text>
+        <Text style={styles.BestText}> Recommended Products</Text>
         <ScrollView>
-          <TouchableOpacity onPress={()=>navigation.navigate('Product Details')}>
-              <View style={styles.BestContainer}>
-                <View style={{flexDirection: 'row'}}>
-                    <FlatList data = {data}
-                    keyExtractor={({id}, index) => id}
-                    renderItem={({item})=> (
-                        <View style={styles.ProdInfo}>
-                          <Text style={styles.ProdName}>{item.order_name}</Text>
-                          <Text style={styles.ProdPrice}>Php {item.order_price}.00</Text>
-                        </View>
-                    )}>
-                      
-                    </FlatList>
-                </View>
+              <View >
+              
+              {showRecommended()}
               </View>
-            </TouchableOpacity>
 
         </ScrollView>
       </ScrollView>
@@ -99,8 +143,35 @@ export default CustomerHomepage;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#F4F4F4'
+    backgroundColor: '#F4F4F4',
+    paddingTop: 50,
   },
+  PContainer:{
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 10,
+    shadowColor: "#000",
+    padding: 15,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginBottom: 10,
+  },
+  searchcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10
+  },
+  SectionStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+},
   headercontainer:{
     flexDirection: 'row',
     padding: 20,
@@ -111,6 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     margin: 10,
+    flex: 1,
   },
   title: {
     color: '#5F5B5B',
@@ -147,7 +219,7 @@ const styles = StyleSheet.create({
     height: 130,
     width: 130,
     borderRadius: 20,
-    margin: 1,
+    marginRight:10,
   },
   imgContainer: {
     flex: 2,
@@ -227,9 +299,9 @@ const styles = StyleSheet.create({
   BestContainer:{
     backgroundColor: 'white',
     flex: 1,
-    margin: 10,
     borderRadius: 10,
     shadowColor: "#000",
+    padding: 15,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -245,15 +317,16 @@ const styles = StyleSheet.create({
     width: 90,
   },
   ProdInfo: {
-    margin: 20,
+    margin: 5,
+    marginLeft: 20,
+    marginRight: 20,
   },
   ProdName: {
     fontWeight: 'bold', 
     color: '#000000',
-    fontSize: 15
+    fontSize: 20,
   },
   ProdPrice:{
-    fontWeight: 'bold', 
     color: '#000000',
   },
   BestBasketButton:{

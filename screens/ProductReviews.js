@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text,View,Image,StyleSheet,TouchableOpacity} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import Icons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
 
 const ProductReviews = ({navigation}) => {
@@ -9,7 +9,7 @@ const ProductReviews = ({navigation}) => {
         <View style={styles.container}>
             <View style={{flexDirection: 'row', padding: 10}}>
                 <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
-                <Icons name= 'arrow-back' size={50} color='#000000'/>
+                <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
                 </TouchableOpacity>
                 <Text style={styles.SectionText}> Product Reviews </Text>
             </View>
@@ -37,7 +37,7 @@ export default ProductReviews;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#F4F4F4'
+      backgroundColor: '#F4F4F4',
     },
     SectionText: {
         color: '#5F5B5B',

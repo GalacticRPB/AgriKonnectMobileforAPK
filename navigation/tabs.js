@@ -48,11 +48,17 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <Text style={{
-                            color: focused ?  'green' : 'F4F4F4', 
-                        }}>
-                            <Foundation name='home' size={30} iconStyle={''}/>
-                        </Text>
+                        <Image
+                        source={
+                            focused
+                            ? require ('../assets/homegreen.png')
+                            : require('../assets/home.png')
+                        }
+                        style={{
+                            width: 30,
+                            height: 30,
+                        }}
+                        />
                         <Text
                         style={{
                             color: focused ? 'green' : 'F4F4F4', 
@@ -70,11 +76,17 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <Text style={{
-                            color: focused ?  'green' : 'F4F4F4', 
-                        }}>
-                            <Entypo name='shop' size={30} iconStyle={''}/>
-                        </Text>
+                         <Image
+                            source={
+                                focused
+                                ? require ('../assets/green-store.png')
+                                : require('../assets/store.png')
+                            }
+                            style={{
+                                width: 30,
+                                height: 30,
+                            }}
+                            />
                         <Text
                         style={{
                             color: focused ?  'green' : 'F4F4F4', 
@@ -92,11 +104,17 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <Text style={{
-                            color: focused ?  'green' : 'F4F4F4', 
-                        }}>
-                        <MCI name='swap-horizontal-circle-outline'  size={30} iconStyle={''}/>
-                        </Text>
+                       <Image
+                            source={
+                                focused
+                                ? require ('../assets/transaction.png')
+                                : require('../assets/transaction-green.png')
+                            }
+                            style={{
+                                width: 30,
+                                height: 30,
+                            }}
+                            />
                         <Text
                         style={{
                             color: focused ?  'green' : 'F4F4F4', 
@@ -114,13 +132,17 @@ const Tabs = () => {
             options={{
                 tabBarIcon: ({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top: 0}}>
-                        <Text
-                        style={{
-                            color: focused ?  'green' : 'F4F4F4', 
-                            fontSize:10
-                        }}>
-                        <MCI name='account' size={30} iconStyle={''}/>
-                        </Text>
+                       <Image
+                            source={
+                                focused
+                                ? require ('../assets/accountgreen.png')
+                                : require('../assets/account.png')
+                            }
+                            style={{
+                                width: 30,
+                                height: 30,
+                            }}
+                            />
                         <Text
                         style={{
                             color: focused ?  'green' : 'F4F4F4', 

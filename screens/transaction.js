@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import {Text, View,StyleSheet,Image, TouchableOpacity, ScrollView} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import {Text, View,StyleSheet,Image, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import { FlatList, RefreshControl } from 'react-native-gesture-handler';
 
-/*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import MI from 'react-native-vector-icons/MaterialIcons';
-/*Icons Library-End*/
+import { AntDesign } from '@expo/vector-icons'; 
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const Transaction = ({navigation}) => {
   let user_id = global.id;
 
   const [transaction, setTransaction] = useState([]);
+  const [orderDeliver, setOrderDeliver] = useState([]);
 
   const getTransaction = async () => {
     try {
@@ -29,12 +24,54 @@ const Transaction = ({navigation}) => {
       console.error(error);
     } 
   }
-  console.log(transaction)
   useEffect(() => {
     getTransaction();
   }, []);
+
+  const orderDelivered = async () => {
+    try{
+      const response = await fetch(`http://10.0.2.2:8000/api/out-for-delivery`, {
+        method: 'POST',
+        headers: {
+          Accept: 'applicaton/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          product_id: transaction[0].product_id,
+          seller_id: transaction[0].seller_id,
+          customer_id: transaction[0].user_id,
+          order_id: transaction[0].id,
+          order_name: transaction[0].order_name,
+          order_qty: transaction[0].product_qty,
+          order_price: transaction[0].price,
+          order_total: transaction[0].total_price,
+          firstname: transaction[0].firstname,
+          middlename: transaction[0].middlename,
+          lastname: transaction[0].lastname,
+          mobilephone: transaction[0].mobilephone,
+          shippingaddress: transaction[0].shippingaddress,
+          modeofpayment: transaction[0].modeofpayment,
+        })
+      });
+      Alert.alert('Order out for Delivery');
+      const json = await response.json();
+      console.log(json)
+      setOrderDeliver(json.deliver);
+    }catch (error)
+    {
+      console.error(error);
+    }
+  }
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getTransaction();
+    wait(2000).then(() => setRefreshing(false));
+  },[]);
     return(
-    <ScrollView contentContainerStyle={styles.contentContainer}>
+    <ScrollView contentContainerStyle={styles.contentContainer} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 
     <View style={styles.topBG}>
     <Text style = {styles.name}>Incoming Transactions</Text>
@@ -64,17 +101,20 @@ const Transaction = ({navigation}) => {
                 keyExtractor={({ id }, index) => id}
                 renderItem={({ item }) => (
                   <TouchableOpacity style = {styles.item} onPress={ () => navigation.navigate('Ongoing', {item:item})}>
-                    <Text style = {styles.header2}>Product Name: {item.order_name}</Text>
+                    <View style={styles.BestContainer}>
                     <View style={{borderBottomColor: 'gray', borderBottomWidth: StyleSheet.hairlineWidth, margin: 3}}/>
-                    <Text style = {styles.myProducts}>Quantity:</Text>
-                    <Text style = {styles.myProducts}>Unit Price:</Text>
-                    <Text style = {styles.myProducts}>Total Price:</Text>
-                    <Text style = {styles.myProducts}>Customer Name:</Text>
-                    <Text style = {styles.myProducts}>Phone Number:</Text>
-                    <Text style = {styles.myProducts}>Shipping Address:</Text>
-                    <Text style = {styles.myProducts}>Mode of Payment:</Text>
-                    <TouchableOpacity>
-                      <Text>Shipping Status</Text>
+                    <Text style = {styles.myProducts}>Product Name: {item.order_name}</Text>
+                    <Text style = {styles.myProducts}>Quantity: {item.product_qty}</Text>
+                    <Text style = {styles.myProducts}>Unit Price: {item.price}</Text>
+                    <Text style = {styles.myProducts}>Total Price: {item.total_price}</Text>
+                    <Text style = {styles.myProducts}>Customer Name: {item.firstname} {item.middlename} {item.lastname}</Text>
+                    <Text style = {styles.myProducts}>Phone Number: {item.mobilephone}</Text>
+                    <Text style = {styles.myProducts}>Shipping Address: {item.shippingaddress}</Text>
+                    <Text style = {styles.myProducts}>Mode of Payment: {item.modeofpayment}</Text>
+                    </View>
+                    <TouchableOpacity style = {styles.registerButton} onPress={ orderDelivered }>
+                      <Text >Out for Delivery</Text>
+                      
                     </TouchableOpacity>
                   
                   </TouchableOpacity>
@@ -92,6 +132,7 @@ contentContainer: {
       flex: 1,
       justifyContent: 'flex-end',
       color: '#F4F4F4',
+      paddingTop: 50,
     },
     ground:{
       backgroundColor: '#F4F4F4',
@@ -120,11 +161,27 @@ contentContainer: {
         justifyContent: 'center',
         alignItems: 'center',
     },
+    leftIcon:{
+    justifyContent:'flex-start',
+    marginLeft: '5%',
+},
     name:{
         color: 'white',
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',   
+    },
+    BestContainer:{
+      backgroundColor: 'white',
+      flex: 1,
+      borderRadius: 10,
+      shadowColor: "#000",
+      padding: 25,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      width: 400,
     },
     tab:{
       marginTop: 10,
@@ -246,6 +303,12 @@ contentContainer: {
         backgroundColor: 'gray',
         height:2,
         width:'100%',
+      },
+      registerButton:{
+        textAlign: 'center',
+        color: 'green',
+        fontWeight: 'bold',
+        fontSize: 16,
       },
 })
 

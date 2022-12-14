@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, RefreshControl } from 'react-native-gesture-handler';
 
 /*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Entypo } from '@expo/vector-icons'; 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import MI from 'react-native-vector-icons/MaterialIcons';
+import { FontAwesome } from '@expo/vector-icons'; 
 /*Icons Library-End*/
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const Products = ({navigation}) => {
   let id = global.id;
@@ -56,12 +53,21 @@ const getProducts = () => {
   useEffect(() => {
     getProducts();
   }, []);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getProducts();
+    wait(2000).then(() => setRefreshing(false));
+  },[]);
+
     return(
-        <ScrollView contentContainerStyle={styles.contentContainer}>
+        <ScrollView contentContainerStyle={styles.contentContainer} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 
         <View style={styles.sBarBG}>
         <View style={styles.searchbar}>
-        <FontAwesome name='search' color={'gray'} size={30} iconStyle={''}/>
+        <FontAwesome name="search" size={30} color="gray" />
           <TextInput 
             style={styles.searchbar}
             placeholder='Search Product Name'
@@ -79,7 +85,7 @@ const getProducts = () => {
                 My Products
             </Text>
             <TouchableOpacity style = {styles.addButton} onPress={()=> navigation.navigate('AddProduct')}>
-            <FontAwesome5 name='plus' color={'white'} size={30} iconStyle={''}/>
+            <Entypo name="plus" size={30} color="white" />
             </TouchableOpacity>
         </View>
         <ScrollView>
@@ -91,10 +97,12 @@ const getProducts = () => {
                     <ScrollView>
                     <TouchableOpacity onPress={() => {navigation.navigate('EditProduct', {item:item})}}>
                     <View style={styles.ProdInfo}>
-                    <Text style={styles.ProdName}>{item.category}</Text>
+                    <View style={styles.BestContainer}>
+                      <Text style={styles.ProdName}>{item.category}</Text>
                       <Text style={styles.ProdPrice}>{item.name}</Text>
                       <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
                       <Text style={styles.ProdPrice}>Quantity: {item.quantity}</Text>
+                    </View>
                     </View>
                     </TouchableOpacity>
                   </ScrollView>
@@ -117,6 +125,18 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'flex-end',
       color: '#F4F4F4',
+      paddingTop: 50,
+    },
+    BestContainer:{
+      backgroundColor: 'white',
+      flex: 1,
+      borderRadius: 10,
+      shadowColor: "#000",
+      padding: 5,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
     },
     ground:{
       backgroundColor: '#F4F4F4',
@@ -212,6 +232,7 @@ const styles = StyleSheet.create({
       flexWrap: 'nowrap',
       height: 35,
       alignItems: 'center',
+      marginBottom: 10,
       justifyContent: 'space-between',
     },
     addButton:{
@@ -225,6 +246,7 @@ const styles = StyleSheet.create({
     },
     ProdInfo: {
       margin: 20,
+      marginTop: 10,
     },
     ProdName: {
       fontWeight: 'bold', 

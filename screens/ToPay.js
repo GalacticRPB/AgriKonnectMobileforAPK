@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,Image} from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import Icons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
 const ToPay = ({navigation}) => {
 
@@ -30,28 +30,29 @@ const ToPay = ({navigation}) => {
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
                     <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                    <Icons name= 'arrow-back' size={50} color='#000000'/>
+                    <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> To Pay </Text>
                 </View>
-                <View style={styles.PayContainer} onPress={()=>navigation.navigate('Account')}>
-                    <View style={{flexDirection: 'row'}}>
+               
                         <FlatList data = {toPay}
                             keyExtractor={({id}, index) => id}
                             renderItem={({item}) => (
                             <ScrollView>
+                                <View style={styles.PayContainer} onPress={()=>navigation.navigate('Account')}>
+                                <View style={{flexDirection: 'row'}}>
                                 <View style={{flexDirection: 'column', margin: 10}}>
                                     <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
                                     <Text style={styles.amount}>Price: {item.total_price}</Text>
                                     <Text style={styles.amount}>Order Status: Pending...</Text>
+                                </View>
+                                </View>
                                 </View>
                             </ScrollView>
 
                             )}>
                         </FlatList>
                     </View>
-                </View>
-        </View>
 )}
 
 export default ToPay;
@@ -60,7 +61,8 @@ export default ToPay;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#F4F4F4'
+      backgroundColor: '#F4F4F4',
+      paddingTop: 50,
     },
     SectionText: {
         color: '#5F5B5B',

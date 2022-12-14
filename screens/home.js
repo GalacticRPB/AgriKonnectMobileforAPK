@@ -2,28 +2,52 @@ import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView} from 'react-native';
 
 /*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import MI from 'react-native-vector-icons/MaterialIcons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FlatList } from 'react-native-gesture-handler';
+import { MaterialIcons } from '@expo/vector-icons'; 
 /*Icons Library-End*/
 
 const Home = ({navigation}) => {
 
-  const [recent, setRecent] = useState("");
+  const [recent, setRecent] = useState([]);
+  const [report, setReport] = useState([]);
+  const [info, setInfo] = useState([]);
+  const [qty, setQuantity] = useState([]);
+  const [count, setCount] = useState([]);
 
   let id = global.id
 
   console.log(id)
   console.log(recent)
+  const ordercount = count;
+  const total = report;
+
+  const getReport = async () => {
+    try{
+      const response = await fetch(`http://10.0.2.2:8000/api/sample/${id}`);
+      const json = await response.json();
+      setReport(json.price)
+      setInfo(json.products)
+      setQuantity(json.qty)
+    }
+    catch (error)
+    {
+      console.error(error)
+    }
+   
+  }
+
+  const getCount = async () => {
+    try{
+      const response = await fetch(`http://10.0.2.2:8000/api/orderCount/${id}`);
+      const json = await response.json();
+      setCount(json.orderCount)
+    }
+    catch (error)
+    {
+      console.error(error)
+    }
+   
+  }
   const getRecent = async () => {
     try {
       const response = await fetch (`http://10.0.2.2:8000/api/recent/${id}`);
@@ -38,6 +62,8 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     getRecent();
+    getReport();
+    getCount();
   }, []);
 
   return(
@@ -50,25 +76,27 @@ const Home = ({navigation}) => {
         <Text style = {styles.name}>{global.firstname}</Text>
       </View>
       <View>
-        <MCI name='account-circle' color={'gray'} size={80} iconStyle={''}/>
+        <MaterialIcons name="account-circle" size={80} color="gray" />
       </View>
       </View>
 
-      <View style={[styles.rectangle, styles.elevation]} />
+      <View>
+      <Text style = {styles.recent}>Transaction Details</Text>
+      <Text style={styles.ProdPrice}>Total Order Purchase for this Month: {ordercount}</Text>
+      <Text style={styles.ProdPrice}>Sales: Php {total}.00</Text>
+      </View>
 
       <Text style = {styles.recent}>Recently Sold</Text> 
         <View>
-          <ScrollView>
+          <ScrollView style = {styles.BestBasketButton}>
             <FlatList data = {recent}
               keyExtractor={({id}, index) => id}
               renderItem={({item}) => (
-                <ScrollView>
                   <View style={styles.ProdInfo}>
                   <Text style={styles.ProdName}>{item.name}</Text>
                     <Text style={styles.ProdPrice}>Product: {item.order_name}</Text>
                     <Text style={styles.ProdPrice}>Php : Php {item.order_total}.00</Text>
                   </View>
-              </ScrollView>
 
               )}>
               
@@ -90,6 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     color: '#F4F4F4',
+    paddingTop: 40,
   },
   ground:{
     backgroundColor: '#F4F4F4',
@@ -161,7 +190,7 @@ const styles = StyleSheet.create({
     height: 250,
     borderRadius: 10,
     backgroundColor: "#388E3C",
-    marginTop: 20,
+    marginTop: 0,
   },
   hello:{
     color: 'black',
@@ -169,7 +198,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   ProdInfo: {
-    margin: 20,
+    padding: 10,
+    marginTop: -20,
   },
   ProdName: {
     fontWeight: 'bold', 
@@ -181,12 +211,10 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   BestBasketButton:{
-    backgroundColor:"#31A05F",
+    backgroundColor:"white",
     borderRadius: 10,
-    padding: 12,
-    width: 40,
-    marginTop:30,
-    marginLeft: 100,
+    width: '100%',
+    marginTop:10,
   },
 
 

@@ -16,7 +16,7 @@ const CustomerSignIn = ({navigation}) => {
   const [password, setPassword] = useState('');
 
   const login = async () => {
-    await fetch('http://localhost:8000/api/loginCustomer', {
+    await fetch('http://10.0.2.2:8000/api/loginCustomer', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,8 +32,11 @@ const CustomerSignIn = ({navigation}) => {
           global.id = resData.id;
           global.firstname = resData.firstname;
           global.middlename = resData.middlename;
+          global.lastname = resData.lastname;
           global.username = resData.username;
           global.mobilephone = resData.mobilephone;
+          global.email = resData.email;
+          global.address = resData.address;
           setPassword('');
           setUsername(''), navigation.navigate('BottomNavigation');
         }
@@ -78,6 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F4F4F4',
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 50,
   },
   foreground: {
     flex: 1,
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
   },
   ask: {
     textAlign: 'center',
-    marginTop: 150,
+    marginTop: 100,
     fontSize: 16,
   },
   registerButton: {

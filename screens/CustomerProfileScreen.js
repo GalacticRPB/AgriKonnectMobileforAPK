@@ -4,6 +4,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import McIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MiIcons from 'react-native-vector-icons/MaterialIcons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+
 
 const CustomerProfile = ({navigation}) => {
 
@@ -12,7 +15,7 @@ const CustomerProfile = ({navigation}) => {
             <ScrollView>
                 <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity style={styles.UserIcon}  onPress={()=>navigation.navigate('EditCustomerProfile')}>
-                        <Icons name='user-edit'size={50} color='white'/>
+                        <MaterialIcons name="account-circle" size={100} color="white" />
                     </TouchableOpacity>
                     <View style={{flexDirection: 'column'}}>
                         <Text style={styles.Username}>{global.username}</Text>
@@ -22,42 +25,42 @@ const CustomerProfile = ({navigation}) => {
                 <View style={styles.subcontainer}>
                     <TouchableOpacity style={styles.ButtonContainer} onPress={()=>navigation.navigate('ToPay')}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Icons name='money-check-alt'size={40} color='#5F5B5B'/>
+                            <MaterialIcons name="payments" size={50} color="#5F5B5B" />
                             <Text style={styles.ButtonTitle}> To Pay</Text>
-                            <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
+                            <MaterialIcons style={styles.forwardIcon} name="arrow-forward-ios" size={20} color="#5F5B5B" />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.ButtonContainer} onPress={()=>navigation.navigate('ToReceive')}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <McIcons name='truck-delivery'size={50} color='#5F5B5B'/>
+                        <MaterialIcons name="receipt" size={50} color="#5F5B5B" />
                             <Text style={styles.ButtonTitle}> To Receive</Text>
-                            <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
+                            <MaterialIcons style={styles.forwardIcon} name="arrow-forward-ios" size={20} color="#5F5B5B" />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.ButtonContainer} onPress={()=>navigation.navigate('ToReview')}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <MiIcons name='rate-review'size={50} color='#5F5B5B'/>
+                            <MaterialIcons name="rate-review" size={50} color="#5F5B5B" />
                             <Text style={styles.ButtonTitle}> To Review</Text>
-                            <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
+                            <MaterialIcons style={styles.forwardIcon} name="arrow-forward-ios" size={20} color="#5F5B5B" />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.ButtonContainer} onPress={()=>navigation.navigate('RecentTransactions')}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <MiIcons name='receipt'size={50} color='#5F5B5B'/>
+                            <Ionicons name="receipt" size={50} color="#5F5B5B" />
                             <Text style={styles.ButtonTitle}> Recent Transactions</Text>
-                            <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
+                            <MaterialIcons style={styles.forwardIcon} name="arrow-forward-ios" size={20} color="#5F5B5B" />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.ButtonContainer} onPress={()=>navigation.navigate('OrderReviews')}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <McIcons name='message-star'size={50} color='#5F5B5B'/>
+                            <MaterialIcons name="border-color" size={50} color="#5F5B5B" />
                             <Text style={styles.ButtonTitle}> Order Reviews </Text>
-                            <MiIcons style={styles.forwardIcon} name='arrow-forward-ios'size={20} color='#5F5B5B'/>
+                            <MaterialIcons style={styles.forwardIcon} name="arrow-forward-ios" size={20} color="#5F5B5B" />
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.ButtonContainer} onPress={ () => [Alert.alert("You Have been successfully logged out"), navigation.popToTop()] }>
                         <View style={{flexDirection: 'row'}}>
-                            <McIcons name='logout'size={50} color='#5F5B5B'/>
+                            <MaterialIcons name="logout" size={50} color="#5F5B5B" />
                             <Text style={{marginTop: 10, marginLeft: 10, color: '#000000'}}> Logout</Text>
                         </View>
                     </TouchableOpacity>
@@ -73,6 +76,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1, 
       backgroundColor: '#388E3C',
+      paddingTop: 50,
     },
     subcontainer:{
         flex: 1,

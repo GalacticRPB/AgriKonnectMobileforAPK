@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput} from 'react-native';
+import shop from '../assets/shop.png'
 
 const registerOption = ({navigation}) =>{
   state={}
@@ -7,7 +8,7 @@ const registerOption = ({navigation}) =>{
     <View style = {styles.ground}>
     <View style={styles.circle} />
     <View style = {styles.foreground}>
-
+      
       
 
       <TouchableOpacity 

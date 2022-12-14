@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Text,View,StyleSheet,ScrollView,TouchableOpacity, Pressable} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, RefreshControl } from 'react-native-gesture-handler';
 import { RadioButton } from 'react-native-paper';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import CheckBox from '@react-native-community/checkbox';
 
 const shippingfee = 50;
-const conviencefee = 5;
+const modeofpayment = "Cash on Delivery";
 
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 const BasketScreen  = ({navigation, route}) => {
 
   const [data, setData] = useState([]);
@@ -15,54 +18,6 @@ const BasketScreen  = ({navigation, route}) => {
 
 
   let id = global.id
-
-  /*const handleDecrement = (cart_id) => {
-    setData((data) =>
-      data.map((item) =>
-        cart_id === item.id
-          ? {
-              ...item,
-              fruits_qty: item.fruits_qty - (item.fruits_qty > 1 ? 1 : 0),
-            }
-          : item
-      )
-    );
-    updateCartQuantity(cart_id, "dec");
-  };
-
-  const handleIncrement = (cart_id) => {
-    setData((data) =>
-      data.map((item) =>
-        cart_id === item.id
-          ? {
-              ...item,
-              fruits_qty: item.fruits_qty + (item.fruits_qty < 10 ? 1 : 0),
-            }
-          : item
-      )
-    );
-    updateCartQuantity(cart_id, "inc");
-  };
-
-  function updateCartQuantity  (cart_id, scope) {
-    try {
-      const response = fetch(`http://10.0.0.2:8000/api/basket-updatedquantity/${cart_id}/${scope}/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-      });
-      if ((response).status === 200)
-      {
-
-      }
-
-    }catch (error){
-      console.error(error);
-    }
-
-  }*/
 
   const getBasket = async () => {
     try {
@@ -82,24 +37,17 @@ const BasketScreen  = ({navigation, route}) => {
     getBasket();
   }, []);
 
-  /*function increment() {
-    //setCount(prevCount => prevCount+=1);
-    setCount(function (prevCount) {
-      return (prevCount += 1);
-    });
-  }
-  function decrement() {
-    setCount(function (prevCount) {
-      if (prevCount > 0) {
-        return (prevCount -= 1); 
-      } else {
-        return (prevCount = 0);
-      }
-    });
-  }*/
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getBasket();
+    wait(2000).then(() => setRefreshing(false));
+  },[]);
+
   return (
     <View style={styles.container}>
-      <ScrollView>
+       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
         <View style={styles.headercontainer}>
           <Text style={styles.SectionText}> My Basket </Text>
           <ScrollView>
@@ -109,13 +57,13 @@ const BasketScreen  = ({navigation, route}) => {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item}) => (
                     <ScrollView>
-                    <TouchableOpacity onPress={() => {navigation.navigate('CheckoutForm', {item:item, sffee: shippingfee, cfee: conviencefee})}}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('CheckoutForm', {item:item, sffee: shippingfee, mopayment: modeofpayment})}}>
                     <View style={styles.ProdInfo}>
                   
                         <Text style={styles.ProdName}>Product Name: {item.name}</Text>
-                        <Text style={styles.ProdPrice}>Unit Price: {item.price}</Text>
+                        <Text style={styles.ProdPrice}>Unit Price: {item.price}.00</Text>
                         <Text style={styles.ProdPrice}>Quantity: {item.fruits_qty}</Text>
-                        <Text style={styles.ProdPrice}>Total Price: {item.fruits_qty * item.price}</Text>
+                        <Text style={styles.ProdPrice}>Total Price: {item.fruits_qty * item.price}.00</Text>
                         <View style={{flexDirection: 'row'}}>
           
                         </View>
@@ -143,7 +91,8 @@ export default BasketScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#F4F4F4'
+    backgroundColor: '#F4F4F4',
+    paddingTop: 50,
   },
   headercontainer:{
     padding: 20,

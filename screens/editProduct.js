@@ -6,6 +6,9 @@ import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 /*Icons Library-End*/
 
+const cate = ['Vegetables', 'Fruits'];
+const desc = ['Organic', 'Conventional'];
+
 const EditProduct = ({navigation, route}) => {
   
   const [edit, setEditProduct] = useState([]);
@@ -82,12 +85,29 @@ const EditProduct = ({navigation, route}) => {
     </View>
       <Text style = {styles.addtext}>Edit product details</Text> 
       <Text style = {styles.text}>Select product category</Text>
-      <TextInput 
-      placeholder='Product Category'
-      onChangeText = { (text) => [setCategory(text)] }
-      style = {styles.input}
-      defaultValue = {edit.category}>
-      </TextInput>
+      <SelectDropdown
+      defaultButtonText={' '}
+      buttonStyle={styles.dropdown1BtnStyle}
+      buttonTextStyle={styles.dropdown1BtnTxtStyle}
+      dropdownStyle={styles.dropdown1DropdownStyle}
+      rowStyle={styles.dropdown1RowStyle}
+      rowTextStyle={styles.dropdown1RowTxtStyle}
+      data={cate}
+      defaultValue={edit.category}
+      onSelect={selectedItem => {
+        setCategory({ category: selectedItem});
+      }}
+      buttonTextAfterSelection={(selectedItem, index) => {
+        // text represented after item is selected
+        // if data array is an array of objects then return selectedItem.property to render after item is selected
+        return selectedItem;
+      }}
+      rowTextForSelection={(item, index) => {
+        // text represented for each item in dropdown
+        // if data array is an array of objects then return item.property to represent item in dropdown
+        return item;
+      }}
+    />
         <Text style = {styles.text}>Product Name</Text>
        <TextInput 
       placeholder='Product Name'
@@ -113,12 +133,29 @@ const EditProduct = ({navigation, route}) => {
       </TextInput>
 
       <Text style = {styles.text}>Product Description</Text>
-      <TextInput 
-      placeholder='Product Description'
-      onChangeText = { (text) => setDescription(text) }
-      style = {styles.input}
-      defaultValue = {edit.description}>
-      </TextInput>
+      <SelectDropdown
+      defaultButtonText={' '}
+      buttonStyle={styles.dropdown1BtnStyle}
+      buttonTextStyle={styles.dropdown1BtnTxtStyle}
+      dropdownStyle={styles.dropdown1DropdownStyle}
+      rowStyle={styles.dropdown1RowStyle}
+      rowTextStyle={styles.dropdown1RowTxtStyle}
+      data={desc}
+      defaultValue={edit.description}
+      onSelect={selectedItem => {
+        setDescription({description: selectedItem});
+      }}
+      buttonTextAfterSelection={(selectedItem, index) => {
+        // text represented after item is selected
+        // if data array is an array of objects then return selectedItem.property to render after item is selected
+        return selectedItem;
+      }}
+      rowTextForSelection={(item, index) => {
+        // text represented for each item in dropdown
+        // if data array is an array of objects then return item.property to represent item in dropdown
+        return item;
+      }}
+    />
 
       <View style={styles.bottom}>
       <TouchableOpacity 
@@ -142,6 +179,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     color: '#F4F4F4',
+    paddingTop: 50,
   },
   ground:{
     backgroundColor: '#F4F4F4',

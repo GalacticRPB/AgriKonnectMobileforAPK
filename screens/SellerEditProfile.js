@@ -261,6 +261,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingTop: 50,
   },
   name: {
     color: 'white',

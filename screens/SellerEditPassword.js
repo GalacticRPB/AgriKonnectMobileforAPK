@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 /*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import { AntDesign } from '@expo/vector-icons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -75,13 +75,8 @@ const PasswordEdit = ({navigation}) => {
       <View style={[styles.mPBox, styles.topBG]}>
         <TouchableOpacity>
           <Text style={styles.leftIcon}>
-            <FontAwesome5
-              name="arrow-left"
-              color={'white'}
-              size={25}
-              iconStyle={''}
-              onPress={() => navigation.navigate('Account')}
-            />
+            <AntDesign name="arrowleft" size={25} color="white" 
+            onPress={() => navigation.navigate('Account')}/>
           </Text>
         </TouchableOpacity>
         <Text style={styles.name}>Password</Text>
@@ -115,6 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     color: '#F4F4F4',
+    paddingTop: 50,
   },
   ground: {
     backgroundColor: '#F4F4F4',

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView} from 'react-native';
+import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView, Alert} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
-import MiIcons from 'react-native-vector-icons/MaterialIcons';
+import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 const ProductDetails = ({navigation, route}) => {
 
@@ -11,6 +12,8 @@ const ProductDetails = ({navigation, route}) => {
 
     let x = global.id
 
+    let product_id = route.params.item.id
+    console.log(product_id)
     function handleIncrement() {
         //setCount(prevCount => prevCount+=1);
         if(value < 10)
@@ -40,11 +43,16 @@ const ProductDetails = ({navigation, route}) => {
                     seller_id: route.params.item.user_id,
                     fruits_qty: value,
                     name: route.params.item.name,
+                    image: route.params.item.image,
                     price: route.params.item.price,
+                    
                 })
+                
             });
+        Alert.alert('Product Added to Cart');
         const json = await response.json();
-        console.log("test for product")
+        console.log("test for vegetables")
+        console.log(response)
         setData(json.message);
         } catch (error) {
         console.error(error);
@@ -53,7 +61,7 @@ const ProductDetails = ({navigation, route}) => {
 
     const getFruits = async () => {
         try {
-        const response = await fetch(`http://10.0.2.2:8000/api/products/${route.params.item.id}`);
+        const response = await fetch(`http://10.0.2.2:8000/api/viewfruit/${product_id}`);
         const json = await response.json();
         setReview(json.reviews);
         } catch (error) {
@@ -61,40 +69,41 @@ const ProductDetails = ({navigation, route}) => {
         } 
     }
     
+    
+    
     useEffect(() => {
         getFruits();
     }, []);
-    
-    console.log(review)
+
     return(
         <View style={styles.container}>
             <View style={{padding: 10}}>
                 <TouchableOpacity onPress={()=>navigation.navigate('Fruits')}>
-                <Icons name= 'arrow-back' size={50} color='#000000'/>
+                <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
                 </TouchableOpacity>
             </View>
             <ScrollView>
-                <View style={{flexDirection:'column', alignSelf: 'center'}}>
-                    <Image source={require('../assets/lettuce.png')}/>
+                <View style={{flexDirection:'column', alignSelf: 'flex-start',
+                 marginLeft: 50}}>
                     <Text style={styles.Headertext}>{route.params.item.name}</Text>
                     <Text style={styles.Subtext}>Product Category:</Text>
                     <Text style={styles.bodytext}>{route.params.item.category}</Text>
                     <Text style={styles.Subtext}>Growing Method:</Text>
                     <Text style={styles.bodytext}>{route.params.item.description}</Text>
                     <Text style={styles.Subtext}>Price:</Text>
-                    <Text style={styles.bodytext}>{route.params.item.price}</Text>
-                    <Text style={styles.Subtext}>Quantity:  {value}kg</Text>
+                    <Text style={styles.bodytext}>Php {route.params.item.price}.00</Text>
+                    <Text style={styles.Subtext}>Quantity: {value}kg</Text>
                     <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
-                    <TouchableOpacity onPress={handleDecrement(route.params.item.id)}><Icons name ='minus' style={styles.decrementbutton}/></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.numberContainer}>{value}</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={handleIncrement(route.params.item.id)}><Icons name ='plus' style={styles.incrementbutton}/></TouchableOpacity>
-                    <Text>kg</Text>
-                  </View>
+                        <TouchableOpacity onPress={handleDecrement}><Entypo name="minus" color="black" style={styles.decrementbutton}/></TouchableOpacity>
+                        <TouchableOpacity><Text style={styles.numberContainer}>{value}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={handleIncrement}><Entypo name="plus" style={styles.incrementbutton} /></TouchableOpacity>
+                        <Text>kg</Text>
+                    </View>
                 </View>
-                <View style={{flexDirection: 'row', marginLeft: 60}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
                     <Text style={styles.sellername}>Seller: {route.params.item.seller_name}</Text>
                 </View>
-                <View style={{flexDirection: 'row', marginLeft: 60, marginTop: 10}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                     <Text>Reviews</Text>
                 </View>
                 <ScrollView>
@@ -131,7 +140,8 @@ export default ProductDetails;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#F4F4F4'
+      backgroundColor: '#F4F4F4',
+      paddingTop: 50,
     },
     Headertext:{
         color: '#000000',
@@ -184,14 +194,14 @@ const styles = StyleSheet.create({
     },
     ButtonTitle:{
         textAlign: 'left',
-        color: '#000000',
+        color: 'black',
         fontWeight: 'bold',
     },
     rating: {
-        color: '#000000',
+        color: 'black',
     },
     comment:{
-        color: '#000000',
+        color: 'black',
     },
     basketbutton:{
         backgroundColor: 'green',
@@ -246,4 +256,16 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
+    ProdInfo: {
+        margin: 20,
+      },
+      ProdName: {
+        fontWeight: 'bold', 
+        color: '#000000',
+        fontSize: 15
+      },
+      ProdPrice:{
+        fontWeight: 'bold', 
+        color: '#000000',
+      },
 })

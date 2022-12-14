@@ -1,10 +1,8 @@
 import React,{useEffect, useState}  from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView} from 'react-native';
-import MiIcons from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/Ionicons';
-import SelectDropdown from 'react-native-select-dropdown';
 import { FlatList } from 'react-native-gesture-handler';
-
+import { Ionicons } from '@expo/vector-icons';
 
 const RecentTransactions = ({navigation}) => {
     
@@ -15,7 +13,7 @@ const RecentTransactions = ({navigation}) => {
         try {
         const response = await fetch (`http://10.0.2.2:8000/api/customer-recent/${id}`);
         const json = await response.json();
-        setData(json.reviews)
+        setData(json.recent)
         }
         catch (error)
         {
@@ -32,13 +30,12 @@ const RecentTransactions = ({navigation}) => {
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
                     <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                    <Icons name= 'arrow-back' size={50} color='#000000'/>
+                    <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> Recent Transactions </Text>
                 </View>
             <View style={styles.TransaContainer} onPress={()=>navigation.navigate('ToPay')}>
                 <View style={{flexDirection: 'row'}}>
-                    <Image style={styles.ProdImg} source={require('../assets/lettuce.png')}/>
                         <View style={{flexDirection: 'column', margin: 10}}>
                         <FlatList data = {data}
                             keyExtractor={({id}, index) => id}
@@ -63,7 +60,8 @@ export default RecentTransactions;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#F4F4F4'
+      backgroundColor: '#F4F4F4',
+      paddingTop: 50,
     },
     SectionText: {
         color: '#5F5B5B',

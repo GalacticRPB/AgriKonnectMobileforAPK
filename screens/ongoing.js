@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity, ScrollView} from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, RefreshControl } from 'react-native-gesture-handler';
 
 /*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import MI from 'react-native-vector-icons/MaterialIcons';
+import { AntDesign } from '@expo/vector-icons'; 
 /*Icons Library-End*/
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const Ongoing = ({navigation}) => {
 
@@ -34,13 +29,22 @@ const Ongoing = ({navigation}) => {
     useEffect(() => {
       getOngoing();
     },[]);
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getOngoing();
+    wait(2000).then(() => setRefreshing(false));
+  },[]);
+
     return(
-    <ScrollView contentContainerStyle={styles.contentContainer}>
+    <ScrollView contentContainerStyle={styles.contentContainer} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 
 <View style = {[styles.mPBox, styles.topBG]}>
         <TouchableOpacity>
         <Text style = {styles.leftIcon}>
-            <FontAwesome5 name="arrow-left" color={'white'} size={25} iconStyle={''} onPress={()=> navigation.navigate('Transaction')}/>
+            <AntDesign name="arrowleft" size={25} color="white" onPress={()=> navigation.navigate('Transaction')} />
         </Text>
         </TouchableOpacity>
         <Text style = {styles.name}>Ongoing Transactions</Text>
@@ -66,6 +70,8 @@ const Ongoing = ({navigation}) => {
         renderItem={({item}) => (
         <ScrollView>
              <View style={{flexDirection: 'column', margin: 10}}>
+              <View style={styles.ProdInfo}>
+                    <View style={styles.BestContainer}>
                   <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
                   <Text style={styles.amount}>Quantity: {item.order_qty}</Text>
                   <Text style={styles.amount}>Unit Price: {item.order_price}</Text>
@@ -75,6 +81,8 @@ const Ongoing = ({navigation}) => {
                   <Text style={styles.amount}>Shipping Address: {item.shippingaddress}</Text>
                   <Text style={styles.amount}>Mode of Payment: {item.modeofpayment}</Text>
                   <Text style={styles.amount}>Shipping Status: Pending...</Text>
+              </View>
+              </View>
               </View>
 
         </ScrollView>
@@ -90,6 +98,19 @@ contentContainer: {
       flex: 1,
       justifyContent: 'flex-end',
       color: '#F4F4F4',
+      paddingTop: 50,
+    },
+    BestContainer:{
+      backgroundColor: 'white',
+      flex: 1,
+      borderRadius: 10,
+      shadowColor: "#000",
+      padding: 5,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      width: 400,
     },
     ground:{
       backgroundColor: '#F4F4F4',
@@ -110,6 +131,10 @@ contentContainer: {
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'left',
+    },
+    ProdInfo: {
+      margin: 20,
+      marginTop: 10,
     },
     topBG: {
         width: '100%',

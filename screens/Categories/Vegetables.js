@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView, ActivityIndicator} from 'react-native';
-import IoIcons from 'react-native-vector-icons/Ionicons';
-import Icons from 'react-native-vector-icons/FontAwesome';
+import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler';
 
 
@@ -80,10 +79,10 @@ const getProducts = () => {
           data = {filteredData}
           keyExtractor= {({id}, index) => id}
           renderItem={({item}) => (
-            <View style={{ marginTop: 20 }}>
+            <View style={styles.PContainer}>
                 <TouchableOpacity onPress={() => {navigation.navigate('VegetableDetails', {item:item})}}>
                   <Text style={styles.ProdName}>{item.name}</Text>
-                  <Text style={styles.ProdPrice}>Php {item.price}.oo</Text>
+                  <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
                   <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
                 </TouchableOpacity>
             </View>
@@ -101,21 +100,20 @@ const getProducts = () => {
     <View style={styles.container}>
        <View style={{flexDirection: 'row', padding: 10}}>
             <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
-            <IoIcons name= 'arrow-back' size={50} color='#000000'/>
+            <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
             </TouchableOpacity>
                     
         <Text style={styles.SectionText}> Vegetables</Text>
         </View>
-        <View>
         <TextInput 
             placeholder='Search Product Name'
             placeholderTextColor = 'gray'
             value = {search}
             onChangeText = { (text) => searchFilter(text) }
-            ></TextInput>
-        </View>
+            style={styles.searchbar}
+            />
             <View style={styles.BestContainer}>
-              <View style={{flexDirection: 'row'}}>
+              <View >
                 {showVegetables()}
                 
                  
@@ -130,6 +128,7 @@ export default Vegetables;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
+    marginTop: 50,
   },
 
   title: {
@@ -245,18 +244,8 @@ const styles = StyleSheet.create({
     marginTop: -30,
   },
   BestContainer:{
-    backgroundColor: 'white',
     flex: 1,
     margin: 10,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   ProdImg:{
     marginTop: 10,
@@ -270,10 +259,9 @@ const styles = StyleSheet.create({
   ProdName: {
     fontWeight: 'bold', 
     color: '#000000',
-    fontSize: 15
+    fontSize: 20,
   },
   ProdPrice:{
-    fontWeight: 'bold', 
     color: '#000000',
   },
   BestBasketButton:{
@@ -283,5 +271,30 @@ const styles = StyleSheet.create({
     width: 40,
     marginTop:30,
     marginLeft: 90,
+  },
+  searchbar:{
+    width: '95%',
+    height: 50,
+    borderRadius: 5,
+    backgroundColor: "white",
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    alignSelf: 'center',
+  },
+  PContainer:{
+    backgroundColor: 'white',
+    flex: 1,
+    borderRadius: 10,
+    shadowColor: "#000",
+    padding: 15,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginBottom: 10,
   },
 })

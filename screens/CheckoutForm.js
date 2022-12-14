@@ -1,5 +1,5 @@
 import React,{useState}  from 'react';
-import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView} from 'react-native';
+import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView, Alert} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 
@@ -7,15 +7,12 @@ const CheckoutForm = ({navigation, route}) => {
 
 
     const [shippingaddress, setAddress] = useState([]);
-    const [mobilephone, setMobilephone] = useState([]);
-    const [modeofpayment, setModeofPayment] = useState([]);
     const [orders, setOrders] = useState([]);
 
     console.log(global.firstname)
     const sf = route.params.sffee;
-    const cf = route.params.cfee;
     const total = (route.params.item.price * route.params.item.fruits_qty)
-    const grandtotal = (route.params.item.price * route.params.item.fruits_qty + route.params.cfee)
+    const grandtotal = (route.params.item.price * route.params.item.fruits_qty + sf)
 
     const Checkout = async () => {
         try{
@@ -30,18 +27,17 @@ const CheckoutForm = ({navigation, route}) => {
                     seller_id: route.params.item.seller_id,
                     user_id: route.params.item.user_id,
                     product_id: route.params.item.product_id,
-                    order_name: route.params.item.order_name,
+                    order_name: route.params.item.name,
                     price: route.params.item.price,
                     product_qty: route.params.item.fruits_qty,
                     shippingfee: route.params.sffee,
-                    conviencefee: route.params.cfee,
                     total_price: grandtotal,
                     firstname: global.firstname,
                     middlename: global.middlename,
                     lastname: global.lastname,
                     shippingaddress: shippingaddress,
-                    mobilephone: mobilephone,
-                    modeofpayment: modeofpayment,
+                    mobilephone: global.mobilephone,
+                    modeofpayment: route.params.mopayment,
                     image: route.params.item.image,
                 })
             });
@@ -49,15 +45,34 @@ const CheckoutForm = ({navigation, route}) => {
             if((response).status === 200)
             {
                 setAddress('');
-                setMobilephone('');
-                setModeofPayment('');
+
             }
             console.log(response)
             const json = await response.json();
             setOrders(json.message);
+            console.log(json)
             }
             catch (error) {
             console.error(error);
+            }
+        }
+
+        const validation = () => {
+            errors = [];
+
+            if(shippingaddress.length <= 0)
+            {
+                errors.push("Shipping Address is Required")
+            }
+            if (errors.length === 0)
+            {
+            Checkout();
+            Alert.alert("Order Successfully Placed!");
+            navigation.navigate('Basket');
+            }
+            else
+            {
+            Alert.alert("Error!", errors.join('\n'))
             }
         }
             
@@ -71,7 +86,6 @@ const CheckoutForm = ({navigation, route}) => {
                     <Text style={styles.SectionText}> Checkout Form </Text>
                 </View>
                 <View style={{flexDirection: 'row'}}>
-                    <Image style={styles.itemPhoto} source={require('../assets/lettuce.png')}/>
                     <View style={{flexDirection: 'column', margin: 10}}>
                         <Text style={styles.prodname}>{route.params.item.name}</Text>
                         <Text style={styles.prodprice}>Price: {route.params.item.price}</Text>
@@ -83,40 +97,31 @@ const CheckoutForm = ({navigation, route}) => {
                     <TextInput 
                     placeholder='Enter Shipping Address'
                     style = {styles.input}
-                    onChangeText = { (text) => setAddress(text) } >
-                    </TextInput>
+                    onChangeText = { (text) => setAddress(text) } 
+                    />
+                    <View style={styles.PContainer}>
                     <Text style={styles.TitleInput}> Mobile Number</Text>
-                    <TextInput 
-                    placeholder='Enter mobile number'
-                    style = {styles.input}
-                    onChangeText = { (text) => setMobilephone(text) } >
-                    </TextInput>
+                    <Text style={styles.info}>{global.mobilephone}</Text>
                     <Text style={styles.TitleInput}> Mode of Payment</Text>
-                    <TextInput 
-                    placeholder='Please input Cash on Delivery'
-                    style = {styles.input}
-                    onChangeText = { (text) => setModeofPayment(text) } >
-                    </TextInput>
+                    <Text style={styles.info}>{route.params.mopayment}</Text> 
                     
                         <Text style={styles.TitleInput}> Shipping Fee</Text>
-                        <Text  style={styles.ProdPrice}>
-                            {sf}
-                        </Text>
-                        <Text style={styles.TitleInput}> Convience Fee</Text>
-                        <Text  style={styles.ProdPrice}>
-                            {cf}
+                        <Text  style={styles.info}>
+                            
+                            Php {sf}.00
                         </Text>
                         <Text style={styles.TitleInput}> Order Total</Text>
-                        <Text  style={styles.ProdPrice}>
-                            {total}
+                        <Text  style={styles.info}>
+                            Php {total}.00
                         </Text>
 
                     <Text style={styles.TitleInput}> Order Amount (fees included)</Text>
-                        <Text  style={styles.ProdPrice}>
-                            {grandtotal}
+                        <Text  style={styles.info}>
+                            Php {grandtotal}.00
                         </Text>
+                        </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around',margin: 10}}>
-                        <TouchableOpacity onPress={ Checkout}>
+                        <TouchableOpacity onPress={ validation}>
                             <Text style={styles.basketbutton}>PLACE ORDER</Text>
                         </TouchableOpacity>
                     </View>
@@ -132,7 +137,9 @@ export default CheckoutForm;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#F4F4F4'
+      backgroundColor: '#F4F4F4',
+      paddingTop: 50,
+      margin: 10,
     },
     SectionText: {
         color: '#5F5B5B',
@@ -189,7 +196,8 @@ const styles = StyleSheet.create({
     },
     TitleInput:{
         color: '#5F5B5B',
-        margin: 10,
+        margin: 0,
+        fontWeight: 'bold',
     },
     input:{
         backgroundColor: '#D9D9D9',
@@ -222,5 +230,31 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         padding: 10,
-    }
+    },
+    info:{
+        flex: 1,
+        width: '85%',
+        alignSelf: 'center',
+        height: 30,
+        borderRadius:10,
+        padding: 5,
+        color: 'gray',
+        marginBottom: 15,
+    },
+    PContainer:{
+        margin: 10,
+        backgroundColor: 'white',
+        flex: 1,
+        borderRadius: 10,
+        shadowColor: "#000",
+        padding: 15,
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        marginBottom: 10,
+      },
 })

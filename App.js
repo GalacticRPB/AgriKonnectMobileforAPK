@@ -36,6 +36,7 @@ import ContactInfoEdit from "./screens/sellerContactInfo";
 import EditProfile from "./screens/SellerEditProfile";
 import PasswordEdit from "./screens/SellerEditPassword";
 import ProductReview from "./screens/ProductsReview";
+import RecommendedProducts from "./screens/RecommendedProducts";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -111,6 +112,7 @@ const App = () => {
         <Stack.Screen name="EditProduct" component={ EditProduct } />
         <Stack.Screen name="AddProduct" component={ AddProduct } />
         <Stack.Screen name="TransactionDetails" component={ TransactionDetails } />
+        <Stack.Screen name="RecommendedProducts" component={ RecommendedProducts } />
         <Stack.Screen name="Ongoing" component={ Ongoing } />
         <Stack.Screen name="Delivered" component={ Delivered } />
       </Stack.Navigator>

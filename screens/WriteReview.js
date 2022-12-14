@@ -14,75 +14,82 @@ import {
 import Icons from 'react-native-vector-icons/Ionicons';
 
 const WriteReview = ({navigation, route}) => {
-  const [toReview, setReview] = useState([]);
-  const postReview = async () => {
-    try {
-      const response = await fetch('http://10.0.2.2:8000/api/review', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          customer_id: route.params.item.customer_id,
-          product_id: route.params.item.product_id,
-          seller_id: route.params.item.seller_id,
-          firstname: global.firstname,
-          middlename: global.middlename,
-          lastname: global.lastname,
-          order_name: route.params.item.order_name,
-          order_qty: route.params.item.order_qty,
-          order_total: route.params.item.order_total,
-          review: toReview,
-        }),
-      });
 
-      if (response.status === 200) {
-        setReview('');
-        console.log(response);
+  const [review, setReview] = useState([]);
+  const [setreview, setToReview] = useState([]);
+
+    console.log(route)
+
+  const submitReview = async () => {
+    try{
+        const response = await fetch(`http://10.0.2.2:8000/api/review`, {
+            method: 'POST',
+            headers: {
+                Accept: 'applicaton/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                order_id: route.params.item.order_id,
+                customer_id: route.params.item.customerId,
+                product_id: route.params.item.product_id,
+                seller_id: route.params.item.seller_id,
+                firstname: global.firstname,
+                middlename: global.middlename,
+                lastname: global.lastname,
+                order_name: route.params.item.order_name,
+                order_qty: route.params.item.order_qty,
+                order_total: route.params.item.order_total,
+                review: review,
+            })
+        });
+
+        if((response).status === 200)
+        {
+            setReview('');
+            Alert.alert("Review Submitted");
+            navigation.navigate('OrderReviews');
+        }
+       
         const json = await response.json();
-        Alert.alert('Customer Updated Successfully');
-        navigation.navigate('Profile');
-      }
-    } catch (error) {
-      console.error(error);
+        setToReview(json.review);
+        console.log(json);
+        }
+        catch (error) {
+        console.error(error);
+        }
     }
-  };
 
-  return (
+    return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={{flexDirection: 'row', padding: 10}}>
-          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <Icons name="arrow-back" size={50} color="#000000" />
-          </TouchableOpacity>
-          <Text style={styles.SectionText}> Write a review </Text>
-        </View>
-        <View style={{padding: 50}}>
-          <View style={{flexDirection: 'column', margin: 10}}>
-            <Text style={styles.Title}>{route.params.item.order_name}</Text>
-            <Text style={styles.kilo}>{route.params.item.order_qty} kg</Text>
-            <Text style={styles.amount}>
-              Php {route.params.item.order_total}.00
-            </Text>
-          </View>
-          <View style={{flexDirection: 'column'}}>
-            <Text style={styles.TitleInput}>
-              {' '}
-              What's your product experience?
-            </Text>
-            <TextInput
-              multiline
-              placeholder="Write your review"
-              style={styles.input}
-              onChangeText={text => [setReview(text)]}
-              keyboardType="default"></TextInput>
-          </View>
-        </View>
-        <TouchableOpacity onPress={postReview}>
-          <Text style={styles.reviewbutton}>SUBMIT</Text>
-        </TouchableOpacity>
-      </ScrollView>
+        <ScrollView>
+            <View style={{flexDirection: 'row', padding: 10}}>
+                <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
+                <Icons name= 'arrow-back' size={50} color='#000000'/>
+                </TouchableOpacity>
+                <Text style={styles.SectionText}> Write a review </Text>
+            </View>
+            <View style={{padding: 50}}>
+                    <View style={{flexDirection: 'column', margin: 10}}>
+                        <Text style={styles.Title}>{route.params.item.order_name}</Text>
+                        <Text style={styles.kilo}>{route.params.item.order_qty} kg</Text>
+                        <Text style={styles.amount}>Php {route.params.item.order_total}.00</Text>
+                    </View>
+                    <View style={{flexDirection: 'column'}}>
+  
+                        <Text style={styles.TitleInput}> What's your product experience?</Text>
+                        <TextInput 
+                        multiline
+                        placeholder='Write your review'
+                        style = {styles.input} 
+                        onChangeText = { (text) => [setReview(text)] }
+                        keyboardType='default'>
+                        </TextInput>
+                    </View>
+            </View>
+            <TouchableOpacity onPress={ submitReview }>
+                <Text style={styles.reviewbutton}>SUBMIT</Text>
+            </TouchableOpacity>
+        </ScrollView>
     </View>
   );
 };

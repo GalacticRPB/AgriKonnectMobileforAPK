@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {Text,View,Image,StyleSheet,TouchableOpacity} from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import Icons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
 
 const OrderReview = ({navigation}) => {
@@ -31,7 +31,7 @@ const OrderReview = ({navigation}) => {
         <View style={styles.container}>
             <View style={{flexDirection: 'row', padding: 10}}>
                 <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
-                <Icons name= 'arrow-back' size={50} color='#000000'/>
+                <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
                 </TouchableOpacity>
                 <Text style={styles.SectionText}> Product Reviews </Text>
             </View>
@@ -65,7 +65,8 @@ export default OrderReview;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#F4F4F4'
+      backgroundColor: '#F4F4F4',
+      paddingTop: 50,
     },
     SectionText: {
         color: '#5F5B5B',

@@ -4,7 +4,7 @@ import Icons from 'react-native-vector-icons/Ionicons';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
-const VegetableDetails = ({navigation, route}) => {
+const RecommendedProducts = ({navigation, route}) => {
 
     const [data, setData] = useState("");
     const [review, setReview] = useState([]);
@@ -78,7 +78,7 @@ const VegetableDetails = ({navigation, route}) => {
     return(
         <View style={styles.container}>
             <View style={{padding: 10}}>
-                <TouchableOpacity onPress={()=>navigation.navigate('Vegetables')}>
+                <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
                 <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
                 </TouchableOpacity>
             </View>
@@ -134,7 +134,7 @@ const VegetableDetails = ({navigation, route}) => {
     )
 }
 
-export default VegetableDetails;
+export default RecommendedProducts;
 
 
 const styles = StyleSheet.create({

@@ -41,7 +41,7 @@ export default ShippingAddress;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#F4F4F4'
+      backgroundColor: '#F4F4F4',
     },
     SectionText: {
         color: '#5F5B5B',

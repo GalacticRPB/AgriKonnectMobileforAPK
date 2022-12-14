@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Text,View,StyleSheet,ScrollView,Image,TouchableOpacity, ActivityIndicator} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
 import { RadioButton } from 'react-native-paper';
-import Icons from 'react-native-vector-icons/FontAwesome';
+import { Ionicons } from '@expo/vector-icons'; 
 
 
 const ProductReview  = ({navigation}) => {
@@ -48,7 +49,14 @@ const ProductReview  = ({navigation}) => {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.headercontainer}>
-          <Text style={styles.SectionText}> Product Review </Text>
+        <View style = {[styles.mPBox, styles.topBG]}>
+            <TouchableOpacity>
+                <Text style = {styles.leftIcon}>
+                    <Ionicons name="arrow-back" size={25} color="white" onPress={()=> navigation.navigate('Account')}/>
+                </Text>
+            </TouchableOpacity>
+            <Text style = {styles.name}>Product Reviews</Text>
+        </View>
           <ScrollView>
             <View style={styles.BestContainer}>
               <View style={{flexDirection: 'row'}}>
@@ -83,10 +91,8 @@ export default ProductReview;
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-    backgroundColor: '#F4F4F4'
-  },
-  headercontainer:{
-    padding: 20,
+    backgroundColor: '#F4F4F4',
+    paddingTop: 50,
   },
   SectionText: {
     color: '#5F5B5B',
@@ -102,6 +108,23 @@ const styles = StyleSheet.create({
     fontSize: 20,
     padding: 10,
     marginTop: -30,
+  },
+  topBG: {
+    width: '100%',
+    height: 70,
+    backgroundColor: "green",
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  mPBox:{
+  flexDirection: "row",
+  flexWrap: 'nowrap',
+  },
+  name:{
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',   
   },
   BestContainer:{
     backgroundColor: 'white',
@@ -159,6 +182,9 @@ const styles = StyleSheet.create({
     padding: 10,
     color: 'white',
     marginBottom: 5
+  },
+  leftIcon:{
+    marginLeft: '20%',
   },
   numberContainer: {
     backgroundColor:"#FFF59D",

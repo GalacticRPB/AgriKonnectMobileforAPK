@@ -3,15 +3,8 @@ import {Text, View,StyleSheet,TouchableOpacity, ScrollView} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 /*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import MI from 'react-native-vector-icons/MaterialIcons';
+import { AntDesign } from '@expo/vector-icons'; 
 /*Icons Library-End*/
 
 const Delivered = ({navigation}) => {
@@ -40,10 +33,10 @@ const Delivered = ({navigation}) => {
     return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
 
-<View style = {[styles.mPBox, styles.topBG]}>
+    <View style = {[styles.mPBox, styles.topBG]}>
         <TouchableOpacity>
         <Text style = {styles.leftIcon}>
-            <FontAwesome5 name="arrow-left" color={'white'} size={25} iconStyle={''} onPress={()=> navigation.navigate('Transaction')}/>
+          <AntDesign name="arrowleft" size={25} color="white" onPress={()=> navigation.navigate('Transaction')} />
         </Text>
         </TouchableOpacity>
         <Text style = {styles.name}>Delivered Transactions</Text>
@@ -67,23 +60,22 @@ const Delivered = ({navigation}) => {
           </View>
         </TouchableOpacity>
       </View>
-
-      <FlatList data = {delivered}
-        keyExtractor={({id}, index) => id}
-        renderItem={({item}) => (
-        <ScrollView>
-            <View style={{flexDirection: 'column', margin: 10}}>
-                <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
-                <Text style={styles.amount}>Quantity: {item.order_qty}</Text>
-                <Text style={styles.amount}>Price: Php {item.order_total}.00</Text>
-                <Text style={styles.amount}>Order Status: Delivered</Text>
-            </View>
-        </ScrollView>
-
-        )}>
-    </FlatList>
-
-    </View>
+          <FlatList data = {delivered}
+            keyExtractor={({id}, index) => id}
+            renderItem={({item}) => (
+            <ScrollView>
+                <View style={styles.ProdInfo}>
+                  <View style={styles.BestContainer}>
+                    <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
+                    <Text style={styles.amount}>Quantity: {item.order_qty}</Text>
+                    <Text style={styles.amount}>Price: Php {item.order_total}.00</Text>
+                    <Text style={styles.amount}>Order Status: Delivered</Text>
+                </View>
+                </View>
+            </ScrollView>
+            )}>
+        </FlatList>
+        </View>
     </View>
     </ScrollView>
     );}
@@ -93,6 +85,24 @@ contentContainer: {
       flex: 1,
       justifyContent: 'flex-end',
       color: '#F4F4F4',
+      paddingTop: 50,
+    },
+    BestContainer:{
+      backgroundColor: 'white',
+      flex: 1,
+      borderRadius: 10,
+      shadowColor: "#000",
+      padding: 25,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      width: 400,
+    },
+    ProdInfo: {
+      margin: 0,
+      marginTop: 10,
+      
     },
     ground:{
       backgroundColor: '#F4F4F4',

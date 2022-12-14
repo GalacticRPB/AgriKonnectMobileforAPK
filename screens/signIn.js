@@ -16,7 +16,7 @@ const SignIn = ({navigation}) => {
   const [password, setPassword] = useState('');
 
   const loginSeller = async () => {
-    await fetch('http://localhost:8000/api/login', {
+    await fetch('http://10.0.2.2:8000/api/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -49,6 +49,7 @@ const SignIn = ({navigation}) => {
           global.email = resData.email;
           global.username = resData.username;
           global.mobilephone = resData.mobilephone;
+          global.brgy = resData.brgy;
           setPassword('');
           setUsername('');
           navigation.navigate('Tabs');

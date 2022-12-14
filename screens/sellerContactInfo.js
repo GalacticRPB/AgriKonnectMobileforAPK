@@ -2,15 +2,9 @@ import React from 'react';
 import {Text, View,StyleSheet,TextInput, TouchableOpacity, ScrollView} from 'react-native';
 
 /*Icons Library-Start*/
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import Foundation from 'react-native-vector-icons/Foundation';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import MI from 'react-native-vector-icons/MaterialIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons'; 
 /*Icons Library-End*/
 
 const ContactInfoEdit = ({navigation}) => {
@@ -20,7 +14,7 @@ const ContactInfoEdit = ({navigation}) => {
         <View style = {[styles.mPBox, styles.topBG]}>
             <TouchableOpacity>
                 <Text style = {styles.leftIcon}>
-                    <FontAwesome5 name="arrow-left" color={'white'} size={25} iconStyle={''} onPress={()=> navigation.navigate('Account')}/>
+                    <Ionicons name="arrow-back" size={25} color="white" onPress={()=> navigation.navigate('Account')}/>
                 </Text>
             </TouchableOpacity>
             <Text style = {styles.name}>Contact Information</Text>
@@ -30,24 +24,24 @@ const ContactInfoEdit = ({navigation}) => {
         <View style = {styles.foreground}>
 
             <TouchableOpacity style = {styles.picEdit}>
-                <FontAwesome5 name="user-edit" color={'green'} size={50} iconStyle={''}/>
+                <MaterialCommunityIcons name="account" size={50} color="green" />
             </TouchableOpacity>
             <ScrollView>
             <View style = {styles.inputsBox}> 
 
                     <Text style = {styles.inputsTitle}>First Name</Text>
                     <View style = {styles.input}>
-                        <Text>{global.firstname} {global.middlename} {global.lastname}</Text>
-                    </View>
-                    
-                    <Text style = {styles.inputsTitle}>Birthdate</Text>
-                    <View style = {styles.input}>
-                        <Text>{ global.birthdate}</Text>
+                        <Text>{global.firstname}</Text>
                     </View>
 
-                    <Text style = {styles.inputsTitle}>Gender</Text>
+                    <Text style = {styles.inputsTitle}>Middle Name</Text>
                     <View style = {styles.input}>
-                        <Text>{global.gender}</Text>
+                        <Text>{global.middlename}</Text>
+                    </View>
+
+                    <Text style = {styles.inputsTitle}>Last Name</Text>
+                    <View style = {styles.input}>
+                        <Text>{global.lastname}</Text>
                     </View>
 
                     <Text style = {styles.inputsTitle}>Email</Text>
@@ -67,14 +61,6 @@ const ContactInfoEdit = ({navigation}) => {
                     </View>
             </ScrollView>
             
-
-
-            <TouchableOpacity 
-                style = {styles.button}
-                onPress={ () => navigation.navigate('EditProfile')}>
-                <Text style = {styles.buttonText}>
-                    EDIT PROFILE</Text>
-            </TouchableOpacity>
         </View>
         </View>
     </ScrollView>
@@ -85,6 +71,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         color: '#F4F4F4',
+        paddingTop: 50,
     },
     ground:{
         backgroundColor: '#F4F4F4',

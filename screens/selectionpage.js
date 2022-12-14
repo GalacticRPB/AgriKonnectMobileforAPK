@@ -2,13 +2,16 @@ import React, {Component} from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import shops from '../assets/shops.png';
 
 const SelectionPage = ({navigation}) => {
   state={}
   return(
     <View >
-      <View style={styles.circle}></View>
-      
+      <View>
+      <Image style={styles.shop} source={shops}/>
+      </View>
+
       <Text style={styles.text1}>Select  User</Text>
 
       <View>
@@ -24,11 +27,9 @@ const SelectionPage = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-  circle: {
+  shop: {
     width: 300,
     height: 300,
-    backgroundColor: "#388E3C",
-    borderRadius: 200,
     alignSelf: 'center',
     marginTop: 70,
   },

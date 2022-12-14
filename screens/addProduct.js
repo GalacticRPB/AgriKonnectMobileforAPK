@@ -12,8 +12,11 @@ import {
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import * as ImagePicker from 'expo-image-picker';
+import { AntDesign } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons';
 
-const countries = ['Vegetable', 'Fruit'];
+const category = ['Vegetables', 'Fruits'];
+const desc = ['Organic', 'Conventional'];
 
 async function base64File(url) {
   const data = await fetch(url);
@@ -73,7 +76,7 @@ export default function AddProduct({navigation}) {
       `${global.firstname} ${global.middlename} ${global.lastname}`,
     );
 
-    fetch('http://localhost:8000/api/products', {
+    fetch('http://10.0.2.2:8000/api/products', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -101,13 +104,8 @@ export default function AddProduct({navigation}) {
           <View style={[styles.mPBox]}>
             <TouchableOpacity>
               <Text style={styles.leftIcon}>
-                <FontAwesome5
-                  name="arrow-left"
-                  color={'black'}
-                  size={25}
-                  iconStyle={''}
-                  onPress={() => navigation.navigate('Products')}
-                />
+                <AntDesign name="arrowleft" size={25} color="black"
+                onPress={() => navigation.navigate('Products')} />
               </Text>
             </TouchableOpacity>
             <Text style={styles.edit}>Add New Product</Text>
@@ -124,7 +122,7 @@ export default function AddProduct({navigation}) {
               style={styles.circle}
               onPress={launchImageLibraryHandler}>
               <View style={styles.addButton}>
-                <FontAwesome5 name="plus" color={'white'} size={30} />
+              <Entypo name="plus" size={30} color="white" />
               </View>
             </TouchableOpacity>
           )}
@@ -138,7 +136,7 @@ export default function AddProduct({navigation}) {
             dropdownStyle={styles.dropdown1DropdownStyle}
             rowStyle={styles.dropdown1RowStyle}
             rowTextStyle={styles.dropdown1RowTxtStyle}
-            data={countries}
+            data={category}
             onSelect={selectedItem => {
               setProductInfo({...productInfo, category: selectedItem});
             }}
@@ -161,14 +159,28 @@ export default function AddProduct({navigation}) {
             }></TextInput>
 
           <Text style={styles.text}>Description</Text>
-          <TextInput
-            style={styles.input}
-            onChange={e =>
-              setProductInfo({
-                ...productInfo,
-                description: e.nativeEvent.text,
-              })
-            }></TextInput>
+          <SelectDropdown
+            defaultButtonText={' '}
+            buttonStyle={styles.dropdown1BtnStyle}
+            buttonTextStyle={styles.dropdown1BtnTxtStyle}
+            dropdownStyle={styles.dropdown1DropdownStyle}
+            rowStyle={styles.dropdown1RowStyle}
+            rowTextStyle={styles.dropdown1RowTxtStyle}
+            data={desc}
+            onSelect={selectedItem => {
+              setProductInfo({...productInfo, description: selectedItem});
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+          />
 
           <Text style={styles.text}>Product Price</Text>
           <TextInput
@@ -202,6 +214,7 @@ export default function AddProduct({navigation}) {
 const styles = StyleSheet.create({
   contentContainer: {
     color: '#F4F4F4',
+    paddingTop: 50,
   },
   ground: {
     backgroundColor: '#F4F4F4',
