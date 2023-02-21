@@ -44,10 +44,12 @@ const RecentTransactions = ({navigation}) => {
                                 <Text style={styles.ProdName}>Product: {item.order_name}</Text>
                                 <Text style={styles.ProdPrice}>Price:  {item.order_total}.00</Text>
                                 <Text style={styles.ProdPrice}>Quantity:  {item.order_qty}</Text>
+                        
                                 </View>
                                 )}>
                             
                             </FlatList>
+                            
                         </View>
                 </View>
             </View>

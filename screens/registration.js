@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import CheckBox from 'expo-checkbox';
 import {
   Alert,
   ScrollView,
@@ -10,6 +11,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'; // not react-native-image-picker
 
+
 const Registration = ({navigation}) => {
   const [firstname, setFirstname] = useState('');
   const [middlename, setMiddlename] = useState('');
@@ -18,8 +20,15 @@ const Registration = ({navigation}) => {
   const [mobilephone, setMobilephone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [privacy, setPrivacy] = useState(false);
   const [selectedImage, setSelectedImage] = useState([]);
   const [brgy, setAddress] = useState('');
+  const [isError, setError] = useState(false)
+
+  const handleCheckbox = () => {
+    setPrivacy(!privacy)
+    setError(false)
+  }
 
   const RegisterSeller = async () => {
     const formData = new FormData();
@@ -31,6 +40,7 @@ const Registration = ({navigation}) => {
     formData.append('email', email);
     formData.append('password', password);
     formData.append('brgy', brgy);
+    formData.append('privacy', false);
     formData.append('verified', false);
     formData.append('image', {
       uri: selectedImage[0].uri,
@@ -48,6 +58,11 @@ const Registration = ({navigation}) => {
       },
       body: formData,
     });
+    if(!privacy)
+    {
+      setError(true)
+      return;
+    }
 
     if (response.status === 200) {
       Alert.alert('Success', 'Registration Successful', [
@@ -146,6 +161,14 @@ const Registration = ({navigation}) => {
               style={styles.input}
               onChangeText={text => setAddress(text)}
             />
+
+    <CheckBox value={privacy} onValueChange={handleCheckbox} required={true}>
+        </CheckBox>
+     <Text>
+     I hereby authorize AgriKOnnect to collect and process the data indicated herein for the purpose of the usage of the application. I understand that my personal information is protected by RA 10173, Data Privacy Act of 2012.
+      </Text>
+      {isError && <Text style = {{color: 'red'}}>This field is required</Text>}
+
           </View>
 
           <TouchableOpacity style={styles.button} onPress={RegisterSeller}>

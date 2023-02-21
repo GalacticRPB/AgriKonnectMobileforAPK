@@ -1,8 +1,7 @@
 import React,{useEffect, useState}  from 'react';
 import {Text, View,StyleSheet,TouchableOpacity, Image} from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import Icons from 'react-native-vector-icons/Ionicons';
-
+import { AntDesign } from '@expo/vector-icons'; 
 
 
 const ToReview = ({navigation}) => {
@@ -30,7 +29,7 @@ const ToReview = ({navigation}) => {
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
                     <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                    <Icons name= 'arrow-back' size={50} color='#000000'/>
+                    <AntDesign name="arrowleft" size={50} color="black" />
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> To Review </Text>
                 </View>

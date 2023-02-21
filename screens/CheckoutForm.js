@@ -1,6 +1,6 @@
 import React,{useState}  from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView, Alert} from 'react-native';
-import Icons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
 
 
 const CheckoutForm = ({navigation, route}) => {
@@ -45,6 +45,9 @@ const CheckoutForm = ({navigation, route}) => {
             if((response).status === 200)
             {
                 setAddress('');
+                Checkout();
+                Alert.alert("Order Successfully Placed!");
+                navigation.navigate('Basket');
 
             }
             console.log(response)
@@ -57,31 +60,31 @@ const CheckoutForm = ({navigation, route}) => {
             }
         }
 
-        const validation = () => {
-            errors = [];
+        // const validation = () => {
+        //     errors = [];
 
-            if(shippingaddress.length <= 0)
-            {
-                errors.push("Shipping Address is Required")
-            }
-            if (errors.length === 0)
-            {
-            Checkout();
-            Alert.alert("Order Successfully Placed!");
-            navigation.navigate('Basket');
-            }
-            else
-            {
-            Alert.alert("Error!", errors.join('\n'))
-            }
-        }
+        //     if(shippingaddress.length <= 0)
+        //     {
+        //         errors.push("Shipping Address is Required")
+        //     }
+        //     if (errors.length === 0)
+        //     {
+        //     Checkout();
+        //     Alert.alert("Order Successfully Placed!");
+        //     navigation.navigate('Basket');
+        //     }
+        //     else
+        //     {
+        //     Alert.alert("Error!", errors.join('\n'))
+        //     }
+        // }
             
     return(
         <View style={styles.container}>
             <ScrollView>
                 <View style={{flexDirection: 'row', padding: 10}}>
                     <TouchableOpacity onPress={()=>navigation.navigate('Basket')}>
-                    <Icons name= 'arrow-back' size={50} color='#000000'/>
+                    <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> Checkout Form </Text>
                 </View>
@@ -121,7 +124,7 @@ const CheckoutForm = ({navigation, route}) => {
                         </Text>
                         </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around',margin: 10}}>
-                        <TouchableOpacity onPress={ validation}>
+                        <TouchableOpacity onPress={ Checkout}>
                             <Text style={styles.basketbutton}>PLACE ORDER</Text>
                         </TouchableOpacity>
                     </View>

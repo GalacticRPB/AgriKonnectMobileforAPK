@@ -16,6 +16,7 @@ import CustomerRegistration from "./screens/customerregistration";
 import CustomerSignIn from "./screens/customerSignin";
 import BottomNavigation from "./navigation/bottomNavigation";
 import VegetableDetails from "./screens/VegetableDetails";
+import OtpScreen from "./screens/OTPScreen";
 
 import Vegetables from './screens/Categories/Vegetables';
 import Fruits from './screens/Categories/Fruits';
@@ -51,6 +52,7 @@ const App = () => {
         />
         <Stack.Screen name="SellerRegistration" component={ Registration } />
         <Stack.Screen name="CustomerRegistration" component={ CustomerRegistration } />
+        <Stack.Screen name="OTPScreen" component={ OtpScreen } />
         <Stack.Screen name="Tabs" component={ Tabs }  />
         <Stack.Screen name="SellerSignIn" component={ SignIn } />
         <Stack.Screen name="CustomerSignIn" component={ CustomerSignIn } />

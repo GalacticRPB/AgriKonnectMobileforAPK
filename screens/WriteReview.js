@@ -11,7 +11,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import Icons from 'react-native-vector-icons/Ionicons';
+import { AntDesign } from '@expo/vector-icons'; 
 
 const WriteReview = ({navigation, route}) => {
 
@@ -64,7 +64,7 @@ const WriteReview = ({navigation, route}) => {
         <ScrollView>
             <View style={{flexDirection: 'row', padding: 10}}>
                 <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                <Icons name= 'arrow-back' size={50} color='#000000'/>
+                <AntDesign name="arrowleft" size={50} color="black" />
                 </TouchableOpacity>
                 <Text style={styles.SectionText}> Write a review </Text>
             </View>

@@ -17,6 +17,46 @@ import { Entypo } from '@expo/vector-icons';
 
 const category = ['Vegetables', 'Fruits'];
 const desc = ['Organic', 'Conventional'];
+const name = ['Alugbati', 
+'Ampalaya',
+'Bataw',
+'Bawang',
+'Bulaklak ng saging',
+'Cabbage',
+'Gabi',
+'Gabing San Fernando',
+'Kabute',
+'Kalabasa',
+'Kamatis',
+'Kamote',
+'Kamoteng Kahoy',
+'Kangkong',
+'Labanos',
+'Labong',
+'Luya',
+'Luyang Dilaw',
+'Mais',
+'Malunggay',
+'Mani',
+'Mongo',
+'Mustasa',
+'Pechay',
+'Pipino',
+'Puso ng Saging',
+'Saluyot',
+'Sampalok',
+'Sayote',
+'Sibuyas',
+'Sigarilyas',
+'Sili',
+'Singkamas',
+'Sitaw',
+'Talong',
+'Ube',
+'Ubod',
+'Upo',
+
+];
 
 async function base64File(url) {
   const data = await fetch(url);
@@ -152,11 +192,28 @@ export default function AddProduct({navigation}) {
             }}
           />
           <Text style={styles.text}>Product Name</Text>
-          <TextInput
-            style={styles.input}
-            onChange={e =>
-              setProductInfo({...productInfo, name: e.nativeEvent.text})
-            }></TextInput>
+          <SelectDropdown
+            defaultButtonText={' '}
+            buttonStyle={styles.dropdown1BtnStyle}
+            buttonTextStyle={styles.dropdown1BtnTxtStyle}
+            dropdownStyle={styles.dropdown1DropdownStyle}
+            rowStyle={styles.dropdown1RowStyle}
+            rowTextStyle={styles.dropdown1RowTxtStyle}
+            data={name}
+            onSelect={selectedItem => {
+              setProductInfo({...productInfo, name: selectedItem});
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item;
+            }}
+          />
 
           <Text style={styles.text}>Description</Text>
           <SelectDropdown

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {Text, View,StyleSheet,Image, TouchableOpacity, TextInput, ScrollView, Alert} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-
+// import { Checkbox } from 'react-native-paper';
+import Checkbox from 'expo-checkbox';
 const CustomerRegistration = ({navigation}) => {
 
   const [firstname, setFirstname] = useState('');
@@ -9,10 +10,17 @@ const CustomerRegistration = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [lastname, setLastname] = useState('');
   const [email, setEmail] = useState('');
+  const [privacy, setPrivacy] = useState(false);
   const [mobilephone, setMobilephone] = useState('');
   const [password, setPassword] = useState('')
 
   const [data, setData] = useState([]);
+  const [isError, setError] = useState(false);
+
+  const handleCheckbox = () => {
+    setPrivacy(!privacy);
+    setError(false);
+  };
 
   const RegisterCustomer = async () => {
     try{
@@ -30,8 +38,14 @@ const CustomerRegistration = ({navigation}) => {
           email: email,
           mobilephone: mobilephone,
           password: password,
+          privacy: privacy ? 1 : 0,
         })
       });
+      if(!privacy)
+      {
+        setError(true);
+        return;
+      }
 
       if((response).status === 200)
       {
@@ -41,10 +55,15 @@ const CustomerRegistration = ({navigation}) => {
         setUsername(''),
         setEmail(''),
         setMobilephone(''),
+        setPrivacy(''),
         setPassword('');
+        setError(false);
+        global.email = email;
         Alert.alert("Customer Registered Successfully!");
-        navigation.navigate('CustomerSignIn');
+        navigation.navigate('OTPScreen');
       }
+     
+
     console.log(response)
     const json = await response.json();
     setData(json.customer);
@@ -54,40 +73,6 @@ const CustomerRegistration = ({navigation}) => {
     }
   }
 
-  const handleUserValidation = () => {
-    errors = [];
-
-    if (firstname.length <= 0){
-        errors.push("Username should have at least 8 characters")
-    }
-    if (middlename.length <=0){
-        errors.push("Password should have at least 8 characters")
-    }
-    if (lastname <=0){
-        errors.push("Password is not the same as Confirm Password")
-    }
-    if (username.length <= 0){
-      errors.push("Password should have at least 8 characters")
-    }
-    if (email.length <= 0){
-      errors.push("Password should have at least 8 characters")
-    }
-    if (mobilephone.length != 11){
-        errors.push("Mobile number should be valid 11 digit number")
-    }
-    if (password.length <=0){
-      errors.push("Mobile number should be valid 11 digit number")
-    }
-    if (errors.length == 0){
-        RegisterCustomer();
-        Alert.alert('User Created Successfully!');
-        navigation.navigate('Login')
-    }else{
-        Alert.alert("Error!", errors.join('\n'))
-    }
-}
-
-  
   return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
@@ -165,6 +150,12 @@ const CustomerRegistration = ({navigation}) => {
       </TextInput>
       </View>
 
+     <Checkbox value={privacy} onValueChange={handleCheckbox} required={true}>
+     </Checkbox>
+     <Text>
+     I hereby authorize AgriKOnnect to collect and process the data indicated herein for the purpose of the usage of the application. I understand that my personal information is protected by RA 10173, Data Privacy Act of 2012.
+      </Text>
+      {isError && <Text style = {{color: 'red'}}>This field id required</Text>}
       <TouchableOpacity 
       style = {styles.button}
       onPress={ RegisterCustomer}>

@@ -100,7 +100,6 @@ const Transaction = ({navigation}) => {
                 data={transaction}
                 keyExtractor={({ id }, index) => id}
                 renderItem={({ item }) => (
-                  <TouchableOpacity style = {styles.item} onPress={ () => navigation.navigate('Ongoing', {item:item})}>
                     <View style={styles.BestContainer}>
                     <View style={{borderBottomColor: 'gray', borderBottomWidth: StyleSheet.hairlineWidth, margin: 3}}/>
                     <Text style = {styles.myProducts}>Product Name: {item.order_name}</Text>
@@ -111,13 +110,12 @@ const Transaction = ({navigation}) => {
                     <Text style = {styles.myProducts}>Phone Number: {item.mobilephone}</Text>
                     <Text style = {styles.myProducts}>Shipping Address: {item.shippingaddress}</Text>
                     <Text style = {styles.myProducts}>Mode of Payment: {item.modeofpayment}</Text>
-                    </View>
                     <TouchableOpacity style = {styles.registerButton} onPress={ orderDelivered }>
                       <Text >Out for Delivery</Text>
                       
                     </TouchableOpacity>
-                  
-                  </TouchableOpacity>
+                    </View>
+                   
                 )}
               />
             </View>
@@ -176,7 +174,7 @@ contentContainer: {
       flex: 1,
       borderRadius: 10,
       shadowColor: "#000",
-      padding: 25,
+      padding: 5,
       shadowOffset: {
         width: 0,
         height: 2,

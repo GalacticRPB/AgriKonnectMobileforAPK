@@ -89,7 +89,8 @@ const Home = ({navigation}) => {
       <Text style = {styles.recent}>Recently Sold</Text> 
         <View>
           <ScrollView style = {styles.BestBasketButton}>
-            <FlatList data = {recent}
+            <View>
+                 <FlatList data = {recent}
               keyExtractor={({id}, index) => id}
               renderItem={({item}) => (
                   <View style={styles.ProdInfo}>
@@ -101,9 +102,8 @@ const Home = ({navigation}) => {
               )}>
               
             </FlatList>
+            </View>
           </ScrollView>
-          <View style={styles.bottom}>
-        </View>
       </View>
 
 
