@@ -126,6 +126,7 @@ export default function AddProduct({navigation}) {
       .then(res => res.json())
       .then(data => {
         if (data.status === 200) {
+          Alert.alert('Success', 'Product Added Successfully!');
           navigation.navigate('Products');
         } else {
           Alert.alert('Error', 'Could not add product');

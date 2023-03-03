@@ -23,11 +23,19 @@ const Registration = ({navigation}) => {
   const [privacy, setPrivacy] = useState(false);
   const [selectedImage, setSelectedImage] = useState([]);
   const [brgy, setAddress] = useState('');
-  const [isError, setError] = useState(false)
+
+  //validation
+
+  const [checkValidName, setValidName] = useState(false);
+  const [checkSpecialChar, setCheckSpecialChar] = useState(false);
+  const [checkDigitChar, setCheckDigitChar] = useState(false);
+  const [checkValidEmail, setValidEmail] = useState(false);
+  const [checkMobileNumber, setCheckValidMobileNumber] = useState(false);
+
+  const [isError, setError] = useState([]);
 
   const handleCheckbox = () => {
     setPrivacy(!privacy)
-    setError(false)
   }
 
   const RegisterSeller = async () => {
@@ -40,7 +48,7 @@ const Registration = ({navigation}) => {
     formData.append('email', email);
     formData.append('password', password);
     formData.append('brgy', brgy);
-    formData.append('privacy', false);
+    formData.append('privacy', privacy ? 1 : 0);
     formData.append('verified', false);
     formData.append('image', {
       uri: selectedImage[0].uri,
@@ -54,15 +62,12 @@ const Registration = ({navigation}) => {
     const response = await fetch('http://10.0.2.2:8000/api/register', {
       method: 'POST',
       headers: {
+        Accept: 'multipart/form-data',
         'Content-Type': 'multipart/form-data',
       },
       body: formData,
     });
-    if(!privacy)
-    {
-      setError(true)
-      return;
-    }
+    console.log(await response.json())
 
     if (response.status === 200) {
       Alert.alert('Success', 'Registration Successful', [
@@ -71,7 +76,13 @@ const Registration = ({navigation}) => {
           onPress: () => navigation.navigate('SellerSignIn'),
         },
       ]);
-    } else {
+    }
+    // else if(response.status === 422)
+    // {
+    //   setError(response.data.errors);
+    //   console.log(response.data.errors)
+    // }
+     else {
       Alert.alert('Error', 'Registration Failed', [
         {
           text: 'OK',
@@ -79,6 +90,8 @@ const Registration = ({navigation}) => {
         },
       ]);
     }
+
+   
   };
 
   const launchImageLibraryHandler = () => {
@@ -140,6 +153,12 @@ const Registration = ({navigation}) => {
               onChangeText={text => setPassword(text)}
             />
 
+            <TextInput
+              placeholder="Address"
+              style={styles.input}
+              onChangeText={text => setAddress(text)}
+            />
+
             <View style={styles.imageBox}>
               <Text style={styles.imageFilename} numberOfLines={1}>
                 {selectedImage.length > 0
@@ -156,18 +175,12 @@ const Registration = ({navigation}) => {
               </TouchableOpacity>
             </View>
 
-            <TextInput
-              placeholder="Address"
-              style={styles.input}
-              onChangeText={text => setAddress(text)}
-            />
-
     <CheckBox value={privacy} onValueChange={handleCheckbox} required={true}>
         </CheckBox>
      <Text>
      I hereby authorize AgriKOnnect to collect and process the data indicated herein for the purpose of the usage of the application. I understand that my personal information is protected by RA 10173, Data Privacy Act of 2012.
       </Text>
-      {isError && <Text style = {{color: 'red'}}>This field is required</Text>}
+     
 
           </View>
 

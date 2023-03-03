@@ -26,7 +26,7 @@ const CustomerSignIn = ({navigation}) => {
       .then(res => res.json())
       .then(resData => {
         if ('error' in resData) {
-          Alert.alert('Login credentials do not match');
+          Alert.alert('Error','Invalid Username or Password');
           console.log(resData);
         } else {
           global.id = resData.id;

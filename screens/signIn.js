@@ -32,14 +32,14 @@ const SignIn = ({navigation}) => {
               text: 'OK',
             },
           ]);
-          console.error(resData);
+          // console.error(resData);
         } else if ('error' in resData) {
           Alert.alert('Error', 'Invalid username or password', [
             {
               text: 'OK',
             },
           ]);
-          console.error(resData);
+          // console.error(resData);
         } else {
           global.id = resData.id;
           global.firstname = resData.firstname;

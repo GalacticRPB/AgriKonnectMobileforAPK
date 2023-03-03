@@ -13,6 +13,7 @@ const CustomerRegistration = ({navigation}) => {
   const [privacy, setPrivacy] = useState(false);
   const [mobilephone, setMobilephone] = useState('');
   const [password, setPassword] = useState('')
+  const [errors, setErrors] = useState([]);
 
   const [data, setData] = useState([]);
   const [isError, setError] = useState(false);
@@ -21,6 +22,7 @@ const CustomerRegistration = ({navigation}) => {
     setPrivacy(!privacy);
     setError(false);
   };
+
 
   const RegisterCustomer = async () => {
     try{
@@ -38,9 +40,11 @@ const CustomerRegistration = ({navigation}) => {
           email: email,
           mobilephone: mobilephone,
           password: password,
-          privacy: privacy ? 1 : 0,
+          privacy: privacy ? true : false,
         })
       });
+      console.log(await response.json())
+      console.log(response.status)
       if(!privacy)
       {
         setError(true);
@@ -59,16 +63,28 @@ const CustomerRegistration = ({navigation}) => {
         setPassword('');
         setError(false);
         global.email = email;
+        global.firstname = firstname;
+        global.username = username;
         Alert.alert("Customer Registered Successfully!");
         navigation.navigate('OTPScreen');
       }
+      else
+      {
+        Alert.alert('Error', 'Registration Failed', [
+        {
+          text: 'OK',
+          onPress: () => console.log('OK Pressed'),
+        },
+      ]);
+      }
      
-
-    console.log(response)
+    // console.log(response.status)
+    // console.log(response)
     const json = await response.json();
     setData(json.customer);
     }
     catch (error) {
+      // setErrors(error)
       console.error(error);
     }
   }
@@ -108,7 +124,7 @@ const CustomerRegistration = ({navigation}) => {
       style = {styles.input}
       onChangeText = { (text) => setFirstname(text) } >
       </TextInput>
-
+      <Text style = {{color: 'red'}}>{errors.firstname}</Text>
       <TextInput 
       placeholder='Middle Name'
       style = {styles.input}
@@ -155,7 +171,7 @@ const CustomerRegistration = ({navigation}) => {
      <Text>
      I hereby authorize AgriKOnnect to collect and process the data indicated herein for the purpose of the usage of the application. I understand that my personal information is protected by RA 10173, Data Privacy Act of 2012.
       </Text>
-      {isError && <Text style = {{color: 'red'}}>This field id required</Text>}
+      {isError && <Text style = {{color: 'red'}}>This field is required</Text>}
       <TouchableOpacity 
       style = {styles.button}
       onPress={ RegisterCustomer}>
