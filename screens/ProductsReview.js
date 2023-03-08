@@ -14,37 +14,23 @@ const ProductReview  = ({navigation}) => {
 
   const getReview = async () => {
     try {
-      const response = await fetch (`http://10.0.2.2:8000/api/review/${user_id}`);
+      const response = await fetch (`https://agrikonnect.herokuapp.com/api/review/${user_id}`);
       const json = await response.json();
       setData(json.review)
+      
     }
     catch (error)
     {
-      console.error(error)
+      // console.error(error)
     }
   }
 
-
   console.log(data)
+  // console.log(data)
   useEffect(() => {
     getReview();
   }, []);
 
-  /*function increment() {
-    //setCount(prevCount => prevCount+=1);
-    setCount(function (prevCount) {
-      return (prevCount += 1);
-    });
-  }
-  function decrement() {
-    setCount(function (prevCount) {
-      if (prevCount > 0) {
-        return (prevCount -= 1); 
-      } else {
-        return (prevCount = 0);
-      }
-    });
-  }*/
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -57,21 +43,20 @@ const ProductReview  = ({navigation}) => {
             </TouchableOpacity>
             <Text style = {styles.name}>Product Reviews</Text>
         </View>
-          <ScrollView>
+          {/* <ScrollView> */}
             <View style={styles.BestContainer}>
               <View style={{flexDirection: 'row'}}>
                 <FlatList data = {data}
                   keyExtractor={({id}, index) => id}
                   renderItem={({item}) => (
-                    <ScrollView>
-                    <TouchableOpacity onPress={() => {navigation.navigate('ProductDetails', {item:item})}}>
+                    // <ScrollView>
+                    // <TouchableOpacity onPress={() => {navigation.navigate('ProductDetails', {item:item})}}>
                     <View style={styles.ProdInfo}>
-                    <Text style={styles.ProdName}>{item.name}</Text>
-                      <Text style={styles.ProdPrice}>Product: {item.order_name}</Text>
+                      <Text style={styles.ProdName}>{item.order_name}</Text>
                       <Text style={styles.ProdPrice}>Review: {item.review}</Text>
                     </View>
-                    </TouchableOpacity>
-                  </ScrollView>
+                    // </TouchableOpacity>
+                  // </ScrollView>
 
                   )}>
                   
@@ -79,7 +64,7 @@ const ProductReview  = ({navigation}) => {
                     
               </View>
             </View>
-          </ScrollView>
+          {/* </ScrollView> */}
         </View>
       </ScrollView>
       </View>
@@ -151,12 +136,12 @@ const styles = StyleSheet.create({
   },
   ProdName: {
     fontWeight: 'bold', 
-    color: '#000000',
-    fontSize: 15
+    color: '#000',
+    fontSize: 24,
   },
   ProdPrice:{
     fontWeight: 'bold', 
-    color: '#000000',
+    color: '#737070',
   },
   BestBasketButton:{
     backgroundColor:"#31A05F",

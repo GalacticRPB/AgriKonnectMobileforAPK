@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,FlatList, SectionList, Image, ScrollView, ActivityIndicator} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler';
-
+import { Feather } from '@expo/vector-icons';
 
 const Vegetables = ({navigation}) => {
     const [isLoading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ const Vegetables = ({navigation}) => {
   }
 
 const getProducts = () => {
-  const apiURL = `http://10.0.2.2:8000/api/vegetable`;
+  const apiURL = `https://agrikonnect.herokuapp.com/api/vegetable`;
   fetch(apiURL)
   .then((response) => response.json())
   .then((responseJson) => {
@@ -83,7 +83,7 @@ const getProducts = () => {
                 <TouchableOpacity onPress={() => {navigation.navigate('VegetableDetails', {item:item})}}>
                   <Text style={styles.ProdName}>{item.name}</Text>
                   <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
-                  <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
+                  <Text style={styles.ProdSeller}>Seller: {item.seller_name}</Text>
                 </TouchableOpacity>
             </View>
           )}
@@ -100,7 +100,7 @@ const getProducts = () => {
     <View style={styles.container}>
        <View style={{flexDirection: 'row', padding: 10}}>
             <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
-            <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
+            <Ionicons name="arrow-back-sharp" size={50} color="#5F5B5B" />
             </TouchableOpacity>
                     
         <Text style={styles.SectionText}> Vegetables</Text>
@@ -111,7 +111,8 @@ const getProducts = () => {
             value = {search}
             onChangeText = { (text) => searchFilter(text) }
             style={styles.searchbar}
-            />
+            >
+            </TextInput>
             <View style={styles.BestContainer}>
               <View >
                 {showVegetables()}
@@ -134,12 +135,10 @@ const styles = StyleSheet.create({
   title: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
   },
   subtitle: {
     color: '#5F5B5B',
-    fontFamily: 'Poppins',
     fontSize: 15
   },
   BasketIcon:{
@@ -153,7 +152,6 @@ const styles = StyleSheet.create({
   SectionText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
   },
@@ -205,8 +203,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   Reconame: {
-    fontSize: 20, 
-    fontFamily: 'Poppins', 
+    fontSize: 20,
     fontWeight: 'bold', 
     color: '#FFFFFF',
     margin: 10,
@@ -238,7 +235,6 @@ const styles = StyleSheet.create({
   BestText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
     marginTop: -30,
@@ -261,8 +257,12 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 20,
   },
+  ProdSeller:{
+    color: 'gray',
+  },
   ProdPrice:{
-    color: '#000000',
+    color: '#026206',
+    fontWeight: 'bold', 
   },
   BestBasketButton:{
     backgroundColor:"#31A05F",

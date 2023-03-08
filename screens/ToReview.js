@@ -11,7 +11,7 @@ const ToReview = ({navigation}) => {
 
     const review = async () => {
         try{
-            const response = await fetch(`http://10.0.2.2:8000/api/to-review/${user_id}`);
+            const response = await fetch(`https://agrikonnect.herokuapp.com/api/to-review/${user_id}`);
             const json = await response.json();
             setToReview(json.delivered)
         }
@@ -29,7 +29,7 @@ const ToReview = ({navigation}) => {
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
                     <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                    <AntDesign name="arrowleft" size={50} color="black" />
+                    <AntDesign name="arrowleft" size={50} color="#5F5B5B" />
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> To Review </Text>
                 </View>
@@ -38,15 +38,17 @@ const ToReview = ({navigation}) => {
                         <FlatList data = {toReview}
                             keyExtractor={({id}, index) => id}
                             renderItem={({item}) => (
-                            <ScrollView>
+                            // <ScrollView>
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                                 <View style={{flexDirection: 'column', margin: 10}}>
-                                    <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
-                                    <Text style={styles.amount}>Price: {item.order_total}</Text>
+                                    <Text style={styles.ButtonTitle}>{item.order_name}</Text>
+                                    <Text style={styles.amount}>Total Order Price: Php {item.order_total}.00</Text>
+                                </View>
                                     <TouchableOpacity onPress={() => {navigation.navigate('WriteReview', {item:item})}}>
                                         <Text style={styles.reviewbutton}>REVIEW</Text>
                                     </TouchableOpacity>
                                 </View>
-                            </ScrollView>
+                            // </ScrollView>
 
                             )}>
                         </FlatList>
@@ -68,7 +70,6 @@ const styles = StyleSheet.create({
     SectionText: {
         color: '#5F5B5B',
         fontWeight:'bold',
-        fontFamily: 'Poppins',
         fontSize: 20,
         padding: 10,
     },
@@ -90,12 +91,14 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: '#000000',
         fontWeight: 'bold',
+        fontSize: 20
     },
     kilo: {
         color: '#000000',
     },
     amount:{
-        color: '#000000',
+        color: '#026206',
+        fontWeight: 'bold'
     },
     ProdImg:{
         marginTop: 10,

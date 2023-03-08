@@ -16,7 +16,7 @@ const CustomerSignIn = ({navigation}) => {
   const [password, setPassword] = useState('');
 
   const login = async () => {
-    await fetch('http://10.0.2.2:8000/api/loginCustomer', {
+    await fetch('https://agrikonnect.herokuapp.com/api/loginCustomer', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ const CustomerSignIn = ({navigation}) => {
       .then(resData => {
         if ('error' in resData) {
           Alert.alert('Error','Invalid Username or Password');
-          console.log(resData);
+          // console.log(resData);
         } else {
           global.id = resData.id;
           global.firstname = resData.firstname;
@@ -115,11 +115,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'green',
-    borderRadius: 30,
-    marginTop: 50,
-    marginLeft: 40,
-    marginRight: 40,
-    height: 50,
+    borderRadius: 10,
+    width: '100%',
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -130,7 +128,7 @@ const styles = StyleSheet.create({
   },
   ask: {
     textAlign: 'center',
-    marginTop: 100,
+    marginTop: 50,
     fontSize: 16,
   },
   registerButton: {

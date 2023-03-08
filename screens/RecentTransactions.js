@@ -11,7 +11,7 @@ const RecentTransactions = ({navigation}) => {
 
     const getReview = async () => {
         try {
-        const response = await fetch (`http://10.0.2.2:8000/api/customer-recent/${id}`);
+        const response = await fetch (`https://agrikonnect.herokuapp.com/api/customer-recent/${id}`);
         const json = await response.json();
         setData(json.recent)
         }
@@ -30,7 +30,7 @@ const RecentTransactions = ({navigation}) => {
         <View style={styles.container}>
                 <View style={{flexDirection: 'row', padding: 10}}>
                     <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                    <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
+                    <Ionicons name="arrow-back-sharp" size={50} color="#5F5B5B" />
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> Recent Transactions </Text>
                 </View>
@@ -41,8 +41,8 @@ const RecentTransactions = ({navigation}) => {
                             keyExtractor={({id}, index) => id}
                             renderItem={({item})=> (
                                 <View style={styles.ProdInfo}>
-                                <Text style={styles.ProdName}>Product: {item.order_name}</Text>
-                                <Text style={styles.ProdPrice}>Price:  {item.order_total}.00</Text>
+                                <Text style={styles.ProdName}>{item.order_name}</Text>
+                                <Text style={styles.ProdPrice}>Total Order Price: Php {item.order_total}.00</Text>
                                 <Text style={styles.ProdPrice}>Quantity:  {item.order_qty}</Text>
                         
                                 </View>
@@ -68,9 +68,15 @@ const styles = StyleSheet.create({
     SectionText: {
         color: '#5F5B5B',
         fontWeight:'bold',
-        fontFamily: 'Poppins',
         fontSize: 20,
         padding: 10,
+    },
+    ProdName:{
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    ProdPrice: {
+        color: '#5F5B5B',
     },
     TransaContainer:{
         padding: 10,

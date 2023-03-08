@@ -22,7 +22,7 @@ const WriteReview = ({navigation, route}) => {
 
   const submitReview = async () => {
     try{
-        const response = await fetch(`http://10.0.2.2:8000/api/review`, {
+        const response = await fetch(`https://agrikonnect.herokuapp.com/api/review`, {
             method: 'POST',
             headers: {
                 Accept: 'applicaton/json',
@@ -62,13 +62,13 @@ const WriteReview = ({navigation, route}) => {
     return (
     <View style={styles.container}>
         <ScrollView>
-            <View style={{flexDirection: 'row', padding: 10}}>
+            <View style={{flexDirection: 'row', padding: 10, marginTop: 50}}>
                 <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
-                <AntDesign name="arrowleft" size={50} color="black" />
+                <AntDesign name="arrowleft" size={50} color="#5F5B5B" />
                 </TouchableOpacity>
                 <Text style={styles.SectionText}> Write a review </Text>
             </View>
-            <View style={{padding: 50}}>
+            <View style={{margin: 20, marginBottom: -20,}}>
                     <View style={{flexDirection: 'column', margin: 10}}>
                         <Text style={styles.Title}>{route.params.item.order_name}</Text>
                         <Text style={styles.kilo}>{route.params.item.order_qty} kg</Text>
@@ -77,15 +77,15 @@ const WriteReview = ({navigation, route}) => {
                     <View style={{flexDirection: 'column'}}>
   
                         <Text style={styles.TitleInput}> What's your product experience?</Text>
-                        <TextInput 
+                    </View>
+            </View>
+            <TextInput 
                         multiline
                         placeholder='Write your review'
                         style = {styles.input} 
                         onChangeText = { (text) => [setReview(text)] }
                         keyboardType='default'>
                         </TextInput>
-                    </View>
-            </View>
             <TouchableOpacity onPress={ submitReview }>
                 <Text style={styles.reviewbutton}>SUBMIT</Text>
             </TouchableOpacity>
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
   SectionText: {
     color: '#5F5B5B',
     fontWeight: 'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
   },
@@ -120,8 +119,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#D9D9D9',
     borderRadius: 10,
     fontSize: 18,
-    height: 200,
-    margin: 10,
+    margin: 30,
+    padding: 20,
   },
   customRatingBarStyle: {
     justifyContent: 'center',
@@ -184,5 +183,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 12,
     alignSelf: 'center',
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    width: 150,
+    height: 50,
+    fontSize: 18,
   },
 });

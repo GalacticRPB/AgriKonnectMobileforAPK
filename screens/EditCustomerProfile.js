@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {Text,View,StyleSheet,TextInput,TouchableOpacity, Alert} from 'react-native';
-import Icons from 'react-native-vector-icons/Ionicons';
-import FaIcons from 'react-native-vector-icons/FontAwesome5';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const EditCustomerProfile = ({navigation}) => {
@@ -17,16 +17,16 @@ const EditCustomerProfile = ({navigation}) => {
     const [address, setAddress] = useState([]);
     const [customerInfo, setCustomer] = useState([]);
 
-    console.log(customerInfo)
+    // console.log(customerInfo)
     const getCustomerInfo = async () => {
         try
         {
-            const response = await fetch(`http://10.0.2.2:8000/api/editCustomer/${customer_id}`);
+            const response = await fetch(`https://agrikonnect.herokuapp.com/api/editCustomer/${customer_id}`);
             const json = await response.json();
             setCustomer(json.customer);
         }
         catch (error) {
-            console.error(error);
+            // console.error(error);
         }
     }
     useEffect(() => {
@@ -36,7 +36,7 @@ const EditCustomerProfile = ({navigation}) => {
     const updateUser = async () => {
         try
         {
-            const response = await fetch(`http://10.0.2.2:8000/api/updateCustomer/${customer_id}`, {
+            const response = await fetch(`https://agrikonnect.herokuapp.com/api/updateCustomer/${customer_id}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -52,8 +52,11 @@ const EditCustomerProfile = ({navigation}) => {
                     address: address
                 })
             });
-
-            if ((response).status === 200)
+          
+            const data = await response.json()
+            console.log(data)
+            
+            if (data.status === 200)
             {
                 setFirstname('');
                 setMiddlename('');
@@ -62,29 +65,34 @@ const EditCustomerProfile = ({navigation}) => {
                 setPassword('');
                 setEmail('');
                 setAddress('');
-                console.log(firstname, middlename, lastname, mobilephone, password, email, address);
-                const json = await response.json();
+                // console.log(firstname, middlename, lastname, mobilephone, password, email, address);
+                // const json = await response.json();
                 Alert.alert("Customer Updated Successfully");
                 navigation.navigate('Profile');
+            }
+            else if(data.status === 422)
+            {
+                Alert.alert("Hello")
             }
         }catch (error)
         {
             console.error(error)
         }
+        // console.log(data.errors)
     }
-    console.log("customer update")
+    // console.log("customer update")
     
     return(
         <View style={styles.container}>
             <ScrollView>
                 <View style={{flexDirection: 'row', padding: 10}}>
-                    <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
-                    <Icons name= 'arrow-back' size={50} color='#000000'/>
+                    <TouchableOpacity onPress={()=>navigation.navigate('Profile')}>
+                    <Ionicons name="arrow-back-sharp" size={50} color="#5F5B5B" />
                     </TouchableOpacity>
                 </View>
                 <View style = {{flexDirection: 'column', alignItems: 'center',}}>
                     <TouchableOpacity style = {styles.userButton}>
-                    <FaIcons name='user-edit' color={'white'} size={50}/>
+                    <MaterialIcons name="person" size={100} color="white" />
                     </TouchableOpacity>
                     <Text style = {styles.username}>
                         {global.username}
@@ -182,6 +190,7 @@ const styles = StyleSheet.create({
     TitleInput:{
         color: '#5F5B5B',
         margin: 10,
+        fontWeight: 'bold'
     },
     input:{
         backgroundColor: '#D9D9D9',

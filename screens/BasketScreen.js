@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Text,View,StyleSheet,ScrollView,TouchableOpacity, Pressable} from 'react-native';
+import {Text,View,StyleSheet,ScrollView,TouchableOpacity, Image} from 'react-native';
 import { FlatList, RefreshControl } from 'react-native-gesture-handler';
 import { RadioButton } from 'react-native-paper';
 import Icons from 'react-native-vector-icons/FontAwesome';
@@ -21,7 +21,7 @@ const BasketScreen  = ({navigation, route}) => {
 
   const getBasket = async () => {
     try {
-      const response = await fetch (`http://10.0.2.2:8000/api/basket/${id}`);
+      const response = await fetch (`https://agrikonnect.herokuapp.com/api/basket/${id}`);
       const json = await response.json();
       setData(json.cart)
     }
@@ -47,41 +47,35 @@ const BasketScreen  = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+       {/* <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}> */}
         <View style={styles.headercontainer}>
           <Text style={styles.SectionText}> My Basket </Text>
-          <ScrollView>
-            <View style={styles.BestContainer}>
+          <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
               <View style={{flexDirection: 'row'}}>
               <FlatList data = {data}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item}) => (
-                    <ScrollView>
+                    // <ScrollView>
+                      <View style={styles.BestContainer}>
                     <TouchableOpacity onPress={() => {navigation.navigate('CheckoutForm', {item:item, sffee: shippingfee, mopayment: modeofpayment})}}>
                     <View style={styles.ProdInfo}>
-                  
-                        <Text style={styles.ProdName}>Product Name: {item.name}</Text>
-                        <Text style={styles.ProdPrice}>Unit Price: {item.price}.00</Text>
-                        <Text style={styles.ProdPrice}>Quantity: {item.fruits_qty}</Text>
-                        <Text style={styles.ProdPrice}>Total Price: {item.fruits_qty * item.price}.00</Text>
+                        <Text style={styles.ProdName}>{item.name}</Text>
+                        <Text style={styles.ProdPrice}>Unit Price: Php {item.price}.00</Text>
+                        <Text style={styles.ProdPrice}>Quantity:  {item.fruits_qty}</Text>
+                        <Text style={styles.ProdPrice}>Total Price: Php {item.fruits_qty * item.price}.00</Text>
                         <View style={{flexDirection: 'row'}}>
-          
-                        </View>
-                        
+                        </View>    
                     </View>
-              
                     </TouchableOpacity>
-                  </ScrollView>
-
+                    </View>
+                  // </ScrollView>
                   )}>
-                  
-                </FlatList>
-                    
+                </FlatList> 
               </View>
-            </View>
           </ScrollView>
         </View>
-      </ScrollView>
+      {/* </ScrollView> */}
     </View>
   )
 }
@@ -100,14 +94,12 @@ const styles = StyleSheet.create({
   SectionText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
   },
   BestText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
     marginTop: -30,
@@ -138,11 +130,10 @@ const styles = StyleSheet.create({
   ProdName: {
     fontWeight: 'bold', 
     color: '#000000',
-    fontSize: 15
+    fontSize: 25
   },
   ProdPrice:{
-    fontWeight: 'bold', 
-    color: '#000000',
+    color: '#026206',
   },
   BestBasketButton:{
     backgroundColor:"#31A05F",

@@ -31,7 +31,7 @@ const ProductDetails = ({navigation, route}) => {
 
     const AddCart = async () => {
         try{
-            const response = await fetch('http://10.0.2.2:8000/api/addtoCart', {
+            const response = await fetch('https://agrikonnect.herokuapp.com/api/addtoCart', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -51,86 +51,104 @@ const ProductDetails = ({navigation, route}) => {
             });
         Alert.alert('Product Added to Cart');
         const json = await response.json();
-        console.log("test for vegetables")
-        console.log(response)
+        // console.log("test for vegetables")
+        // console.log(response)
         setData(json.message);
         } catch (error) {
-        console.error(error);
+        // console.error(error);
         } 
     }
 
     const getFruits = async () => {
         try {
-        const response = await fetch(`http://10.0.2.2:8000/api/viewfruit/${product_id}`);
+        const response = await fetch(`https://agrikonnect.herokuapp.com/api/viewfruit/${product_id}`);
         const json = await response.json();
         setReview(json.reviews);
         } catch (error) {
-            console.error(error);
+            // console.error(error);
         } 
     }
-    
-    
-    
     useEffect(() => {
         getFruits();
     }, []);
 
     return(
         <View style={styles.container}>
-            <View style={{padding: 10}}>
+            <View style={{flexDirection: 'row',padding: 10}}>
                 <TouchableOpacity onPress={()=>navigation.navigate('Fruits')}>
-                <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
+                <Ionicons name="arrow-back-sharp" size={50} color="#5F5B5B" />
                 </TouchableOpacity>
+                <Text style={styles.SectionText}>Product Details</Text>
             </View>
+            <Text style={styles.Headertext}>{route.params.item.name}</Text>
             <ScrollView>
-                <View style={{flexDirection:'column', alignSelf: 'flex-start',
-                 marginLeft: 50}}>
-                    <Text style={styles.Headertext}>{route.params.item.name}</Text>
+                <View style={styles.PContainer}>
+                    <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+                        <Text style={styles.sellername}>Seller:</Text>
+                        <Text style={styles.bodytext}>{route.params.item.seller_name}</Text>
+                    </View>
+                </View>
+                
+                <View style={styles.PContainer}>
+                <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                     <Text style={styles.Subtext}>Product Category:</Text>
                     <Text style={styles.bodytext}>{route.params.item.category}</Text>
+                </View>
+                <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                     <Text style={styles.Subtext}>Growing Method:</Text>
                     <Text style={styles.bodytext}>{route.params.item.description}</Text>
+                </View>
+                <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
                     <Text style={styles.Subtext}>Price:</Text>
                     <Text style={styles.bodytext}>Php {route.params.item.price}.00</Text>
-                    <Text style={styles.Subtext}>Quantity: {value}kg</Text>
-                    <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                </View>
+                <View style={{flexDirection:'row', justifyContent: 'space-between'}}> 
+                    <Text style={styles.Subtext}>Quantity: </Text>
+                    <Text style={styles.bodytext}>{value}kg</Text>
+                </View>
+                <View style={{flexDirection:'column', alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', marginLeft: 20, alignItems: 'center'}}>
                         <TouchableOpacity onPress={handleDecrement}><Entypo name="minus" color="black" style={styles.decrementbutton}/></TouchableOpacity>
                         <TouchableOpacity><Text style={styles.numberContainer}>{value}</Text></TouchableOpacity>
                         <TouchableOpacity onPress={handleIncrement}><Entypo name="plus" style={styles.incrementbutton} /></TouchableOpacity>
-                        <Text>kg</Text>
+                        <Text style={{margin: 5}}>kg</Text>
+             
                     </View>
-                </View>
-                <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-                    <Text style={styles.sellername}>Seller: {route.params.item.seller_name}</Text>
-                </View>
-                <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <Text>Reviews</Text>
-                </View>
-                <ScrollView>
-                    <View style={styles.BestContainer}>
-                        <View style={{flexDirection: 'row'}}>
-                            <FlatList data = {review}
-                                keyExtractor={({id}, index) => id}
-                                renderItem= {({item}) => (
-                                    <ScrollView>
-                                        <View>
-                                            <Text style={styles.ButtonTitle}>Product: {item.order_name}</Text>
-                                            <Text style={styles.rating}>Quantity: {item.order_qty}</Text>
-                                            <Text style={styles.comment}>Comment: {item.review}</Text>
-                                        </View>
-                                    </ScrollView>
-                                )}>
-                            </FlatList>
-                        </View>
-                    </View>
-                </ScrollView>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around',margin: 10}}>
                         <TouchableOpacity onPress={ AddCart }>
                             <Text style={styles.basketbutton}>ADD TO BASKET</Text>
                         </TouchableOpacity>
                     </View>
+                </View>
+                
+               </View>
+                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                    <Text style={{fontSize: 25, fontWeight: 'bold',
+                     color: '#5F5B5B',}}>Reviews</Text>
+                </View>
+                {/* <ScrollView> */}
+                    <View style={styles.BestContainer}>
+                        <View style={{flexDirection: 'row'}}>
+                            <FlatList data = {review}
+                                keyExtractor={({id}, index) => id}
+                                renderItem= {({item}) => (
+                                    // <ScrollView>
+                                        <View>
+                                            <Text style={styles.rating}>Name: {item.firstname} {item.lastname}</Text>
+                                            <Text style={styles.rating}>Quantity: {item.order_qty}</Text>
+                                            <Text style={styles.comment}>Comment: {item.review}</Text>
+                                        </View>
+                                    // </ScrollView>
+                                )}>
+                            </FlatList>
+                        </View>
+                    </View>
+                {/* </ScrollView> */}
+                
+                    
             </ScrollView>
         </View>
+        
     )
 }
 
@@ -142,20 +160,44 @@ const styles = StyleSheet.create({
       flex: 1, 
       backgroundColor: '#F4F4F4',
       paddingTop: 50,
+      margin: 10,
     },
+    SectionText: {
+        color: '#5F5B5B',
+        fontWeight:'bold',
+        fontSize: 20,
+        padding: 10,
+    },
+    PContainer:{
+        backgroundColor: 'white',
+        flex: 1,
+        borderRadius: 10,
+        shadowColor: "#000",
+        padding: 15,
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        marginBottom: 10,
+      },
     Headertext:{
         color: '#000000',
         fontWeight: 'bold',
-        fontSize: 30,
+        fontSize: 45,
+        textAlign:'center',
+        marginBottom: 10,
     },
     Subtext:{
         color: '#000000',
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize: 20,
     },
     bodytext:{
         color: '#000000',
-        fontSize: 12,
+        fontSize: 15,
     },
     sellerPhoto: {
         width: 50,
@@ -165,9 +207,23 @@ const styles = StyleSheet.create({
     sellername:{
         color: '#000000',
         fontWeight: 'bold',
-        fontSize: 15,
-        marginTop: 10,
+        fontSize: 20,
     },
+    PContainer:{
+        backgroundColor: 'white',
+        flex: 1,
+        borderRadius: 10,
+        shadowColor: "#000",
+        padding: 15,
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        marginBottom: 10,
+      },
     visitbutton:{
         backgroundColor: 'green',
         borderRadius: 10,
@@ -194,11 +250,10 @@ const styles = StyleSheet.create({
     },
     ButtonTitle:{
         textAlign: 'left',
-        color: 'black',
-        fontWeight: 'bold',
+        color: '#5F5B5B',
     },
     rating: {
-        color: 'black',
+        color: '#5F5B5B',
     },
     comment:{
         color: 'black',
@@ -219,21 +274,21 @@ const styles = StyleSheet.create({
     },
     decrementbutton: {
         backgroundColor:"#F22323",
-        borderRadius: 10,
+        borderRadius: 5,
         padding: 10,
         color: 'white',
         marginBottom: 5,
     },
     incrementbutton: {
     backgroundColor:"#388E3C",
-    borderRadius: 10,
+    borderRadius: 5,
     padding: 10,
     color: 'white',
     marginBottom: 5
     },
     numberContainer: {
         backgroundColor:"#FFF59D",
-        borderRadius: 10,
+        borderRadius: 4,
         padding: 10,
         fontSize: 12,
         marginBottom: 5,
@@ -247,6 +302,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 10,
         borderRadius: 10,
+        padding: 15,
         shadowColor: "#000",
         shadowOffset: {
           width: 0,

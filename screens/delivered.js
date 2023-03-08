@@ -16,7 +16,7 @@ const Delivered = ({navigation}) => {
   const toDelivered = async () => {
     try
     {
-      const response = await fetch(`http://10.0.2.2:8000/api/order-delivered/${user_id}`);
+      const response = await fetch(`https://agrikonnect.herokuapp.com/api/order-delivered/${user_id}`);
       const json = await response.json();
       setDelivered(json.delivered)
     }
@@ -60,21 +60,29 @@ const Delivered = ({navigation}) => {
           </View>
         </TouchableOpacity>
       </View>
+      <View>
           <FlatList data = {delivered}
             keyExtractor={({id}, index) => id}
             renderItem={({item}) => (
             <ScrollView>
-                <View style={styles.ProdInfo}>
-                  <View style={styles.BestContainer}>
-                    <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
-                    <Text style={styles.amount}>Quantity: {item.order_qty}</Text>
-                    <Text style={styles.amount}>Price: Php {item.order_total}.00</Text>
-                    <Text style={styles.amount}>Order Status: Delivered</Text>
+                <View style={styles.BestContainer}>
+                  <View style={styles.rowFormat1}>
+                    <View>
+                    <Text>Product Name: </Text>
+                    <Text>Quantity: </Text>
+                    <Text style={styles.leftDetail}>Price: </Text>
+                </View>
+                <View>
+                  <Text style = {styles.rightDetail}>{item.order_name}</Text>
+                  <Text style = {styles.rightDetail}>{item.order_qty}</Text>
+                  <Text style = {styles.leftDetail}>Php {item.order_total}.00</Text>
+                </View>
                 </View>
                 </View>
             </ScrollView>
             )}>
         </FlatList>
+        </View>
         </View>
     </View>
     </ScrollView>
@@ -92,17 +100,14 @@ contentContainer: {
       flex: 1,
       borderRadius: 10,
       shadowColor: "#000",
-      padding: 25,
+      padding: 5,
       shadowOffset: {
         width: 0,
         height: 2,
       },
-      width: 400,
-    },
-    ProdInfo: {
-      margin: 0,
-      marginTop: 10,
-      
+      width: '100%',
+      marginBottom: 5,
+      marginTop: 15,
     },
     ground:{
       backgroundColor: '#F4F4F4',
@@ -119,16 +124,13 @@ contentContainer: {
       alignItems: 'center',
     },
     myProducts:{
-        color: 'green',
-        fontSize: 20,
-        fontWeight: 'bold',
         textAlign: 'left',
     },
     topBG: {
         width: '100%',
         height: 70,
-        backgroundColor: "blue",
-        justifyContent: 'flex-start',
+        backgroundColor: "green",
+        justifyContent: 'center',
         alignItems: 'center',
     },
     name:{
@@ -194,10 +196,11 @@ contentContainer: {
     rowFormat1:{
       flexDirection: "row",
       flexWrap: 'nowrap',
-      alignItems: 'center',
+      alignItems: 'flex-end',
       justifyContent: 'space-between',
-      marginTop: 10,
+      marginTop: 0,
       width: '100%',
+      padding: 10,
     },
     elevation: {
         elevation: 10,
@@ -220,7 +223,7 @@ contentContainer: {
         fontSize: 18,
       },
       leftDetail:{
-        color: 'blue',
+        color: 'green',
         fontSize: 18,
         fontWeight: 'bold'
       },
@@ -243,8 +246,9 @@ contentContainer: {
         flexWrap: 'nowrap',
     },
     leftIcon:{
-        marginLeft: '20%',
-    },
+      justifyContent:'flex-start',
+      marginLeft: '5%',
+  },
 })
 
 export default Delivered;

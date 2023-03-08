@@ -16,12 +16,12 @@ const Transaction = ({navigation}) => {
 
   const getTransaction = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:8000/api/showOrder/${user_id}`);
+      const response = await fetch(`https://agrikonnect.herokuapp.com/api/showOrder/${user_id}`);
       const json = await response.json();
       setTransaction(json.orders);
     }
     catch(error) {
-      console.error(error);
+      // console.error(error);
     } 
   }
   useEffect(() => {
@@ -30,7 +30,7 @@ const Transaction = ({navigation}) => {
 
   const orderDelivered = async () => {
     try{
-      const response = await fetch(`http://10.0.2.2:8000/api/out-for-delivery`, {
+      const response = await fetch(`https://agrikonnect.herokuapp.com/api/out-for-delivery`, {
         method: 'POST',
         headers: {
           Accept: 'applicaton/json',
@@ -55,11 +55,11 @@ const Transaction = ({navigation}) => {
       });
       Alert.alert('Order out for Delivery');
       const json = await response.json();
-      console.log(json)
+      // console.log(json)
       setOrderDeliver(json.deliver);
     }catch (error)
     {
-      console.error(error);
+      // console.error(error);
     }
   }
 
@@ -94,28 +94,49 @@ const Transaction = ({navigation}) => {
           </View>
         </TouchableOpacity>
       </View>
-        <View style = {styles.rowFormat}>
+        <View>
             <FlatList
                 style = {{ height: 450 }}
                 data={transaction}
                 keyExtractor={({ id }, index) => id}
                 renderItem={({ item }) => (
+                  // <ScrollView>
                     <View style={styles.BestContainer}>
-                    <View style={{borderBottomColor: 'gray', borderBottomWidth: StyleSheet.hairlineWidth, margin: 3}}/>
-                    <Text style = {styles.myProducts}>Product Name: {item.order_name}</Text>
-                    <Text style = {styles.myProducts}>Quantity: {item.product_qty}</Text>
-                    <Text style = {styles.myProducts}>Unit Price: {item.price}</Text>
-                    <Text style = {styles.myProducts}>Total Price: {item.total_price}</Text>
-                    <Text style = {styles.myProducts}>Customer Name: {item.firstname} {item.middlename} {item.lastname}</Text>
-                    <Text style = {styles.myProducts}>Phone Number: {item.mobilephone}</Text>
-                    <Text style = {styles.myProducts}>Shipping Address: {item.shippingaddress}</Text>
-                    <Text style = {styles.myProducts}>Mode of Payment: {item.modeofpayment}</Text>
-                    <TouchableOpacity style = {styles.registerButton} onPress={ orderDelivered }>
-                      <Text >Out for Delivery</Text>
+                    <View style={styles.rowFormat1}>
+                      <View>
+                    <Text>Product Name: </Text>
+                    <Text>Quantity: </Text>
+                    <Text>Unit Price: </Text>
+                    <Text style = {styles.leftDetail}>Total Price: </Text>
+                    </View>
+                    <View>
+                    <Text style = {styles.rightDetail}>{item.order_name}</Text>
+                    <Text style = {styles.rightDetail}>{item.product_qty}</Text>
+                    <Text style = {styles.rightDetail}>Php {item.price}.00</Text>
+                    <Text style = {styles.leftDetail}>Php {item.total_price}.00</Text>
+                    </View>
+                    </View>
+                    <View style = {styles.divider}/>
+                    <View style = {styles.rowFormat1}>
+                      <View>
+                    <Text>Customer Name:</Text>
+                    <Text>Phone Number: </Text>
+                    <Text>Shipping Address: </Text>
+                    <Text>Mode of Payment: </Text>
+                    </View>
+                    <View>
+                    <Text style = {styles.rightDetail}>{item.firstname} {item.middlename} {item.lastname}</Text>
+                    <Text style = {styles.rightDetail}>{item.mobilephone}</Text>
+                    <Text style = {styles.rightDetail}>{item.shippingaddress}</Text>
+                    <Text style = {styles.rightDetail}>{item.modeofpayment}</Text>
+                    </View>
+                    </View>
+                    <TouchableOpacity style = {styles.deliveredButton} onPress={ orderDelivered }>
+                      <Text style = {styles.deliveredButtonText}>Out for Delivery</Text>
                       
                     </TouchableOpacity>
                     </View>
-                   
+                    // </ScrollView>  
                 )}
               />
             </View>
@@ -147,9 +168,6 @@ contentContainer: {
       alignItems: 'center',
     },
     myProducts:{
-        color: 'green',
-        fontSize: 20,
-        fontWeight: 'bold',
         textAlign: 'left',
     },
     topBG: {
@@ -179,7 +197,9 @@ contentContainer: {
         width: 0,
         height: 2,
       },
-      width: 400,
+      width: '100%',
+      marginBottom: 5,
+      marginTop: 15,
     },
     tab:{
       marginTop: 10,
@@ -238,10 +258,11 @@ contentContainer: {
     rowFormat1:{
       flexDirection: "row",
       flexWrap: 'nowrap',
-      alignItems: 'center',
+      alignItems: 'flex-end',
       justifyContent: 'space-between',
-      marginTop: 10,
+      marginTop: 0,
       width: '100%',
+      padding: 10,
     },
     elevation: {
         elevation: 10,
@@ -272,10 +293,11 @@ contentContainer: {
       deliveredButton:{
         backgroundColor: 'green',
         borderRadius: 5,
-        height: 60,
-        width: 90,
+        height: 40,
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 10,
       },
       deliveredButtonText:{
         color: 'white',

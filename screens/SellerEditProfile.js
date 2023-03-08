@@ -51,7 +51,7 @@ const EditProfile = ({navigation, route}) => {
 
   const getUserInfo = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:8000/api/edit/${id}`);
+      const response = await fetch(`https://agrikonnect.herokuapp.com/api/edit/${id}`);
       const json = await response.json();
       setDataInfo(json.user);
     } catch (error) {
@@ -65,7 +65,7 @@ const EditProfile = ({navigation, route}) => {
 
   const updateUser = async () => {
     try {
-      const response = await fetch(`http://10.0.2.2:8000/api/update/${id}`, {
+      const response = await fetch(`https://agrikonnect.herokuapp.com/api/update/${id}`, {
         method: 'PUT',
         headers: {
           Accept: 'application/json',

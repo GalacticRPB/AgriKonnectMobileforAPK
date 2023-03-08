@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F4F4F4'
     },
     UserIcon:{
-        padding: 50
+        padding: 30
     },
     Username: {
         marginTop: 60,

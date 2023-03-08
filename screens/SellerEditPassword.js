@@ -29,7 +29,7 @@ const PasswordEdit = ({navigation}) => {
   const getPassword = async () => {
     try {
       const response = await fetch(
-        `http://10.0.2.2:8000/api/editPassword/${id}`,
+        `https://agrikonnect.herokuapp.com/api/editPassword/${id}`,
       );
       const json = await response.json();
       setPassword(json.user);
@@ -43,9 +43,10 @@ const PasswordEdit = ({navigation}) => {
   }, []);
 
   const updatePassword = async () => {
-    try {
+    try 
+    {
       const response = await fetch(
-        `http://10.0.2.2:8000/api/updatePassword/${id}`,
+        `https://agrikonnect.herokuapp.com/api/updatePassword/${id}`,
         {
           method: 'PUT',
           headers: {
@@ -57,7 +58,8 @@ const PasswordEdit = ({navigation}) => {
           }),
         },
       );
-
+      
+      // console.log(response.status)
       if (response.status === 200) {
         setPassword('');
         console.log(password);
@@ -65,11 +67,15 @@ const PasswordEdit = ({navigation}) => {
         Alert.alert('Password Updated Successfully');
         navigation.navigate('EditPassword');
       }
-    } catch (error) {
-      console.error(error);
+      else
+      {
+        Alert.alert('Error', 'Password Field Required')
+      }
+      } catch (error) {
+        // console.error(error);
     }
   };
-
+  
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
       <View style={[styles.mPBox, styles.topBG]}>
@@ -97,7 +103,7 @@ const PasswordEdit = ({navigation}) => {
           </View>
 
           <TouchableOpacity style={styles.button} onPress={updatePassword}>
-            <Text style={styles.buttonText}>SAVE CHANGES</Text>
+            <Text style={styles.buttonText}>SAVE PASSWORD</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -165,12 +171,10 @@ const styles = StyleSheet.create({
 
   button: {
     backgroundColor: 'green',
-    borderRadius: 30,
-    marginTop: 20,
-    marginLeft: 40,
-    marginRight: 40,
-    height: 50,
-    width: '80%',
+    borderRadius: 10,
+    marginTop: 5,
+    height: 40,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },

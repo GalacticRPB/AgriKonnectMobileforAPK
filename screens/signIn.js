@@ -16,7 +16,7 @@ const SignIn = ({navigation}) => {
   const [password, setPassword] = useState('');
 
   const loginSeller = async () => {
-    await fetch('http://10.0.2.2:8000/api/login', {
+    await fetch('https://agrikonnect.herokuapp.com/api/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -132,11 +132,9 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'green',
-    borderRadius: 30,
-    marginTop: 50,
-    marginLeft: 40,
-    marginRight: 40,
-    height: 50,
+    borderRadius: 10,
+    width: '100%',
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -147,7 +145,7 @@ const styles = StyleSheet.create({
   },
   ask: {
     textAlign: 'center',
-    marginTop: 150,
+    marginTop: 50,
     fontSize: 16,
   },
   registerButton: {

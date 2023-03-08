@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, View,StyleSheet,TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, View,StyleSheet,TextInput, TouchableOpacity, ScrollView, Alert} from 'react-native';
 
 /*Icons Library-Start*/
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -8,6 +8,65 @@ import { Ionicons } from '@expo/vector-icons';
 /*Icons Library-End*/
 
 const ContactInfoEdit = ({navigation}) => {
+
+    let id = global.id;
+
+    const [username, setUsername ] = useState(global.setUsername);
+
+    const getUsername = async () => {
+        try
+        {
+            const response = await fetch(
+                `https://agrikonnect.herokuapp.com/api/edit/${id}`,
+            );
+            const json = await response.json();
+            setUsername(json.user);
+        }
+        catch (error)
+        {
+            console.error(error);
+        }
+    };
+
+     useEffect(() => {
+        getUsername();
+    }, []);
+
+    const updateUsername = async () => {
+        try
+        {
+            const response = await fetch(
+                `https://agrikonnect.herokuapp.com/api/update/${id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                    }),
+                },
+            );
+
+            console.log(response.status)
+            if (response.status === 200) {
+                setUsername('');
+                console.log(username);
+                const json = await response.json();
+                Alert.alert('Username Updated Successfully');
+                navigation.navigate('ContactInfoEdit');
+            }
+            else
+            {
+                Alert.alert('Error', 'Please provide your new username')
+            }
+        }
+         catch (error) {
+        console.error(error);
+        }
+        
+    }
     return(
     <ScrollView contentContainerStyle={styles.contentContainer}>
 
@@ -44,6 +103,7 @@ const ContactInfoEdit = ({navigation}) => {
                         <Text>{global.lastname}</Text>
                     </View>
 
+                    
                     <Text style = {styles.inputsTitle}>Email</Text>
                     <View style = {styles.input}>
                     <Text>{global.email}</Text>
@@ -57,6 +117,22 @@ const ContactInfoEdit = ({navigation}) => {
                     <Text style = {styles.inputsTitle}>Address</Text>
                     <View style = {styles.input}>
                     <Text>{global.brgy}</Text>
+                    </View>
+
+                    <Text style = {styles.inputsTitle}>Username</Text>
+                    <View style = {styles.input}>
+                        {/* <Text>{global.username}</Text> */}
+                        <TextInput
+                            onChangeText={text => [setUsername(text)]}
+                            placeholder="Enter new username"
+                            value={username}
+                        >
+                        </TextInput>
+                    </View>
+                    <View>
+                    <TouchableOpacity style={styles.button} onPress={updateUsername}>
+                        <Text style={styles.buttonText}>UPDATE USERNAME</Text>
+                    </TouchableOpacity>
                     </View>
                     </View>
             </ScrollView>
@@ -120,7 +196,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 40,
+        marginBottom: 0,
     },
     inputsBox:{
         alignSelf: 'flex-start',
@@ -137,23 +213,25 @@ const styles = StyleSheet.create({
         width: 360,
         marginBottom:10,
         height: 40,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: 5,
     },
 
 
     button:{
         backgroundColor: 'green',
-        borderRadius: 30,
-        marginTop: 20,
-        marginLeft: 40,
-        marginRight: 40,
-        height: 50,
-        width: '80%',
+        borderRadius: 10,
+        marginTop: 5,
+        marginBottom: 5,
+        height: 40,
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
     },
     buttonText:{
         color: 'white',
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: 'bold',
     },
 })

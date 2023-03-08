@@ -1,6 +1,7 @@
 import React,{useState}  from 'react';
 import {Text, View,StyleSheet,TouchableOpacity,TextInput, SectionList, Image, ScrollView, Alert} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 
 const CheckoutForm = ({navigation, route}) => {
@@ -9,6 +10,8 @@ const CheckoutForm = ({navigation, route}) => {
     const [shippingaddress, setAddress] = useState([]);
     const [orders, setOrders] = useState([]);
 
+    const [shippingError, setShippingError] = useState('');
+
     console.log(global.firstname)
     const sf = route.params.sffee;
     const total = (route.params.item.price * route.params.item.fruits_qty)
@@ -16,7 +19,7 @@ const CheckoutForm = ({navigation, route}) => {
 
     const Checkout = async () => {
         try{
-            const response = await fetch(`http://10.0.2.2:8000/api/place-order`, {
+            const response = await fetch(`https://agrikonnect.herokuapp.com/api/place-order`, {
                 method: 'POST',
                 headers: {
                     Accept: 'applicaton/json',
@@ -42,21 +45,33 @@ const CheckoutForm = ({navigation, route}) => {
                 })
             });
 
-            if((response).status === 200)
+            const data = await response.json()
+            console.log(data);
+            if(data.status === 200)
             {
                 setAddress('');
-                Checkout();
+                // Checkout();
                 Alert.alert("Order Successfully Placed!");
                 navigation.navigate('Basket');
 
+            } else {
+                const {shippingaddress} = data.errors ?? "Something went wrong!"
+                if(shippingaddress)
+                {
+                    setShippingError(shippingaddress[0]);
+                }
+                else
+                {
+                    // console.log(response.data);
+                }
             }
-            console.log(response)
+            // console.log(response)
             const json = await response.json();
             setOrders(json.message);
-            console.log(json)
+            // console.log(json)
             }
             catch (error) {
-            console.error(error);
+            // console.error(error);
             }
         }
 
@@ -84,45 +99,54 @@ const CheckoutForm = ({navigation, route}) => {
             <ScrollView>
                 <View style={{flexDirection: 'row', padding: 10}}>
                     <TouchableOpacity onPress={()=>navigation.navigate('Basket')}>
-                    <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
+                    <Ionicons name="arrow-back-sharp" size={50} color="#5F5B5B" />
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> Checkout Form </Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
-                    <View style={{flexDirection: 'column', margin: 10}}>
-                        <Text style={styles.prodname}>{route.params.item.name}</Text>
-                        <Text style={styles.prodprice}>Price: {route.params.item.price}</Text>
-                        <Text style={styles.prodqty}>Qty: {route.params.item.fruits_qty}</Text>
+                <View style={{flexDirection: 'column', marginTop: -20}}>
+                    <View>
+                        <Text style={styles.Headertext}>{route.params.item.name}</Text>
+                        <View style={styles.PContainer}>
+                            <Text style={styles.TitleInput}> Mobile Number</Text>
+                            <Text style={styles.info}>{global.mobilephone}</Text>
+                            <Text style={styles.TitleInput}> Mode of Payment</Text>
+                            <Text style={styles.info}>{route.params.mopayment}</Text> 
+                            <Text style={styles.TitleInput}> Shipping Address</Text>
+                                <TextInput 
+                                placeholder='Enter Shipping Address'
+                                style = {styles.input}
+                                onChangeText = { (text) => setAddress(text) } 
+                                />
+                                {shippingError ? <Text style = {{color: 'red'}}>{shippingError}</Text> : null}
+                        </View>
                     </View>
                 </View>
                 <View style={{flexDirection:'column'}}>
-                    <Text style={styles.TitleInput}> Shipping Address</Text>
-                    <TextInput 
-                    placeholder='Enter Shipping Address'
-                    style = {styles.input}
-                    onChangeText = { (text) => setAddress(text) } 
-                    />
+       
                     <View style={styles.PContainer}>
-                    <Text style={styles.TitleInput}> Mobile Number</Text>
-                    <Text style={styles.info}>{global.mobilephone}</Text>
-                    <Text style={styles.TitleInput}> Mode of Payment</Text>
-                    <Text style={styles.info}>{route.params.mopayment}</Text> 
+
+                    <Text style={styles.TitleInput}>Unit Price: </Text>
+                    <Text style={styles.info}>Php {route.params.item.price}.00</Text>
+                    
+                    <Text style={styles.TitleInput}>Quantity: </Text>
+                    <Text style={styles.info}>{route.params.item.fruits_qty} kg.</Text>
+
                     
                         <Text style={styles.TitleInput}> Shipping Fee</Text>
                         <Text  style={styles.info}>
-                            
                             Php {sf}.00
                         </Text>
-                        <Text style={styles.TitleInput}> Order Total</Text>
+                        <Text style={styles.TitleInput}> Total Product Price</Text>
                         <Text  style={styles.info}>
                             Php {total}.00
                         </Text>
 
-                    <Text style={styles.TitleInput}> Order Amount (fees included)</Text>
+                    <Text style={styles.TitleInput}> Total Order Amount (fees included)</Text>
                         <Text  style={styles.info}>
                             Php {grandtotal}.00
                         </Text>
-                        </View>
+                    </View>
+                   
                     <View style={{flexDirection: 'row', justifyContent: 'space-around',margin: 10}}>
                         <TouchableOpacity onPress={ Checkout}>
                             <Text style={styles.basketbutton}>PLACE ORDER</Text>
@@ -144,10 +168,16 @@ const styles = StyleSheet.create({
       paddingTop: 50,
       margin: 10,
     },
+    Headertext:{
+        color: '#000000',
+        fontWeight: 'bold',
+        fontSize: 45,
+        alignSelf: 'center',
+        marginBottom: 10,
+    },
     SectionText: {
         color: '#5F5B5B',
         fontWeight:'bold',
-        fontFamily: 'Poppins',
         fontSize: 20,
         padding: 10,
     },
@@ -160,6 +190,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         fontWeight: 'bold',
         fontSize: 30,
+        alignSelf:'center'
     },
     ProdPrice:{
         fontWeight: 'bold', 
@@ -198,7 +229,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     TitleInput:{
-        color: '#5F5B5B',
+        color: '#000',
         margin: 0,
         fontWeight: 'bold',
     },
@@ -241,8 +272,8 @@ const styles = StyleSheet.create({
         height: 30,
         borderRadius:10,
         padding: 5,
-        color: 'gray',
-        marginBottom: 15,
+        color: '#000000',
+        marginBottom: 5,
     },
     PContainer:{
         margin: 10,
@@ -251,6 +282,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         shadowColor: "#000",
         padding: 15,
+        paddingbottom: -30,
         shadowOffset: {
           width: 0,
           height: 2,

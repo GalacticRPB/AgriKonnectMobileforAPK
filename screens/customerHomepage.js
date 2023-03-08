@@ -29,14 +29,14 @@ const CustomerHomepage = ({navigation}) => {
   }
 
 const getRecommended = () => {
-  const apiURL = `http://10.0.2.2:8000/api/product-recommended`;
+  const apiURL = `https://agrikonnect.herokuapp.com/api/product-recommended`;
   fetch(apiURL)
   .then((response) => response.json())
   .then((responseJson) => {
       setFilteredData(responseJson.data);
       setMasterData(responseJson.data);
   }).catch((error) => {
-      console.error(error);
+      // console.error(error);
   }).finally(() => {
       setLoading(false);
   })
@@ -63,7 +63,7 @@ const getRecommended = () => {
                 <TouchableOpacity onPress={() => {navigation.navigate('RecommendedProducts', {item:item})}}>
                   <Text style={styles.ProdName}>{item.name}</Text>
                   <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
-                  <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
+                  <Text style={styles.ProdSeller}>Seller: {item.seller_name}</Text>
                 </TouchableOpacity>
             </View>
           )}
@@ -97,8 +97,6 @@ const getRecommended = () => {
             onChangeText = { (text) => searchFilter(text) }
             style={styles.searchbar}
           >
-
-
           </TextInput>
           </View>
         </View>
@@ -126,13 +124,13 @@ const getRecommended = () => {
           </ScrollView>
         </View>
         <Text style={styles.BestText}> Recommended Products</Text>
-        <ScrollView>
+        {/* <ScrollView> */}
               <View >
               
               {showRecommended()}
               </View>
 
-        </ScrollView>
+        {/* </ScrollView> */}
       </ScrollView>
     </View>
   )
@@ -152,6 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     shadowColor: "#000",
     padding: 15,
+    margin: 5,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
 },
   headercontainer:{
     flexDirection: 'row',
-    padding: 20,
+    padding: 10,
     justifyContent: 'space-between'
   },
   searchbar: {
@@ -187,12 +186,10 @@ const styles = StyleSheet.create({
   title: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
   },
   subtitle: {
     color: '#5F5B5B',
-    fontFamily: 'Poppins',
     fontSize: 15
   },
   BasketIcon:{
@@ -206,7 +203,6 @@ const styles = StyleSheet.create({
   SectionText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
   },
@@ -216,26 +212,26 @@ const styles = StyleSheet.create({
   },
   buttonCategories:{
     backgroundColor: '#31A05F',
-    height: 130,
-    width: 130,
+    height: 50,
+    width: 180,
     borderRadius: 20,
     marginRight:10,
   },
   imgContainer: {
-    flex: 2,
-    flexDirection: 'column'
+    flex: 1,
+    flexDirection: 'row'
   },
   CategIcon:{
-    height: 100,
-    width: 100,
-    alignSelf: 'center'
+    height: 50,
+    width: 50,
+    marginLeft: 10,
   },
   Categname: {
-    fontSize: 20, 
-    fontFamily: 'Poppins', 
+    fontSize: 18,
     fontWeight: 'bold', 
     color: '#FFFFFF',
-    textAlign: 'center'
+    textAlign: 'center',
+    margin: 10,
   },
   horizontalReco: {
     height: 300,
@@ -259,7 +255,6 @@ const styles = StyleSheet.create({
   },
   Reconame: {
     fontSize: 20, 
-    fontFamily: 'Poppins', 
     fontWeight: 'bold', 
     color: '#FFFFFF',
     margin: 10,
@@ -278,7 +273,6 @@ const styles = StyleSheet.create({
   },
   Recoprice: {
     fontSize: 15, 
-    fontFamily: 'Poppins', 
     color: '#FFFFFF',
     margin: 10,
     textAlign: 'left'
@@ -291,10 +285,9 @@ const styles = StyleSheet.create({
   BestText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
-    marginTop: -10,
+    marginTop: -80,
   },
   BestContainer:{
     backgroundColor: 'white',
@@ -326,8 +319,12 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 20,
   },
+  ProdSeller:{
+    color: 'gray',
+  },
   ProdPrice:{
-    color: '#000000',
+    color: '#026206',
+    fontWeight: 'bold', 
   },
   BestBasketButton:{
     backgroundColor:"#31A05F",

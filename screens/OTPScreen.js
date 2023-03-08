@@ -5,92 +5,112 @@ const OtpScreen = ( {navigation} ) => {
     const [otp, setOtp] = useState('');
     const [isSelected, setSelection] = useState(false);
 
+    const [otpError, setOtpError] = useState('');
     let x = global.email;
 
-
-    const test = () => {
-      alert("Test");
-    }
-
     const verifyEmail = async () => {
-        await fetch('http://10.0.2.2:8000/api/verifyEmail', {
-          method:'POST',
-          headers:{
-            'Accept':'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({'email':x, 'otp':otp})
-        }).then(res => res.json())
-        .then(resData =>{
-          if ("error" in resData) {
-            Alert.alert('Error', 'Incorrect OTP')
-          } else {
-            Alert.alert('Success', 'Your email has been verified successfully!');
+        // await fetch('http://10.0.2.2:8000/api/verifyEmail', {
+        //   method:'POST',
+        //   headers:{
+        //     'Accept':'application/json',
+        //     'Content-Type': 'application/json'
+        //   },
+        //   body: JSON.stringify({
+        //     'email':x,
+        //      'otp':otp
+        //   })
+        // }).then(res => res.json())
+        // .then(resData =>{
+        //   if ("error" in resData) {
+        //     Alert.alert('Error', 'Incorrect OTP')
+        //   } else {
+        //     Alert.alert('Success', 'Your email has been verified successfully!');
+        //     navigation.navigate('CustomerSignIn')
+        //   }
+        // });
+        try
+        {
+          const response = await fetch('https://agrikonnect.herokuapp.com/api/verifyEmail', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'email': x,
+              'otp': otp
+            })
+          });
+
+          const data = await response.json()
+          if(data.status === 200)
+          {
+            Alert.alert('Success', 'Your account has been verified successfully!. Enjoy Shopping!');
             navigation.navigate('CustomerSignIn')
           }
-        })
+          else
+          {
+            Alert.alert('Error', 'Invalid OTP. Please check the otp caode we sent to your email.')
+          }
+          
+        }
+        catch (error)
+        {
+          // console.error(error);
+        }
     }
 
     return(
-        <View style = { styles.body }>
-
-                
-            <KeyboardAvoidingView style={styles.whiteBox}>
+        <View style = {styles.ground}>   
+            <View style={styles.foreground}>
             <ScrollView>
-            <Text style = { styles.header }>Verify Email</Text>
+            <Text style={styles.create}>Account Verification</Text>
+            <Text style={styles.subcreate}>Enter your OTP (One Time Password)</Text>
 
             <TextInput 
             style = { styles.input }
             onChangeText = { (text) => [setOtp(text)] }
-            placeholder='Enter Otp'
+            placeholder='Enter the code'
             placeholderTextColor= 'gray'
             maxLength={6} 
             keyboardType='numeric'
             />
-
+            {otpError ? <Text style = {{color: 'red'}}>{otpError}</Text> : null}
             <TouchableOpacity activeOpacity={.6} style = { styles.btn } onPress={ verifyEmail }>
-                <Text style = {styles.btnText}>Verify</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-            <Text style = {styles.btnText2}></Text>
+                <Text style = {styles.btnText}>SUBMIT</Text>
             </TouchableOpacity>
             </ScrollView>
-            </KeyboardAvoidingView>
-            <View style = {{ backgroundColor: 'white', 
-            width: Dimensions.get('window').width,
-            height: 300, }}>
-
-            </View>
-
             
+
+
+        </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    body: {
-    backgroundColor: 'green',
+    ground: {
+    backgroundColor: '#F4F4F4',
     flex: 1,
-    fontFamily: 'Roboto',
+    justifyContent: 'center',
     },
-    userIcon: {
-    width:20,
-    height:20,
-    marginLeft: 300,
-    marginTop: -35
+    foreground: {
+      flex: 1,
+      flexDirection: 'column',
+      alignContent: 'space-around',
+      marginTop: '60%',
+      marginLeft: 30,
+      marginRight: 30,
     },
-    whiteBox: {
-    width: Dimensions.get('window').width,
-    height: 280,
-    marginTop: 200,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    shadowOffset: {width: 6, height: 6},
-    shadowRadius: 10,
-    shadowColor: 'white',
-    shadowOpacity: 1,
-    backgroundColor: 'white',
+    create: {
+      color: 'green',
+      fontSize: 32,
+      fontWeight: 'bold',
+      alignSelf: 'center',
+    },
+    subcreate: {
+      fontSize: 20,
+      alignSelf: 'center',
     },
     header: {
     fontSize: 30,
@@ -101,16 +121,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
     },
     input: {
-    padding: 2,
-    width: 300,
-    height: 40,
-    marginBottom: 10,
-    borderColor: 'gray',
-    borderBottomWidth: 1.5,
-    shadowRadius: 10,
-    fontSize: 20,
-    color: 'black',
-    alignSelf: 'center'
+      backgroundColor: 'white',
+      borderColor: 'green',
+      borderWidth: 1,
+      borderRadius: 4,
+      flexDirection: 'row',
+      marginVertical: 10,
+      fontSize: 18,
+      padding: 10,
+      marginTop: 40,
     },
     textFailed: {
     color: 'red',
@@ -132,7 +151,7 @@ const styles = StyleSheet.create({
     },
     btnText:{
     color: 'white',
-    fontSize: 14,
+    fontSize: 18,
     padding: 8,
     textAlign: 'center',
     fontWeight: 'bold',
@@ -140,11 +159,11 @@ const styles = StyleSheet.create({
     btn:{
     backgroundColor: 'green',
     color: 'white',
-    width: 300,
-    height: 35,
+    width: '100%',
+    height: 40,
     borderRadius: 5,
     alignSelf: 'center',
-    marginTop: 20,
+    marginTop: 50,
     },
 });
 

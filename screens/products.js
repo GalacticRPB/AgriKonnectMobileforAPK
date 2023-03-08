@@ -4,7 +4,6 @@ import { FlatList, RefreshControl } from 'react-native-gesture-handler';
 
 /*Icons Library-Start*/
 import { Entypo } from '@expo/vector-icons'; 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { FontAwesome } from '@expo/vector-icons'; 
 /*Icons Library-End*/
 const wait = (timeout) => {
@@ -37,14 +36,14 @@ const Products = ({navigation}) => {
   }
 
 const getProducts = () => {
-  const apiURL = `http://10.0.2.2:8000/api/getproducts/${id}`;
+  const apiURL = `https://agrikonnect.herokuapp.com/api/getproducts/${id}`;
   fetch(apiURL)
   .then((response) => response.json())
   .then((responseJson) => {
       setFilteredData(responseJson.products);
       setMasterData(responseJson.products);
   }).catch((error) => {
-      console.error(error);
+      // console.error(error);
   }).finally(() => {
       setLoading(false);
   })
@@ -66,16 +65,16 @@ const getProducts = () => {
         <ScrollView contentContainerStyle={styles.contentContainer} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
 
         <View style={styles.sBarBG}>
-        <View style={styles.searchbar}>
-        <FontAwesome name="search" size={30} color="gray" />
-          <TextInput 
-            style={styles.searchbar}
-            placeholder='Search Product Name'
-            placeholderTextColor = 'gray'
-            value = {search}
-            onChangeText = { (text) => searchFilter(text) }
-            ></TextInput>
-        </View>
+          <View style={styles.searchbar}>
+          <FontAwesome name="search" size={30} color="gray" />
+            <TextInput 
+              style={styles.searchbar}
+              placeholder='Search Product Name'
+              placeholderTextColor = 'gray'
+              value = {search}
+              onChangeText = { (text) => searchFilter(text) }
+              ></TextInput>
+          </View>
         </View>
 
         <View style = {styles.ground}>
@@ -89,22 +88,25 @@ const getProducts = () => {
             </TouchableOpacity>
         </View>
         <ScrollView>
-            <View style={styles.BestContainer}>
+           
               <View style={{flexDirection: 'row'}}>
                 <FlatList data = {filteredData}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({item}) => (
                     <ScrollView>
-                    <TouchableOpacity onPress={() => {navigation.navigate('EditProduct', {item:item})}}>
                     <View style={styles.ProdInfo}>
-                    <View style={styles.BestContainer}>
-                      <Text style={styles.ProdName}>{item.category}</Text>
-                      <Text style={styles.ProdPrice}>{item.name}</Text>
-                      <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
-                      <Text style={styles.ProdPrice}>Quantity: {item.quantity}</Text>
+                      <View style={styles.BestContainer}>
+                        <Text style={styles.ProdName}>{item.name}</Text>
+                        <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
+                        <Text style={styles.ProdPrice}>Quantity: {item.quantity}</Text>
+                      </View>
+                      <View>
+                        <TouchableOpacity style = {styles.editButton} onPress={() => {navigation.navigate('EditProduct', {item:item})}}>
+                          <Text style = {styles.editButtonText}>EDIT</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    </View>
-                    </TouchableOpacity>
                   </ScrollView>
 
                   )}>
@@ -112,11 +114,11 @@ const getProducts = () => {
                 </FlatList>
                     
               </View>
-            </View>
+           
           </ScrollView>
 
-    </View>
-    </View>
+        </View>
+      </View>
     </ScrollView>
   );
 }
@@ -126,17 +128,6 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-end',
       color: '#F4F4F4',
       paddingTop: 50,
-    },
-    BestContainer:{
-      backgroundColor: 'white',
-      flex: 1,
-      borderRadius: 10,
-      shadowColor: "#000",
-      padding: 5,
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
     },
     ground:{
       backgroundColor: '#F4F4F4',
@@ -197,16 +188,17 @@ const styles = StyleSheet.create({
 
     },
     editButton:{
-      backgroundColor: 'orange',
+      backgroundColor: '#F5E12A',
       borderRadius: 5,
       height: 40,
       width: 80,
       justifyContent: 'center',
       alignItems: 'center',
+      color: 'white',
     },
     editButtonText:{
       color: 'black',
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: 'bold',
     },
     sBarBG: {
@@ -244,17 +236,36 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
     },
+    BestContainer:{
+      backgroundColor: 'white',
+      flex: 1,
+    },
     ProdInfo: {
-      margin: 20,
+      backgroundColor: 'white',
+      flex: 1,
+      borderRadius: 10,
+      shadowColor: "#000",
+      padding: 10,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+      margin: 5,
       marginTop: 10,
+      flexDirection: "row",
+      flexWrap: 'nowrap',
+      alignItems:'center',
+      flex: 1,
     },
     ProdName: {
       fontWeight: 'bold', 
       color: '#000000',
-      fontSize: 15
+      fontSize: 22,
     },
     ProdPrice:{
-      fontWeight: 'bold', 
       color: '#000000',
     },
     BestBasketButton:{

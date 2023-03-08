@@ -23,7 +23,7 @@ const Home = ({navigation}) => {
 
   const getReport = async () => {
     try{
-      const response = await fetch(`http://10.0.2.2:8000/api/sample/${id}`);
+      const response = await fetch(`https://agrikonnect.herokuapp.com/api/sample/${id}`);
       const json = await response.json();
       setReport(json.price)
       setInfo(json.products)
@@ -38,7 +38,7 @@ const Home = ({navigation}) => {
 
   const getCount = async () => {
     try{
-      const response = await fetch(`http://10.0.2.2:8000/api/orderCount/${id}`);
+      const response = await fetch(`https://agrikonnect.herokuapp.com/api/orderCount/${id}`);
       const json = await response.json();
       setCount(json.orderCount)
     }
@@ -50,7 +50,7 @@ const Home = ({navigation}) => {
   }
   const getRecent = async () => {
     try {
-      const response = await fetch (`http://10.0.2.2:8000/api/recent/${id}`);
+      const response = await fetch (`https://agrikonnect.herokuapp.com/api/recent/${id}`);
       const json = await response.json();
       setRecent(json.sellerdelivered)
     }
@@ -67,49 +67,45 @@ const Home = ({navigation}) => {
   }, []);
 
   return(
-    <ScrollView contentContainerStyle={styles.contentContainer}>
+    // <ScrollView contentContainerStyle={styles.contentContainer}>
     <View style = {styles.ground}>
     <View style = {styles.foreground}>
       <View style = {[styles.top]}>
-      <View>
-        <Text style = {styles.hello}>Hello,</Text>
+        <Text style = {styles.hello}>Hello,  </Text>
         <Text style = {styles.name}>{global.firstname}</Text>
-      </View>
-      <View>
-        <MaterialIcons name="account-circle" size={80} color="gray" />
-      </View>
       </View>
 
       <View>
       <Text style = {styles.recent}>Transaction Details</Text>
-      <Text style={styles.ProdPrice}>Total Order Purchase for this Month: {ordercount}</Text>
-      <Text style={styles.ProdPrice}>Sales: Php {total}.00</Text>
+      <View style = {styles.BestBasketButton}>
+      <Text style={styles.monthly}>Total Order Purchase for this Month: </Text>
+      <Text style={styles.def}> {ordercount}</Text>
+      <Text style={styles.sales}>Sales: </Text>
+      <Text style={styles.def}>Php {total}.00</Text>
+      </View>
       </View>
 
       <Text style = {styles.recent}>Recently Sold</Text> 
         <View>
-          <ScrollView style = {styles.BestBasketButton}>
-            <View>
+          {/* <ScrollView style = {styles.BestBasketButton}> */}
+            <View style = {styles.BestBasketButton}>
                  <FlatList data = {recent}
               keyExtractor={({id}, index) => id}
               renderItem={({item}) => (
-                  <View style={styles.ProdInfo}>
-                  <Text style={styles.ProdName}>{item.name}</Text>
-                    <Text style={styles.ProdPrice}>Product: {item.order_name}</Text>
-                    <Text style={styles.ProdPrice}>Php : Php {item.order_total}.00</Text>
+                  <View>
+                    <Text style={styles.ProdName}>{item.order_name}</Text>
+                    <Text style={styles.ProdPrice}>Total Order Price: Php {item.order_total}.00</Text>
                   </View>
 
               )}>
               
             </FlatList>
             </View>
-          </ScrollView>
+          {/* </ScrollView> */}
       </View>
-
-
     </View>
     </View>
-    </ScrollView>
+    // </ScrollView>
   );
 }
 
@@ -120,10 +116,28 @@ const styles = StyleSheet.create({
     color: '#F4F4F4',
     paddingTop: 40,
   },
+  ProdName: {
+    fontWeight: 'bold', 
+    color: '#000000',
+    fontSize: 20,
+  },
+  monthly:{
+    color: '#000000',
+  },
+  sales:{
+    color: '#000000',
+  },
+  def:{
+    fontWeight: 'bold',
+    marginBottom: 10,
+    fontSize: 16,
+    textAlign: 'right',
+  },
   ground:{
     backgroundColor: '#F4F4F4',
     flex:1,
     justifyContent: 'center',
+    marginTop: 50,
   },
   foreground:{
     flex: 1,
@@ -134,12 +148,11 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   top:{
-    marginTop: 15,
     flexDirection: "row",
     flexWrap: 'nowrap',
-    height: 80,
+    height: 50,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   name:{
     color: 'green',
@@ -152,7 +165,7 @@ const styles = StyleSheet.create({
     color: 'green',
     fontWeight: 'bold',
     fontSize: 20,
-    marginTop: 15,
+    marginTop: 20,
   },
   rSoldBox:{
     marginTop: 5,
@@ -197,24 +210,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 10,
   },
-  ProdInfo: {
-    padding: 10,
-    marginTop: -20,
-  },
-  ProdName: {
-    fontWeight: 'bold', 
-    color: '#000000',
-    fontSize: 15
-  },
   ProdPrice:{
     fontWeight: 'bold', 
-    color: '#000000',
+    color: '#5F5B5B',
   },
   BestBasketButton:{
     backgroundColor:"white",
     borderRadius: 10,
     width: '100%',
-    marginTop:10,
+    padding:10,
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginBottom: 10,
+    marginTop: 10,
   },
 
 

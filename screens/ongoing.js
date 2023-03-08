@@ -17,7 +17,7 @@ const Ongoing = ({navigation}) => {
     
     const getOngoing = async () => {
       try{
-        const response = await fetch(`http://10.0.2.2:8000/api/ongoing/${user_id}`);
+        const response = await fetch(`https://agrikonnect.herokuapp.com/api/ongoing/${user_id}`);
         const json = await response.json();
         setOngoing(json.deliveries)
       }
@@ -49,6 +49,7 @@ const Ongoing = ({navigation}) => {
         </TouchableOpacity>
         <Text style = {styles.name}>Ongoing Transactions</Text>
     </View>
+    <View style = {styles.ground}>
     <View style = {styles.foreground}>
       
       <View style = {styles.tab}>
@@ -65,31 +66,50 @@ const Ongoing = ({navigation}) => {
           </View>
         </TouchableOpacity>
       </View>
-      <FlatList data= {ongoing}
-        keyExtractor={({id}, index) => id}
-        renderItem={({item}) => (
-        <ScrollView>
-             <View style={{flexDirection: 'column', margin: 10}}>
-              <View style={styles.ProdInfo}>
-                    <View style={styles.BestContainer}>
-                  <Text style={styles.ButtonTitle}>Product Name: {item.order_name}</Text>
-                  <Text style={styles.amount}>Quantity: {item.order_qty}</Text>
-                  <Text style={styles.amount}>Unit Price: {item.order_price}</Text>
-                  <Text style={styles.amount}>Total Price: {item.order_total}</Text>
-                  <Text style={styles.amount}>Customer Name: {item.firstname} {item.middlename} {item.lastname}</Text>
-                  <Text style={styles.amount}>Mobile Phone: {item.contactNo}</Text>
-                  <Text style={styles.amount}>Shipping Address: {item.shippingaddress}</Text>
-                  <Text style={styles.amount}>Mode of Payment: {item.modeofpayment}</Text>
-                  <Text style={styles.amount}>Shipping Status: Pending...</Text>
-              </View>
-              </View>
-              </View>
-
-        </ScrollView>
+      <View>
+            <FlatList data= {ongoing}
+                  keyExtractor={({id}, index) => id}
+                  renderItem={({item}) => (
+                    <ScrollView>
+                      <View style={styles.BestContainer}>
+                        <View style={styles.rowFormat1}>
+                          <View>
+                            <Text>Product Name: </Text>
+                            <Text>Quantity: </Text>
+                            <Text>Unit Price: </Text>
+                            <Text style={styles.leftDetail}>Total Price: </Text>
+                          </View>
+                          <View>
+                            <Text style = {styles.rightDetail}>{item.order_name}</Text>
+                            <Text style = {styles.rightDetail}>{item.order_qty}</Text>
+                            <Text style = {styles.rightDetail}>Php {item.order_price}.00</Text>
+                            <Text style={styles.leftDetail}>Php {item.order_total}.00</Text>
+                          </View>
+                        </View>
+                        <View style = {styles.divider}/>
+                          <View style={styles.rowFormat1}>
+                            <View>
+                              <Text>Customer Name: </Text>
+                              <Text>Mobile Phone: </Text>
+                              <Text>Shipping Address: </Text>
+                              <Text>Mode of Payment: </Text>
+                            </View>
+                            <View>
+                            <Text style = {styles.rightDetail}>{item.firstname} {item.middlename} {item.lastname}</Text>
+                            <Text style = {styles.rightDetail}>{item.contactNo}</Text>
+                            <Text style = {styles.rightDetail}>{item.shippingaddress}</Text>
+                            <Text style = {styles.rightDetail}>{item.modeofpayment}</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </ScrollView>
       )}>
 
       </FlatList>
+      
+      </View>
     </View> 
+    </View>
     </ScrollView>
     );}
 
@@ -110,7 +130,9 @@ contentContainer: {
         width: 0,
         height: 2,
       },
-      width: 400,
+      width: '100%',
+      marginBottom: 5,
+      marginTop: 15,
     },
     ground:{
       backgroundColor: '#F4F4F4',
@@ -127,19 +149,12 @@ contentContainer: {
       alignItems: 'center',
     },
     myProducts:{
-        color: 'green',
-        fontSize: 20,
-        fontWeight: 'bold',
         textAlign: 'left',
-    },
-    ProdInfo: {
-      margin: 20,
-      marginTop: 10,
     },
     topBG: {
         width: '100%',
         height: 70,
-        backgroundColor: "orange",
+        backgroundColor: "#388E3C",
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
@@ -206,10 +221,11 @@ contentContainer: {
     rowFormat1:{
       flexDirection: "row",
       flexWrap: 'nowrap',
-      alignItems: 'center',
+      alignItems: 'flex-end',
       justifyContent: 'space-between',
-      marginTop: 10,
+      marginTop: 0,
       width: '100%',
+      padding: 10,
     },
     elevation: {
         elevation: 10,
@@ -232,7 +248,7 @@ contentContainer: {
         fontSize: 18,
       },
       leftDetail:{
-        color: 'orange',
+        color: 'green',
         fontSize: 18,
         fontWeight: 'bold'
       },

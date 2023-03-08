@@ -17,44 +17,77 @@ import { Entypo } from '@expo/vector-icons';
 
 const category = ['Vegetables', 'Fruits'];
 const desc = ['Organic', 'Conventional'];
-const name = ['Alugbati', 
-'Ampalaya',
-'Bataw',
-'Bawang',
-'Bulaklak ng saging',
-'Cabbage',
-'Gabi',
-'Gabing San Fernando',
-'Kabute',
-'Kalabasa',
-'Kamatis',
-'Kamote',
-'Kamoteng Kahoy',
-'Kangkong',
-'Labanos',
-'Labong',
-'Luya',
-'Luyang Dilaw',
-'Mais',
-'Malunggay',
-'Mani',
-'Mongo',
-'Mustasa',
-'Pechay',
-'Pipino',
-'Puso ng Saging',
-'Saluyot',
-'Sampalok',
-'Sayote',
-'Sibuyas',
-'Sigarilyas',
-'Sili',
-'Singkamas',
-'Sitaw',
-'Talong',
-'Ube',
-'Ubod',
-'Upo',
+const name = [
+  'Talong',
+  'Sitaw',
+  'Sigarilyas',
+   'Patola',
+   'Upo',
+   'Kalabasa',
+   'Kamatis',
+   'Labanos',
+   'Mustasa',
+  'Pechay',
+   'Luya',
+   'Ampalaya',
+  'Okra',
+   'Kangkong',
+  'Sayote',
+   'Malunggay',
+   'Balinghoy',
+   'Gabi',
+   'Saluyot',
+   'Siling haba',
+   'Siling Labuyo',
+  'Calamansi',
+   'Monggo',
+   'Kamote',
+   'Puso ng Saging',
+  'Alugbati',
+   'Baguio Beans',
+  'Patatas',
+   'Carrots',
+  'Sibuyas Tagalog',
+   'Repolyo',
+   'Bataw',
+   'Tanglad',
+   'Patani',
+   'Saging',
+   'Pinya',
+   'Star Apple',
+   'Guyabano',
+   'Atis',
+   'Rambutan',
+   'Papaya',
+   'Niyog',
+   'Buko',
+   'Mais',
+   'Balimbing',
+   'Dragon Fruit',
+   'Singkamas',
+   'Indian Manggo',
+   'Carabao Manggo',
+   'Rimas',
+   'Pakwan',
+   'Dalandan',
+   'Sampalok',
+   'Lanzones',
+   'Santol',
+   'Lukban',
+   'Aratilis',
+   'Kalamansi',
+   'Kaong',
+   'Caimito',
+   'Durian',
+   'Kamias',
+   'Chico',
+   'Langka',
+   'Bayabas',
+   'Duhat',
+   'Dalanghita',
+   'Mangosteen',
+   'Bignay',
+   'Makopa',
 
 ];
 
@@ -81,6 +114,12 @@ export default function AddProduct({navigation}) {
     description: '',
     category: '',
   });
+
+  const [nameError, setNameerror] = React.useState('');
+  const [categoryError, setCategoryError] = React.useState('');
+  const [descriptionError, setDescriptionError] = React.useState('');
+  const [priceError, setPriceError] = React.useState('');
+  const [quantityError, setQuantityError] = React.useState('');
 
   const launchImageLibraryHandler = () => {
     ImagePicker.launchImageLibraryAsync({
@@ -116,7 +155,7 @@ export default function AddProduct({navigation}) {
       `${global.firstname} ${global.middlename} ${global.lastname}`,
     );
 
-    fetch('http://10.0.2.2:8000/api/products', {
+    fetch('https://agrikonnect.herokuapp.com/api/products', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -126,17 +165,56 @@ export default function AddProduct({navigation}) {
       .then(res => res.json())
       .then(data => {
         if (data.status === 200) {
+          global.name,
+          global.category,
+          global.description,
+          global.price,
+          global.quantity,
           Alert.alert('Success', 'Product Added Successfully!');
           navigation.navigate('Products');
-        } else {
-          Alert.alert('Error', 'Could not add product');
-          console.error(data);
+        } 
+        else if(data.status === 422)
+        {
+          // Alert.alert('Error', 'All fields are required');
+         
+          if(data)
+          {
+            const {name, category, description, quantity, price} = data.errors;
+            if(name)
+            {
+              setNameerror(name[0]);
+            }
+            if(category)
+            {
+              setCategoryError(category[0]);
+            }
+            if(description)
+            {
+              setDescriptionError(description[0]);
+            }
+            if(quantity)
+            {
+              setQuantityError(quantity[0]);
+            }
+            if(price)
+            {
+              setPriceError(price[0]);
+            }
+          }
+          else
+          {
+            console.error(data);
+          }
+          // setErrorMessage(data.error)
         }
       })
-      .catch(err => {
-        console.error(err);
+      .catch(error => {
+        Alert.alert('Error', 'Please provide image of your product!')
+        // console.error(error);
       });
   };
+
+
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -167,7 +245,7 @@ export default function AddProduct({navigation}) {
               </View>
             </TouchableOpacity>
           )}
-
+          
           <Text style={styles.addtext}>Add product details</Text>
           <Text style={styles.text}>Select product category</Text>
           <SelectDropdown
@@ -192,6 +270,7 @@ export default function AddProduct({navigation}) {
               return item;
             }}
           />
+          {categoryError ? <Text style = {{color: 'red'}}>{categoryError}</Text> : null}
           <Text style={styles.text}>Product Name</Text>
           <SelectDropdown
             defaultButtonText={' '}
@@ -215,7 +294,7 @@ export default function AddProduct({navigation}) {
               return item;
             }}
           />
-
+          {nameError ? <Text style = {{color: 'red'}}>{nameError}</Text> : null}
           <Text style={styles.text}>Description</Text>
           <SelectDropdown
             defaultButtonText={' '}
@@ -239,7 +318,7 @@ export default function AddProduct({navigation}) {
               return item;
             }}
           />
-
+          {descriptionError ? <Text style = {{color: 'red'}}>{descriptionError}</Text> : null}
           <Text style={styles.text}>Product Price</Text>
           <TextInput
             placeholder="Price in Peso (ex. 20.00)"
@@ -248,7 +327,7 @@ export default function AddProduct({navigation}) {
             onChange={e =>
               setProductInfo({...productInfo, price: e.nativeEvent.text})
             }></TextInput>
-
+          {priceError ? <Text style = {{color: 'red'}}>{priceError}</Text> : null}
           <Text style={styles.text}>Product Quantity</Text>
           <TextInput
             placeholder="Quantity in Kilograms"
@@ -257,7 +336,7 @@ export default function AddProduct({navigation}) {
             onChange={e =>
               setProductInfo({...productInfo, quantity: e.nativeEvent.text})
             }></TextInput>
-
+          {quantityError ? <Text style = {{color: 'red'}}>{quantityError}</Text> : null}
           <View style={styles.bottom}>
             <TouchableOpacity style={styles.button} onPress={handleAddProduct}>
               <Text style={styles.buttonText}>ADD PRODUCT</Text>

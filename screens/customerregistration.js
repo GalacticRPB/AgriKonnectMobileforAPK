@@ -13,20 +13,28 @@ const CustomerRegistration = ({navigation}) => {
   const [privacy, setPrivacy] = useState(false);
   const [mobilephone, setMobilephone] = useState('');
   const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState([]);
 
-  const [data, setData] = useState([]);
-  const [isError, setError] = useState(false);
+  // const [data, setData] = useState([]);
+  // const [isError, setError] = useState(false);
+
+  const [firstnameError, setFirstNameError] = useState('');
+  const [middlenameError, setMiddleNameError] = useState('');
+  const [lastnameError, setLastNameError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [mobilephoneError, setMobilePhoneError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [privacyError, setPrivacyError] = useState('');
 
   const handleCheckbox = () => {
     setPrivacy(!privacy);
-    setError(false);
+    // setError(false);
   };
 
 
   const RegisterCustomer = async () => {
     try{
-      const response = await fetch('http://10.0.2.2:8000/api/registerCustomer', {
+      const response = await fetch('https://agrikonnect.herokuapp.com/api/registerCustomer', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -43,15 +51,17 @@ const CustomerRegistration = ({navigation}) => {
           privacy: privacy ? true : false,
         })
       });
-      console.log(await response.json())
-      console.log(response.status)
-      if(!privacy)
-      {
-        setError(true);
-        return;
-      }
 
-      if((response).status === 200)
+      // if(!privacy)
+      // {
+      //   setError(true);
+      //   return;
+      // }
+
+      const data = await response.json()
+      // console.log(data.status)
+      // console.error(data.errors)
+      if(data.status === 200)
       {
         setFirstname('');
         setMiddlename(''),
@@ -61,7 +71,7 @@ const CustomerRegistration = ({navigation}) => {
         setMobilephone(''),
         setPrivacy(''),
         setPassword('');
-        setError(false);
+        // setError(false);
         global.email = email;
         global.firstname = firstname;
         global.username = username;
@@ -70,22 +80,62 @@ const CustomerRegistration = ({navigation}) => {
       }
       else
       {
-        Alert.alert('Error', 'Registration Failed', [
+        if(data)
         {
-          text: 'OK',
-          onPress: () => console.log('OK Pressed'),
-        },
-      ]);
+          const {firstname, middlename, lastname, username, email, mobilephone, password, privacy} = data.errors;
+          if(firstname)
+          {
+            setFirstNameError(firstname[0]);
+          }
+          if(middlename)
+          {
+            setMiddleNameError(middlename[0]);
+          }
+          if(lastname)
+          {
+            setLastNameError(lastname[0]);
+          }
+          if(username)
+          {
+            setUsernameError(username[0]);
+          }
+          if(email)
+          {
+            setEmailError(email[0]);
+          }
+          if(mobilephone)
+          {
+            setMobilePhoneError(mobilephone[0]);
+          }
+          if(password)
+          {
+            setPasswordError(password[0]);
+          }
+          if(privacy)
+          {
+            setPrivacyError(privacy[0]);
+          }
+        }
+        else
+        {
+          console.error(data)
+        }
+      //   Alert.alert('Error', 'Registration Failed', [
+      //   {
+      //     text: 'OK',
+      //     onPress: () => console.log('OK Pressed'),
+      //   },
+      // ]);
       }
      
     // console.log(response.status)
     // console.log(response)
-    const json = await response.json();
-    setData(json.customer);
+    // const json = await response.json();
+    // setData(json.customer);
     }
     catch (error) {
       // setErrors(error)
-      console.error(error);
+      // console.error(error);
     }
   }
 
@@ -124,54 +174,60 @@ const CustomerRegistration = ({navigation}) => {
       style = {styles.input}
       onChangeText = { (text) => setFirstname(text) } >
       </TextInput>
-      <Text style = {{color: 'red'}}>{errors.firstname}</Text>
+      {firstnameError ? <Text style = {{color: 'red'}}>{firstnameError}</Text> : null}
       <TextInput 
       placeholder='Middle Name'
       style = {styles.input}
       onChangeText = { (text) => setMiddlename(text) }
       >
       </TextInput>
-
+      {middlenameError ? <Text style = {{color: 'red'}}>{middlenameError}</Text> : null}
       <TextInput 
       placeholder='Last Name'
       style = {styles.input}
       onChangeText = { (text) => setLastname(text) }
       >
       </TextInput>
-
+      {lastnameError ? <Text style = {{color: 'red'}}>{firstnameError}</Text> : null}
       <TextInput 
       placeholder='Username'
       style = {styles.input}
       onChangeText = { (text) => setUsername(text) }>
       </TextInput>
-
+      {usernameError ? <Text style = {{color: 'red'}}>{usernameError}</Text> : null}
       <TextInput 
       placeholder='Phone Number'
       style = {styles.input}
       onChangeText = { (text) => setMobilephone(text) }>
       </TextInput>
-
+      {mobilephoneError ? <Text style = {{color: 'red'}}>{mobilephoneError}</Text> : null}
       <TextInput 
       placeholder='Email'
       style = {styles.input}
       onChangeText = { (text) => setEmail(text) }
       >
       </TextInput>
-      
+      {emailError ? <Text style = {{color: 'red'}}>{emailError}</Text> : null}
       <TextInput 
       placeholder='Password'
       style = {styles.input} 
       secureTextEntry={true}
       onChangeText = { (text) => setPassword(text) }>
       </TextInput>
+      {passwordError ? <Text style = {{color: 'red'}}>{passwordError}</Text> : null}
       </View>
 
-     <Checkbox value={privacy} onValueChange={handleCheckbox} required={true}>
-     </Checkbox>
-     <Text>
-     I hereby authorize AgriKOnnect to collect and process the data indicated herein for the purpose of the usage of the application. I understand that my personal information is protected by RA 10173, Data Privacy Act of 2012.
+   
+    
+      <View style={styles.container}>
+     <View style={styles.checkboxContainer}>
+     <Checkbox style={styles.checkbox} value={privacy} onValueChange={handleCheckbox} required={true}/>     
+     <Text style={styles.label}>
+      I hereby authorize AgriKOnnect to collect and process the data indicated herein for the purpose of the usage of the application. I understand that my personal information is protected by RA 10173, Data Privacy Act of 2012.
       </Text>
-      {isError && <Text style = {{color: 'red'}}>This field is required</Text>}
+      {privacyError ? <Text style = {{color: 'red'}}>{privacyError}</Text> : null}
+      </View>
+      </View>
       <TouchableOpacity 
       style = {styles.button}
       onPress={ RegisterCustomer}>
@@ -235,11 +291,9 @@ const styles = StyleSheet.create({
   },
   button:{
     backgroundColor: 'green',
-    borderRadius: 30,
-    marginTop: 20,
-    marginLeft: 40,
-    marginRight: 40,
-    height: 50,
+    borderRadius: 10,
+    width: '100%',
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -271,7 +325,24 @@ const styles = StyleSheet.create({
   dropdown1DropdownStyle: {backgroundColor: 'white'},
   dropdown1RowStyle: {backgroundColor: 'green', borderBottomColor: 'green'},
   dropdown1RowTxtStyle: {color: 'white', textAlign: 'left'},
-
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  checkbox: {
+    alignSelf: 'center',
+    
+  },
+  label: {
+    margin: 8,
+    textAlign: 'justify',
+    marginLeft: 25,
+  },
 })
 
 export default CustomerRegistration;

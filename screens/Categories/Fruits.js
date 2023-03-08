@@ -49,7 +49,7 @@ const Fruits = ({navigation}) => {
   }
 
 const getProducts = () => {
-  const apiURL = `http://10.0.2.2:8000/api/fruit`;
+  const apiURL = `https://agrikonnect.herokuapp.com/api/fruit`;
   fetch(apiURL)
   .then((response) => response.json())
   .then((responseJson) => {
@@ -83,7 +83,7 @@ const getProducts = () => {
                 <TouchableOpacity onPress={() => {navigation.navigate('ProductDetails', {item:item})}}>
                   <Text style={styles.ProdName}>{item.name}</Text>
                   <Text style={styles.ProdPrice}>Php {item.price}.00</Text>
-                  <Text style={styles.ProdPrice}>Seller: {item.seller_name}</Text>
+                  <Text style={styles.ProdSeller}>Seller: {item.seller_name}</Text>
                 </TouchableOpacity>
             </View>
           )}
@@ -100,7 +100,7 @@ const getProducts = () => {
     <View style={styles.container}>
        <View style={{flexDirection: 'row', padding: 10}}>
             <TouchableOpacity onPress={()=>navigation.navigate('BottomNavigation')}>
-            <Ionicons name="arrow-back-sharp" size={50} color="#000000" />
+            <Ionicons name="arrow-back-sharp" size={50} color="#5F5B5B" />
             </TouchableOpacity>
                     
         <Text style={styles.SectionText}> Fruits</Text>
@@ -136,12 +136,10 @@ const styles = StyleSheet.create({
   title: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
   },
   subtitle: {
     color: '#5F5B5B',
-    fontFamily: 'Poppins',
     fontSize: 15
   },
   BasketIcon:{
@@ -155,7 +153,6 @@ const styles = StyleSheet.create({
   SectionText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
   },
@@ -181,7 +178,6 @@ const styles = StyleSheet.create({
   },
   Categname: {
     fontSize: 20, 
-    fontFamily: 'Poppins', 
     fontWeight: 'bold', 
     color: '#FFFFFF',
     textAlign: 'center'
@@ -208,7 +204,6 @@ const styles = StyleSheet.create({
   },
   Reconame: {
     fontSize: 20, 
-    fontFamily: 'Poppins', 
     fontWeight: 'bold', 
     color: '#FFFFFF',
     margin: 10,
@@ -227,7 +222,6 @@ const styles = StyleSheet.create({
   },
   Recoprice: {
     fontSize: 15, 
-    fontFamily: 'Poppins', 
     color: '#FFFFFF',
     margin: 10,
     textAlign: 'left'
@@ -240,7 +234,6 @@ const styles = StyleSheet.create({
   BestText: {
     color: '#5F5B5B',
     fontWeight:'bold',
-    fontFamily: 'Poppins',
     fontSize: 20,
     padding: 10,
     marginTop: -30,
@@ -261,11 +254,14 @@ const styles = StyleSheet.create({
   ProdName: {
     fontWeight: 'bold', 
     color: '#000000',
-    fontSize: 15
+    fontSize: 20
+  },
+  ProdSeller:{
+    color: 'gray',
   },
   ProdPrice:{
+    color: '#026206',
     fontWeight: 'bold', 
-    color: '#000000',
   },
   BestBasketButton:{
     backgroundColor:"#31A05F",
