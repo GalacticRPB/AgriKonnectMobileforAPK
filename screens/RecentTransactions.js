@@ -34,24 +34,28 @@ const RecentTransactions = ({navigation}) => {
                     </TouchableOpacity>
                     <Text style={styles.SectionText}> Recent Transactions </Text>
                 </View>
-            <View style={styles.TransaContainer} onPress={()=>navigation.navigate('ToPay')}>
-                <View style={{flexDirection: 'row'}}>
-                        <View style={{flexDirection: 'column', margin: 10}}>
+            <View  onPress={()=>navigation.navigate('ToPay')}>
+                
                         <FlatList data = {data}
                             keyExtractor={({id}, index) => id}
                             renderItem={({item})=> (
-                                <View style={styles.ProdInfo}>
-                                <Text style={styles.ProdName}>{item.order_name}</Text>
-                                <Text style={styles.ProdPrice}>Total Order Price: Php {item.order_total}.00</Text>
-                                <Text style={styles.ProdPrice}>Quantity:  {item.order_qty}</Text>
-                        
-                                </View>
+                                <ScrollView>
+                                    <View style={styles.TransaContainer} onPress={()=>navigation.navigate('ToPay')}>
+                                    <View style={{flexDirection: 'row'}}>
+                                    <View style={{flexDirection: 'column', margin: 10}}>
+                                    <View style={styles.ProdInfo}>
+                                    <Text style={styles.ProdName}>{item.order_name}</Text>
+                                    <Text style={styles.ProdPrice}>Total Order Price: Php {item.order_total}.00</Text>
+                                    <Text style={styles.ProdPrice}>Quantity:  {item.order_qty}</Text>
+                                    </View>
+                                    </View>
+                                    </View>
+                                     </View>
+                                </ScrollView>
                                 )}>
                             
                             </FlatList>
-                            
-                        </View>
-                </View>
+                      
             </View>
         </View>
     )
@@ -79,7 +83,7 @@ const styles = StyleSheet.create({
         color: '#5F5B5B',
     },
     TransaContainer:{
-        padding: 10,
+        padding: 20,
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
         margin: 10,
